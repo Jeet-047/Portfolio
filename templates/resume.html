@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block title %}Resume{% endblock %}
+
+{% block head_extra %}
+    <!-- Load Lucide icons for section elements -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Base Container */
+        .resume-container {
+            max-width: 1200px;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            background: #1e293b; /* Primary dark background */
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            box-shadow: 0 10px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(79, 70, 229, 0.3);
+        }
+        @media (min-width: 640px) {
+            .resume-container {
+                margin-top: 3rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            .resume-container {
+                margin-top: 5rem;
+            }
+        }
+
+        /* Profile Card/Header */
+        .profile-card {
+            background: linear-gradient(135deg, #2d3748, #1a202c);
+            border-bottom: 4px solid #4f46e5;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Timeline Styles */
+        .timeline {
+            position: relative;
+            /* FIX: Increased padding-left to create more space between the content and the vertical line/dots */
+            padding-left: 2rem;
+            margin-left: 0.5rem;
+        }
+        @media (min-width: 640px) {
+            .timeline {
+                padding-left: 3rem;
+            }
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            /* Slightly softer gradient for the line */
+            background: linear-gradient(to bottom, #4f46e5, #4f46e599, transparent); 
+            border-radius: 2px;
+        }
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+            /* Added top padding to vertically align the dot with the title */
+            padding-top: 5px; 
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -9px; /* Center dot on the line for mobile */
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            background: #4f46e5;
+            border: 2px solid #1e293b;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #4f46e5; /* Glowing effect */
+            transition: all 0.3s ease;
+        }
+        @media (min-width: 640px) {
+            .timeline-dot {
+                left: -11px;
+                width: 15px;
+                height: 15px;
+                border: 3px solid #1e293b;
+            }
+        }
+        .timeline-item:hover .timeline-dot {
+            transform: scale(1.3);
+            box-shadow: 0 0 15px #8b5cf6;
+        }
+
+        /* Skill Chips */
+        .skill-chip {
+            background-color: #334155;
+            border: 1px solid #4f46e5;
+            box-shadow: 0 0 5px rgba(79, 70, 229, 0.5);
+            transition: all 0.3s ease;
+        }
+        .skill-chip:hover {
+            background-color: #4f46e5;
+            box-shadow: 0 0 15px #4f46e5;
+        }
+
+        /* Gradient Button Style for CTA */
+        .download-cta {
+            background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+            box-shadow: 0 5px 20px rgba(79, 70, 229, 0.4);
+            color: white;
+            font-weight: 700;
+            text-align: center;
+            padding: 12px 24px;
+            border-radius: 12px; 
+            transition: all 0.3s ease;
+        }
+        
+        .download-cta:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.6);
+        }
+
+        /* Column Ordering for Small Screens */
+        .resume-sidebar {
+            order: 2; /* Show sidebar second on small screens */
+        }
+        .resume-main {
+            order: 1; /* Show main content first on small screens */
+        }
+        @media (min-width: 1024px) {
+            .resume-sidebar {
+                order: 1; /* Reset to original order on large screens */
+            }
+            .resume-main {
+                order: 2; /* Reset to original order on large screens */
+            }
+        }
+
+        /* Print Button - Keeping print media style for compatibility */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- Main Resume Container -->
+    <div class="resume-container mx-auto rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl px-2 sm:px-0">
+        <div class="grid grid-cols-1 lg:grid-cols-3">
+            
+            <!-- LEFT COLUMN: Sidebar (Contact, Skills, Awards) -->
+            <div class="resume-sidebar lg:col-span-1 p-6 sm:p-8 bg-gray-900/90 text-gray-300 space-y-8 sm:space-y-10 border-b lg:border-b-0 lg:border-r border-primary/20">
+                
+                <!-- Contact Information -->
+                <div class="space-y-3 sm:space-y-4">
+                    <h3 class="text-xl sm:text-2xl font-bold text-primary flex items-center mb-3 sm:mb-4">
+                        <i data-lucide="mail" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"></i> Contact
+                    </h3>
+                    <div class="space-y-2 sm:space-y-3">
+                        <p class="flex items-center text-xs sm:text-sm break-all">
+                            <i data-lucide="smartphone" class="w-4 h-4 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.resume.contact.phone }}
+                        </p>
+                        <p class="flex items-center text-xs sm:text-sm break-all">
+                            <i data-lucide="at-sign" class="w-4 h-4 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.resume.contact.email }}
+                        </p>
+                        <p class="flex items-center text-xs sm:text-sm">
+                            <i data-lucide="map-pin" class="w-4 h-4 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.resume.contact.location }}
+                        </p>
+                        <p class="flex items-center text-xs sm:text-sm">
+                            <i data-lucide="linkedin" class="w-4 h-4 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> <a href="{{ data.resume.contact.linkedin }}" target="_blank" class="hover:text-white transition-colors break-all">LinkedIn Profile</a>
+                        </p>
+                        <p class="flex items-center text-xs sm:text-sm">
+                            <i data-lucide="github" class="w-4 h-4 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> <a href="{{ data.resume.contact.github }}" target="_blank" class="hover:text-white transition-colors break-all">GitHub Repository</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Technical Stack / Core Skills -->
+                <div class="space-y-3 sm:space-y-4">
+                    <h3 class="text-xl sm:text-2xl font-bold text-primary flex items-center mb-3 sm:mb-4">
+                        <i data-lucide="zap" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"></i> Tech Stack
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        {% for skill in data.resume.tech_stack %}
+                            <span class="skill-chip text-xs font-semibold px-2 sm:px-3 py-1 rounded-full text-white">
+                                {{ skill }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Awards & Recognition -->
+                <div class="space-y-3 sm:space-y-4">
+                    <h3 class="text-xl sm:text-2xl font-bold text-primary flex items-center mb-3 sm:mb-4">
+                        <i data-lucide="award" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"></i> Awards
+                    </h3>
+                    <ul class="space-y-2 sm:space-y-3 list-none p-0">
+                        {% for award in data.resume.awards %}
+                        <li class="flex items-start text-xs sm:text-sm">
+                            <span class="text-yellow-400 mr-2 text-base sm:text-lg flex-shrink-0">★</span>
+                            <div>
+                                <strong class="text-white">{{ award.title }}</strong> 
+                                <span class="text-xs text-gray-500">({{ award.year }})</span>
+                                <p class="text-xs italic">{{ award.issuer }}</p>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <!-- REMOVED: Print Button -->
+            </div>
+
+            <!-- RIGHT COLUMN: Main Content (Header, Experience, Education) -->
+            <div class="resume-main lg:col-span-2 p-6 sm:p-8 lg:p-10 text-gray-200">
+                
+                <!-- Profile Header -->
+                <header class="profile-card p-5 sm:p-6 rounded-xl mb-8 sm:mb-12 shadow-xl animated-element">
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-2">
+                        {{ data.resume.name }}
+                    </h1>
+                    <h2 class="text-lg sm:text-xl font-light text-primary mb-3 sm:mb-4">{{ data.resume.title }}</h2>
+                    <p class="text-gray-300 text-sm sm:text-base font-light">{{ data.resume.bio }}</p>
+                </header>
+
+                <!-- Professional Experience Section -->
+                <section class="mb-8 sm:mb-12">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8 border-b border-primary/40 pb-2 flex items-center animated-element">
+                        <i data-lucide="briefcase" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-primary"></i> Experience
+                    </h3>
+                    <div class="timeline">
+                        {% for job in data.resume.experience %}
+                        <div class="timeline-item">
+                            <span class="timeline-dot"></span>
+                            <h4 class="text-lg sm:text-xl font-bold text-white mb-1 ml-3 sm:ml-4">{{ job.title }}</h4>
+                            <p class="text-xs sm:text-sm font-medium text-primary mb-2">{{ job.company }} | {{ job.years }}</p>
+                            <ul class="list-disc list-outside text-gray-400 ml-4 sm:ml-5 mt-2 space-y-1 text-xs sm:text-sm">
+                                {% for detail in job.details %}
+                                <li>{{ detail }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <!-- Education Section -->
+                <section class="mb-8 sm:mb-12">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8 border-b border-primary/40 pb-2 flex items-center animated-element" style="animation-delay: 0.1s;">
+                        <i data-lucide="graduation-cap" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-primary"></i> Education
+                    </h3>
+                    <div class="timeline">
+                        {% for edu in data.resume.education %}
+                        <div class="timeline-item">
+                            <span class="timeline-dot"></span>
+                            <h4 class="text-lg sm:text-xl font-bold text-white mb-1 ml-3 sm:ml-4">{{ edu.degree }}</h4>
+                            <p class="text-xs sm:text-sm font-medium text-primary mb-1">{{ edu.institution }} | {{ edu.year }}</p>
+                            <p class="text-gray-400 text-xs sm:text-sm mt-1">{{ edu.details }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <!-- REMOVED: Download Resume Button from inside the container -->
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: Download Resume Button positioned outside and below the main container -->
+    <div class="no-print text-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-10">
+        <div class="p-5 sm:p-6 rounded-xl bg-gray-900/80 shadow-2xl">
+            <h4 class="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Interested in a Professional Copy?</h4>
+            <a href="{{ data.resume_path | default('/static/jeet_majumder_resume.pdf') }}" download 
+               class="download-cta inline-flex items-center justify-center space-x-2 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3 relative z-10" style="pointer-events: auto; touch-action: manipulation; cursor: pointer;">
+                <i data-lucide="download" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                <span class="hidden sm:inline">Download Professional Resume (PDF)</span>
+                <span class="sm:hidden">Download Resume</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body_end_script %}
+    <script>
+        // Initialize Lucide icons after DOM content is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+{% endblock %}

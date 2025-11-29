@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block head_extra %}
+    <!-- Load Lucide icons for section elements -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Specific styles for the typing effect on the home page */
+        .typing-text {
+            white-space: nowrap;
+            display: inline-block;
+        }
+        .typing-container {
+            animation: fadeInUp 1s ease-out forwards;
+            animation-delay: 0.1s;
+        }
+
+        /* Floating image animation */
+        .float-image {
+            animation: float 8s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Responsive Hero Height for content alignment */
+        .hero-content {
+            display: flex;
+            align-items: center;
+        }
+
+        /* NEW: Custom styles for My Journey & Skills Sections */
+        .skill-bar-gradient {
+            /* Vibrant gradient for the progress bar fill */
+            background: linear-gradient(90deg, #4f46e5 0%, #8b5cf6 50%, #ec4899 100%);
+        }
+        
+        .skill-card, .info-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(79, 70, 229, 0.2); /* Subtle primary border */
+        }
+        
+        .skill-card:hover, .info-card:hover {
+            transform: translateY(-5px);
+            /* Soft glow effect on hover */
+            box-shadow: 0 15px 30px rgba(79, 70, 229, 0.4); 
+        }
+
+        /* Animated border for qualifications timeline */
+        .timeline-item {
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #4f46e5, #8b5cf6);
+            border-radius: 2px;
+            transition: all 0.5s ease-out;
+        }
+        .timeline-item:hover::before {
+            width: 6px;
+            box-shadow: 0 0 10px #4f46e5;
+        }
+        
+        /* Unique Skill Card Animation Element */
+        .skill-bg-skew {
+            opacity: 0; /* Hidden initially */
+            background: linear-gradient(to right, #4f46e5, #ec4899);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        .skill-item:hover .skill-bg-skew {
+            opacity: 0.1;
+            transform: skewY(-3deg) scale(1.5);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- 1. Hero Section (Two-Column Layout) -->
+    <section id="hero" class="min-h-[85vh] sm:min-h-[90vh] flex hero-content justify-center text-center lg:text-left px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 overflow-hidden bg-background">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center w-full">
+            
+            <!-- Left Column: Text Content and Typing Animation -->
+            <div class="space-y-4 sm:space-y-6 order-2 lg:order-1">
+                <p class="text-lg sm:text-xl text-primary font-semibold animated-element" style="animation-delay: 0.1s;">Hi, I'm</p>
+
+                <!-- Name Headline -->
+                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight animated-element" style="animation-delay: 0.2s;">
+                    {{ data.name }}
+                </h1>
+                
+                <!-- Animated typing headline -->
+                <div class="typing-container" id="typing-data" data-sentences='{{ data.typing_sentences | tojson }}'>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-light text-gray-300">
+                        I build <span id="typing-span" class="typing-text typing-cursor"></span>
+                    </h2>
+                </div>
+
+                <p class="text-base sm:text-lg text-gray-400 mt-3 sm:mt-4 px-2 sm:px-0 animated-element" style="animation-delay: 0.3s;">
+                    {{ data.title }}. Focused on creating scalable, innovative solutions with elegance and efficiency.
+                </p>
+
+                <div class="pt-4 sm:pt-6 flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start animated-element" style="animation-delay: 0.4s;">
+                    <a href="{{ data.pages.projects }}" class="gradient-button inline-block px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base text-white font-bold rounded-xl shadow-lg hover:shadow-primary/50 transition duration-300 transform hover:scale-[1.02] text-center relative z-10" style="pointer-events: auto; touch-action: manipulation;">View My Work</a>
+                    <a href="{{ data.pages.contact }}" class="inline-block px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base text-gray-200 border border-gray-600 rounded-xl hover:border-primary hover:text-primary transition duration-300 transform hover:scale-[1.02] text-center relative z-10" style="pointer-events: auto; touch-action: manipulation;">Hire Me</a>
+                </div>
+            </div>
+
+            <!-- Right Column: Image -->
+            <div class="flex justify-center lg:justify-end animated-element lg:mt-0 mt-6 sm:mt-8 order-1 lg:order-2" style="animation-delay: 0.5s;">
+                <img src="/static/home_img.png" 
+                     alt="Professional portrait of {{ data.name }}" 
+                     class="w-full max-w-[280px] sm:max-w-[350px] md:max-w-md h-auto rounded-full ring-4 sm:ring-8 ring-primary/30 shadow-2xl float-image object-cover aspect-square"
+                >
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- 2. My Journey: About Me & Qualifications Section (Enhanced) -->
+    <section id="about" class="py-12 sm:py-16 md:py-20 lg:py-32 bg-secondary border-t border-primary/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl sm:text-4xl font-bold text-center text-white mb-8 sm:mb-12 md:mb-16 border-b-2 border-primary/50 inline-block pb-1 animated-element">My Journey</h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
+                <!-- About Card (Enhanced) -->
+                <div class="lg:col-span-2 space-y-4 sm:space-y-6 text-gray-300 p-6 sm:p-8 bg-gray-800/70 rounded-xl shadow-2xl info-card animated-element">
+                    <div class="flex items-center space-x-3 mb-3 sm:mb-4">
+                        <i data-lucide="user-square" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
+                        <h3 class="text-xl sm:text-2xl font-semibold text-white">About Me</h3>
+                    </div>
+                    <p class="text-sm sm:text-base">I'm a passionate Full Stack Developer with over 5 years of experience specializing in the Python ecosystem (FastAPI, Django) and modern JavaScript frameworks (React, Vue.js). My journey in technology began with a fascination for complex systems and a drive to create intuitive user experiences.</p>
+                    <p class="text-sm sm:text-base">My expertise lies in translating business requirements into high-quality, scalable code. I thrive in environments that demand continuous learning and problem-solving, particularly in areas like real-time data processing and distributed systems.</p>
+                    <a href="{{ data.resume_path }}" target="_blank" class="mt-4 inline-flex items-center text-sm sm:text-base text-primary hover:text-indigo-400 transition-colors">
+                        View Resume 
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </a>
+                </div>
+
+                <!-- Qualifications Timeline (Enhanced) -->
+                <div class="space-y-4 sm:space-y-6 text-gray-300 p-6 sm:p-8 bg-gray-800/70 rounded-xl shadow-2xl info-card animated-element" style="animation-delay: 0.2s;">
+                    <div class="flex items-center space-x-3 mb-4 sm:mb-6">
+                        <i data-lucide="graduation-cap" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
+                        <h3 class="text-xl sm:text-2xl font-semibold text-white">Education & Milestones</h3>
+                    </div>
+                    {% for qual in data.qualifications %}
+                    <!-- Timeline Item with enhanced CSS -->
+                    <div class="timeline-item pl-5 sm:pl-6 mb-6 sm:mb-8 relative">
+                        <span class="absolute -left-2 top-0 block w-3 h-3 sm:w-4 sm:h-4 bg-primary rounded-full ring-2 sm:ring-4 ring-gray-900 z-10"></span>
+                        <p class="text-white text-base sm:text-lg font-bold">{{ qual.degree }}</p>
+                        <p class="text-xs sm:text-sm font-medium text-gray-400">{{ qual.institution }}</p>
+                        <p class="text-xs text-primary mt-1">{{ qual.year }}</p>
+                        <p class="text-xs mt-2 italic text-gray-500">{{ qual.details }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Technical Skills Section (Unique Grid Design) -->
+    <section id="skills" class="py-12 sm:py-16 md:py-20 lg:py-32 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl sm:text-4xl font-bold text-center text-white mb-8 sm:mb-12 border-b-2 border-primary/50 inline-block pb-1 animated-element">Technical Skills</h2>
+
+            <!-- Unique Grid Layout (4 columns on large screens) -->
+            <div id="skills-container" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
+                {% for skill in data.skills %}
+                <!-- Skill Card - Designed to be unique and impactful -->
+                <div class="skill-item p-4 sm:p-5 bg-gray-800/70 rounded-xl sm:rounded-2xl shadow-xl skill-card text-center relative overflow-hidden group animated-element" style="animation-delay: {{ loop.index * 0.15 }}s;">
+                    
+                    <!-- Unique Animated Skewed Background Element (flair) -->
+                    <div class="absolute inset-0 z-0 skill-bg-skew w-full h-full transform -skew-y-3 scale-150"></div>
+
+                    <div class="relative z-10 space-y-2 sm:space-y-3 flex flex-col items-center">
+                        
+                        <!-- Skill Icon -->
+                        <i data-lucide="zap" class="w-6 h-6 sm:w-8 sm:h-8 text-primary group-hover:text-white transition-colors duration-300"></i>
+                        
+                        <!-- Highlighting Percentage -->
+                        <div class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white transition-all duration-500 group-hover:text-primary">
+                            {{ skill.level }}<span class="text-lg sm:text-xl md:text-2xl">%</span>
+                        </div>
+                        
+                        <!-- Skill Name -->
+                        <span class="text-sm sm:text-base md:text-lg font-semibold text-gray-300 group-hover:text-white transition-colors duration-300 leading-tight px-1">{{ skill.name }}</span>
+                    </div>
+
+                    <!-- Functional Bar (Hidden - to be used by the scroll animation) -->
+                    <div class="w-full bg-gray-700 rounded-full h-1 mt-4 hidden">
+                        <div class="skill-bar h-1 rounded-full skill-bar-gradient transition-all duration-1000 ease-out"
+                             data-level="{{ skill.level }}" style="width: 0%;"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block body_end_script %}
+    <script>
+        // Initialize Lucide icons after DOM content is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Replaces all 'data-lucide' attributes with SVG icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+
+        // --- Hero Typing Animation ---
+        const typingSpan = document.getElementById('typing-span');
+        
+        // Ensure cursor class is maintained
+        if (typingSpan) {
+            typingSpan.classList.add('typing-cursor');
+        }
+        
+        // 1. Get the sentences from the typing container, simulating data passed from main.py
+        const typingDataElement = document.getElementById('typing-data');
+        const sentencesJSON = typingDataElement ? typingDataElement.getAttribute('data-sentences') : null;
+        
+        // Robust data parsing
+        let words = ["things that work."];
+        try {
+            if (sentencesJSON) {
+                const parsedWords = JSON.parse(sentencesJSON);
+                if (Array.isArray(parsedWords) && parsedWords.length > 0) {
+                     words = parsedWords;
+                }
+            }
+        } catch (e) {
+            console.error("Error parsing typing sentences data:", e);
+        }
+        
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let delay = 150;
+
+        function type() {
+            if (!typingSpan) return;
+            
+            const currentWord = words[wordIndex];
+
+            if (isDeleting) {
+                // Deleting logic
+                typingSpan.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+                delay = 75;
+            } else {
+                // Typing logic
+                typingSpan.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+                delay = 150;
+            }
+
+            // Ensure cursor class is always present
+            typingSpan.classList.add('typing-cursor');
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                // Word fully typed, pause and start deleting
+                delay = 1500;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                // Word fully deleted, move to the next word
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                delay = 500;
+            }
+
+            setTimeout(type, delay);
+        }
+
+        // Start the typing animation after a small delay
+        if (typingSpan) {
+            setTimeout(type, 1000);
+        }
+
+
+        // --- Progress Bar Animation on Scroll (Still functional for hidden bars/visual feedback) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const skillContainer = document.getElementById('skills-container');
+            const skillBars = document.querySelectorAll('.skill-bar');
+
+            const skillObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        skillBars.forEach(bar => {
+                            const level = bar.getAttribute('data-level');
+                            // Use setTimeout to ensure animation is visible
+                            setTimeout(() => {
+                                bar.style.width = `${level}%`;
+                            }, 100);
+                        });
+                        // Since this element also uses animated-element, we don't necessarily need to unobserve here,
+                        // but we will keep it for the progress bar logic itself.
+                        // observer.unobserve(entry.target); 
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: "0px",
+                threshold: 0.3 // Trigger when 30% of the skills container is visible
+            });
+
+            if (skillContainer) {
+                skillObserver.observe(skillContainer);
+            }
+        });
+    </script>
+{% endblock %}

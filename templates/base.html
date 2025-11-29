@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ data.name }} - {% block title %}Portfolio{% endblock %}</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide icons for footer -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5', 
+                        'secondary': '#1e293b', 
+                        'background': '#0f172a', 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    keyframes: {
+                        'fadeInUp': {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                    },
+                    animation: {
+                        'fadeInUp': 'fadeInUp 1s ease-out forwards',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { min-height: 100vh; display: flex; flex-direction: column; background-color: #0f172a; color: #e2e8f0; font-family: 'Inter', sans-serif; }
+        main { flex-grow: 1; min-height: calc(100vh - 140px); }
+        
+        /* Responsive Image Utilities */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Touch-friendly tap targets */
+        @media (max-width: 768px) {
+            a:not(.logo-link):not(.social-icon), 
+            button:not(.hamburger) {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            /* Ensure buttons and links are clickable */
+            a, button {
+                position: relative;
+                z-index: 1;
+                pointer-events: auto;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: rgba(79, 70, 229, 0.3);
+            }
+        }
+        
+        /* Prevent horizontal scroll */
+        * {
+            max-width: 100%;
+        }
+        
+        /* Ensure main content is always clickable */
+        main {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Ensure all interactive elements are clickable on mobile */
+        @media (max-width: 768px) {
+            main * {
+                pointer-events: auto;
+            }
+        }
+        
+        /* Better text rendering on mobile */
+        @media (max-width: 768px) {
+            body {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+        } 
+
+        /* Custom gradient button */
+        .gradient-button {
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+        .gradient-button:before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 0.5rem;
+            padding: 2px;
+            background: linear-gradient(45deg, #a78bfa, #38bdf8, #86efac);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .gradient-button:hover:before {
+            opacity: 1;
+        }
+        
+        /* Cursor Blink Animation */
+        .typing-cursor {
+            display: inline-block;
+            position: relative;
+        }
+        .typing-cursor::after {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: #4f46e5;
+            vertical-align: baseline;
+            animation: blink .75s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { 
+                opacity: 0;
+            }
+            50% { 
+                opacity: 1;
+            }
+        }
+
+        /* Navbar Logo Hover Effect - Minimalistic and Professional */
+        .logo-link {
+            position: relative;
+            transition: opacity 0.3s ease;
+        }
+        .logo-link:hover {
+            opacity: 0.9;
+        }
+        .logo-link:hover .logo-name {
+            color: #818cf8; /* Subtle indigo-400 */
+            transition: color 0.3s ease;
+        }
+        .logo-link:hover .logo-suffix {
+            color: #a78bfa; /* Subtle purple-400 */
+            transition: color 0.3s ease;
+        }
+
+        /* Base styles for animations */
+        .animated-element {
+            opacity: 0;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: translateY(20px);
+        }
+        .animated-element.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll-to-Top Button */
+        #scrollTopBtn {
+            z-index: 100;
+            display: none; 
+            transition: opacity 0.3s;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Progress Bar */
+        #progressBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background-color: #4f46e5;
+            z-index: 1000;
+            width: 0%;
+        }
+
+        /* Mobile Menu Styles */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 300px;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+        .mobile-menu.active {
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+        }
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: block;
+            }
+            .mobile-menu-overlay {
+                display: block;
+            }
+            .desktop-nav {
+                display: none;
+            }
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1001;
+        }
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #e2e8f0;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+        }
+    </style>
+    {% block head_extra %}{% endblock %}
+</head>
+<body class="bg-background text-gray-100 font-sans antialiased">
+
+    <!-- READING PROGRESS BAR -->
+    <div id="progressBar"></div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="p-6 pt-20">
+            <nav class="flex flex-col space-y-4">
+                {% for page in data.nav_links %}
+                    <a href="{{ page.url }}" class="px-4 py-3 rounded-lg text-base font-medium transition duration-300
+                       {% if active_page == page.url %}
+                           bg-primary text-white shadow-md
+                       {% else %}
+                           text-gray-300 hover:text-primary hover:bg-gray-800
+                       {% endif %}
+                    " onclick="closeMobileMenu()">
+                        {{ page.name }}
+                    </a>
+                {% endfor %}
+            </nav>
+        </div>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50 bg-background/95 backdrop-blur-sm shadow-lg border-b border-primary/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center">
+            
+            <!-- Logo with Typing Animation -->
+            <a href="{{ data.pages.home }}" class="logo-link text-2xl sm:text-3xl font-extrabold transition duration-300 flex items-baseline space-x-0.5">
+                <span class="logo-name text-white transition duration-300">{{ data.name.split(' ')[0] }}</span>
+                <!-- Data for suffixes injected here -->
+                <span id="typed-suffix" class="logo-suffix text-primary font-bold text-2xl sm:text-3xl transition duration-300" data-suffixes='{{ data.logo_suffixes | tojson }}'></span>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav space-x-2 sm:space-x-4 hidden md:flex">
+                {% for page in data.nav_links %}
+                    <a href="{{ page.url }}" class="px-3 py-1.5 rounded-md text-sm font-medium transition duration-300
+                       {% if active_page == page.url %}
+                           bg-primary text-white shadow-md
+                       {% else %}
+                           text-gray-300 hover:text-primary hover:bg-gray-800
+                       {% endif %}
+                    ">
+                        {{ page.name }}
+                    </a>
+                {% endfor %}
+            </nav>
+
+            <!-- Hamburger Menu Button -->
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 sm:py-12 bg-gray-900 border-t border-primary/20 text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 md:gap-16 pb-8 sm:pb-10 border-b border-gray-700/50">
+                <!-- Column 1: Info -->
+                <div class="text-center sm:text-left">
+                    <img src="/static/footer_img.png" 
+                         alt="{{ data.name }}" 
+                         class="w-16 h-16 sm:w-20 sm:h-20 rounded-full mb-4 ring-2 ring-primary/50 mx-auto sm:mx-0">
+                    <h3 class="text-lg sm:text-xl font-bold text-white mb-1">{{ data.name }}</h3>
+                    <p class="text-xs sm:text-sm">Junior Data Scientist</p>
+                    <a href="mailto:{{ data.email }}" class="text-primary hover:text-white transition duration-300 text-xs sm:text-sm mt-2 block break-all">{{ data.email }}</a>
+                </div>
+                <!-- Column 2: Navigation -->
+                <div class="text-center sm:text-left">
+                    <h4 class="text-base sm:text-lg font-semibold text-white mb-4 border-b border-primary/30 inline-block">Navigation</h4>
+                    <nav class="flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-0 sm:space-y-3">
+                        {% for page in data.nav_links %}
+                            <a href="{{ page.url }}" class="flex items-center text-sm hover:text-primary transition duration-300 group sm:w-full">
+                                <i data-lucide="{% if page.name == 'Home' %}home{% elif page.name == 'Projects' %}folder-kanban{% elif page.name == 'Resume' %}file-text{% elif page.name == 'Contact' %}mail{% endif %}" class="w-4 h-4 mr-2 text-gray-500 group-hover:text-primary transition-colors duration-300"></i>
+                                {{ page.name }}
+                            </a>
+                        {% endfor %}
+                    </nav>
+                </div>
+                <!-- Column 3: Social -->
+                <div class="text-center sm:text-left sm:col-span-2 lg:col-span-1">
+                    <h4 class="text-base sm:text-lg font-semibold text-white mb-4 border-b border-primary/30 inline-block">Connect</h4>
+                    <div class="flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-0 sm:space-y-3"> 
+                        <a href="https://linkedin.com/in/{{ data.linkedin }}" target="_blank" class="flex items-center text-sm text-gray-400 hover:text-primary transition duration-300 sm:w-full group">
+                            <i data-lucide="linkedin" class="w-4 h-4 mr-2 text-gray-500 group-hover:text-primary transition-colors duration-300"></i>
+                            LinkedIn
+                        </a>
+                        <a href="https://github.com/{{ data.github }}" target="_blank" class="flex items-center text-sm text-gray-400 hover:text-primary transition duration-300 sm:w-full group">
+                            <i data-lucide="github" class="w-4 h-4 mr-2 text-gray-500 group-hover:text-primary transition-colors duration-300"></i>
+                            GitHub
+                        </a>
+                        <a href="https://kaggle.com/{{ data.kaggle }}" target="_blank" class="flex items-center text-sm text-gray-400 hover:text-primary transition duration-300 sm:w-full group">
+                            <i data-lucide="bar-chart-3" class="w-4 h-4 mr-2 text-gray-500 group-hover:text-primary transition-colors duration-300"></i>
+                            Kaggle
+                        </a>
+                        <a href="https://youtube.com/{{ data.youtube }}" target="_blank" class="flex items-center text-sm text-gray-400 hover:text-primary transition duration-300 sm:w-full group">
+                            <i data-lucide="youtube" class="w-4 h-4 mr-2 text-gray-500 group-hover:text-primary transition-colors duration-300"></i>
+                            YouTube
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 sm:mt-8 text-center text-gray-500 text-xs sm:text-sm">
+                <p>&copy; {{ data.current_year }} {{ data.name }}. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" onclick="scrollToTop()" class="gradient-button p-2.5 sm:p-3 rounded-full bg-gray-800 text-white shadow-2xl hover:shadow-primary/50 fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex items-center justify-center">
+        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+    </button>
+    
+    <!-- Page Specific Scripts -->
+    {% block body_end_script %}{% endblock %}
+
+    <!-- GLOBAL SCRIPTS (Run on all pages) -->
+    <script>
+        // --- Initialize Lucide Icons ---
+        document.addEventListener("DOMContentLoaded", function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+
+        // --- 1. Navbar Logo Typing Animation ---
+        document.addEventListener("DOMContentLoaded", function() {
+            const typedSuffixSpan = document.getElementById("typed-suffix");
+            
+            // Safe Parsing of Suffixes from Data Attribute
+            let suffixes = [".ai", ".ml"]; // Fallback
+            if (typedSuffixSpan) {
+                try {
+                    const rawSuffixes = typedSuffixSpan.getAttribute('data-suffixes');
+                    if (rawSuffixes) {
+                        suffixes = JSON.parse(rawSuffixes);
+                    }
+                } catch (e) {
+                    console.log("Error parsing suffixes:", e);
+                }
+            }
+
+            let suffixIndex = 0;
+            let charIndex = 0;
+            const typingDelay = 100;
+            const erasingDelay = 75;
+            const newTextDelay = 1500;
+
+            function typeSuffix() {
+                if (!typedSuffixSpan) return;
+                
+                if (suffixIndex >= suffixes.length) suffixIndex = 0;
+                const currentSuffix = suffixes[suffixIndex];
+
+                if (charIndex < currentSuffix.length) {
+                    typedSuffixSpan.textContent += currentSuffix.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeSuffix, typingDelay);
+                } else {
+                    setTimeout(eraseSuffix, newTextDelay);
+                }
+            }
+
+            function eraseSuffix() {
+                if (!typedSuffixSpan) return;
+
+                if (charIndex > 0) {
+                    typedSuffixSpan.textContent = suffixes[suffixIndex].substring(0, charIndex - 1);
+                    charIndex--;
+                    setTimeout(eraseSuffix, erasingDelay);
+                } else {
+                    suffixIndex++;
+                    setTimeout(typeSuffix, typingDelay + 500);
+                }
+            }
+
+            if(typedSuffixSpan && suffixes.length > 0) {
+                setTimeout(typeSuffix, 1000);
+            }
+        });
+
+        // --- 2. Scroll Animations & Progress Bar ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: "0px",
+                threshold: 0.1
+            };
+
+            const elements = document.querySelectorAll('.animated-element');
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            elements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        // --- 3. Scroll Logic ---
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        const progressBar = document.getElementById('progressBar');
+
+        window.onscroll = function() {
+            // Scroll Top Button
+            const scrolledHeight = document.body.scrollTop || document.documentElement.scrollTop;
+            if (scrolledHeight > 200) {
+                scrollTopBtn.style.display = "flex";
+                scrollTopBtn.style.opacity = "1";
+            } else {
+                scrollTopBtn.style.opacity = "0";
+                setTimeout(() => {
+                    if (document.body.scrollTop <= 200 && document.documentElement.scrollTop <= 200) {
+                         scrollTopBtn.style.display = "none";
+                    }
+                }, 300);
+            }
+
+            // Progress Bar
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + "%";
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- Mobile Menu Toggle ---
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+        function toggleMobileMenu() {
+            hamburgerBtn.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            mobileMenuOverlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            hamburgerBtn.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (hamburgerBtn) {
+            hamburgerBtn.addEventListener('click', toggleMobileMenu);
+        }
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+        }
+
+        // Close mobile menu on window resize if it's open
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+        });
+
+        // --- Ensure buttons and links work on mobile ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fix for mobile touch events
+            const buttons = document.querySelectorAll('button, a[href], .gradient-button, .gradient-cta, .submit-cta, .download-cta');
+            buttons.forEach(button => {
+                // Remove any pointer-events: none that might be inherited
+                if (button.style.pointerEvents === 'none') {
+                    button.style.pointerEvents = 'auto';
+                }
+                
+                // Ensure touch events work
+                button.addEventListener('touchstart', function(e) {
+                    // Allow the event to propagate
+                    e.stopPropagation();
+                }, { passive: true });
+                
+                // Prevent double-tap zoom on buttons
+                let lastTouchEnd = 0;
+                button.addEventListener('touchend', function(e) {
+                    const now = Date.now();
+                    if (now - lastTouchEnd <= 300) {
+                        e.preventDefault();
+                    }
+                    lastTouchEnd = now;
+                }, false);
+            });
+        });
+    </script>
+</body>
+</html>

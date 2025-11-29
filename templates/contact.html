@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Me{% endblock %}
+
+{% block head_extra %}
+    <!-- Load Lucide icons for social media and form elements -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Contact Page Background and Layout */
+        .contact-page {
+            background: #0f172a; /* Deep Slate Blue */
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @media (min-width: 640px) {
+            .contact-page {
+                padding-top: 4rem;
+                padding-bottom: 4rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            .contact-page {
+                padding-top: 6rem;
+                padding-bottom: 6rem;
+            }
+        }
+
+        /* Main Contact Card Style (Focus Element) */
+        .contact-card {
+            background: #1e293b; /* Darker card base */
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 80px rgba(0, 0, 0, 0.9), 0 0 30px rgba(79, 70, 229, 0.4);
+            transition: transform 0.3s ease;
+        }
+        .contact-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Input Field Styling */
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #334155; /* Slightly lighter background for input */
+            border: 1px solid #4f46e5;
+            border-radius: 0.5rem;
+            color: #f8fafc; /* White text */
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+        @media (min-width: 640px) {
+            .form-input {
+                font-size: 1rem;
+            }
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.5); /* Inner focus glow */
+        }
+
+        /* Submit Button (Gradient CTA) */
+        .submit-cta {
+            background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+            box-shadow: 0 5px 20px rgba(79, 70, 229, 0.6);
+            color: white;
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem; 
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .submit-cta:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.8);
+        }
+
+        /* Social Link Styling */
+        .social-icon {
+            color: #4f46e5;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .social-icon:hover {
+            color: #8b5cf6;
+            transform: translateY(-3px) scale(1.1);
+        }
+
+        /* Info Block */
+        .info-block {
+            border-left: 3px solid #4f46e5;
+            padding-left: 0.75rem;
+        }
+        @media (min-width: 640px) {
+            .info-block {
+                padding-left: 1rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="contact-page">
+        <div class="contact-card max-w-5xl mx-auto w-full p-6 sm:p-8 md:p-12">
+            
+            <!-- Header Text -->
+            <header class="text-center mb-6 sm:mb-8 md:mb-10">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-2 sm:mb-3">Let's Build Something Great.</h2>
+                <p class="text-base sm:text-lg text-gray-400 px-2">
+                    Reach out directly or connect with me on social media. I look forward to your message!
+                </p>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-10">
+                
+                <!-- Left Column: Contact Information & Links -->
+                <div class="lg:col-span-1 space-y-6 sm:space-y-8 order-2 lg:order-1">
+                    
+                    <div class="space-y-3 sm:space-y-4">
+                        <h3 class="text-lg sm:text-xl font-bold text-primary flex items-center mb-3 sm:mb-4">
+                            <i data-lucide="info" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"></i> Direct Contact Info
+                        </h3>
+                        
+                        <div class="info-block space-y-2 sm:space-y-3 text-gray-300">
+                            <p class="flex items-center text-sm sm:text-base break-all">
+                                <i data-lucide="mail" class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.email }}
+                            </p>
+                            <p class="flex items-center text-sm sm:text-base">
+                                <i data-lucide="map-pin" class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.resume.contact.location }}
+                            </p>
+                            <p class="flex items-center text-sm sm:text-base">
+                                <i data-lucide="smartphone" class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.resume.contact.phone }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Links -->
+                    <div class="space-y-3 sm:space-y-4">
+                        <h3 class="text-lg sm:text-xl font-bold text-primary flex items-center mb-3 sm:mb-4">
+                            <i data-lucide="users" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"></i> Find Me Online
+                        </h3>
+                        <div class="flex space-x-4 sm:space-x-6">
+                            <a href="{{ data.resume.contact.linkedin }}" target="_blank" aria-label="LinkedIn">
+                                <i data-lucide="linkedin" class="social-icon w-7 h-7 sm:w-8 sm:h-8"></i>
+                            </a>
+                            <a href="{{ data.resume.contact.github }}" target="_blank" aria-label="GitHub">
+                                <i data-lucide="github" class="social-icon w-7 h-7 sm:w-8 sm:h-8"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Contact Form -->
+                <div class="lg:col-span-2 order-1 lg:order-2">
+                    <form action="#" method="POST" class="space-y-4 sm:space-y-6">
+                        
+                        <!-- Name and Email (Side-by-side on desktop) -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-200 mb-2">Your Name</label>
+                                <input type="text" id="name" name="name" required class="form-input" placeholder="Jeet Majumder">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-200 mb-2">Email Address</label>
+                                <input type="email" id="email" name="email" required class="form-input" placeholder="you@example.com">
+                            </div>
+                        </div>
+
+                        <!-- Subject Line -->
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-gray-200 mb-2">Subject</label>
+                            <input type="text" id="subject" name="subject" required class="form-input" placeholder="Inquiry about a Data Science role...">
+                        </div>
+
+                        <!-- Message Body -->
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-200 mb-2">Message</label>
+                            <textarea id="message" name="message" rows="5" required class="form-input" placeholder="Hello Jeet, I saw your portfolio and..."></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="pt-2 sm:pt-4">
+                            <button type="submit" class="submit-cta w-full flex items-center justify-center space-x-2 text-sm sm:text-base py-3 sm:py-3.5 relative z-10" style="pointer-events: auto; touch-action: manipulation; cursor: pointer;">
+                                <i data-lucide="send" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                                <span>Send Message</span>
+                            </button>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body_end_script %}
+    <script>
+        // Initialize Lucide icons after DOM content is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+        
+        // Simple form submission handler (prevents default action for static demo)
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // In a real application, you would send data to the server here.
+                // For the demo, we just give visual feedback.
+                const submitButton = document.querySelector('.submit-cta');
+                if (submitButton) {
+                    submitButton.innerHTML = '<i data-lucide="check-circle" class="w-5 h-5"></i><span>Message Sent!</span>';
+                    submitButton.classList.remove('submit-cta');
+                    submitButton.classList.add('bg-green-600', 'hover:bg-green-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
+                    
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                    
+                    // Reset after 3 seconds
+                    setTimeout(() => {
+                        submitButton.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Send Message</span>';
+                        submitButton.classList.remove('bg-green-600', 'hover:bg-green-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
+                        submitButton.classList.add('submit-cta');
+                        if (typeof lucide !== 'undefined') {
+                            lucide.createIcons();
+                        }
+                    }, 3000);
+                }
+            });
+        }
+    </script>
+{% endblock %}
