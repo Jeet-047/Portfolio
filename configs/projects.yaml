@@ -1,0 +1,278 @@
+projects:
+    # Project Section : ------------------------------------------------------------------
+  - id: "multi-doc-rag-system"
+    title: "Multi-Doc Q&A RAG System"
+    date: "2025-11"
+    role: "End-to-End Developer (RAG System)"
+    technologies:
+      - "NLP"
+      - "RAG"
+      - "Ollama LLMs"
+      - "FAISS"
+      - "Docker"
+      - "Streamlit"
+      - "FastAPI"
+      - "Python"
+    short_desc: "This project implements a production-oriented Retrieval-Augmented Generation (RAG) system that can answer questions over multiple document types such as PDFs, DOCX, TXT, Markdown files, and web URLs."
+    full_desc: >
+      This project implements a real-world, production-ready Retrieval-Augmented Generation (RAG) 
+      question-answering system designed to efficiently answer questions from large document collections. 
+      The system first ingests documents from multiple sources such as PDFs, Word files, text files, and URLs, 
+      extracts both text and metadata, and cleans the content in a structured manner. The cleaned data is then 
+      split into meaningful chunks, converted into vector embeddings, and stored for fast retrieval. 
+      When a user asks a question, the system intelligently retrieves the most relevant document chunks 
+      using similarity search, improves accuracy through re-ranking and diversity optimization, and builds 
+      a focused context for the language model. Depending on the context size, it dynamically applies 
+      either a simple or map-reduce strategy before generating the final answer using fast, locally running 
+      LLMs. The result is a system that balances accuracy, speed, scalability, and simplicity, making it 
+      suitable for document Q&A, internal knowledge bases, research assistants, and enterprise-level document 
+      search—without relying on costly external APIs.
+    color: "bg-emerald-600"
+    icon: "🇶🇦✨"
+    website_url: "https://github.com/Jeet-047/multi-doc-type-RAG-system/blob/main/README.md#%EF%B8%8F-user-interface"
+    github_url: "https://github.com/Jeet-047/multi-doc-type-RAG-system"
+    images:
+      - "/static/project_img/P-mrqas/mrqas_img1.png"
+      - "/static/project_img/P-mrqas/mrqas_img2.png"
+      - "/static/project_img/P-mrqas/mrqas_img3.png"
+      - "/static/project_img/P-mrqas/mrqas_img4.png"
+      - "/static/project_img/P-mrqas/mrqas_img5.png"
+    features:
+      - "Query-aware retrieval tuning"
+      - "Citation scoring and highlighting"
+      - "Balanced speed vs accuracy trade-off"
+      - "No hallucinated answers"
+
+  # Project Section : ------------------------------------------------------------------
+  - id: "news-topic-classifier"
+    title: "News Topic Classification App"
+    date: "2025-10"
+    role: "End-to-End NLP Developer"
+    technologies:
+      - "NLP"
+      - "Scikit-learn"
+      - "FastAPI"
+      - "MLOPS"
+      - "GitHub Actions"
+      - "Docker"
+      - "MongoDB Atlas"
+      - "Render"
+      - "Python"
+    short_desc: "An end-to-end NLP system that ingests raw news articles, and serves real-time predictions to classify news into categories like World, Sports, Business, and Tech. through a FastAPI interface."
+    full_desc: >
+      This project demonstrates a complete Machine Learning lifecycle for News Topic Classification, 
+      covering everything from raw data ingestion to live prediction via a web interface.
+      Designed with production-grade MLOps principles: modular pipelines, automated CI, Dockerized deployment, 
+      and clean model versioning.
+    color: "bg-pink-600"
+    icon: "📰"
+    website_url: "https://news-topic-classification-by-jeet.onrender.com"
+    github_url: "https://github.com/Jeet-047/News-topic-classification"
+    images:
+      - "/static/project_img/P-ntc/ntc_img1.png"
+      - "/static/project_img/P-ntc/ntc_img2.png"
+      - "/static/project_img/P-ntc/ntc_img3.png"
+      - "/static/project_img/P-ntc/ntc_img4.png"
+    features:
+      - "Instant classification responses"
+      - "Logging & Exception Handling"
+      - "Auto-retraining scheduler"
+      - "Cloud-native deployment (Render)"
+
+  # Project Section : ------------------------------------------------------------------
+  - id: "vehicle-insurance-predictor"
+    title: "Vehicle Insurance Prediction App"
+    date: "2025-09"
+    role: "End-to-End ML Developer"
+    technologies:
+      - "ML"
+      - "FastAPI"
+      - "MLOPS"
+      - "Docker"
+      - "GitHub Actions"
+      - "AWS EC2"
+      - "AWS S3"
+      - "Python"
+    short_desc: "An industry-grade, production-ready Machine Learning system that predicts vehicle insurance outcomes using a complete MLOps pipeline."
+    full_desc: >
+      This project demonstrates enterprise-level MLOps skills by building a complete vehicle insurance 
+      prediction system using MongoDB, FastAPI, Docker, AWS, and CI/CD automation. It showcases the full 
+      lifecycle from data ingestion to live deployment with cloud-based scalability and maintainability.
+    color: "bg-rose-600"
+    icon: "🚗"
+    website_url: "http://18.234.35.23:5000/"
+    github_url: "https://github.com/Jeet-047/vehicle-insurance-classification"
+    images:
+      - "/static/project_img/P-vip/vip_img1.png"
+      - "/static/project_img/P-vip/vip_img2.png"
+    features:
+      - "Logging & Exception Handling"
+      - "Model Versioning (S3 model registry)"
+      - "Config Driven Architecture"
+      - "Fully Automated Deployment"
+
+  # Project Section : ------------------------------------------------------------------
+  - id: "brain-tumor-detector"
+    title: "Brain Tumor Detection App"
+    date: "2025-08"
+    role: "End-to-End DL Developer"
+    technologies:
+      - "DL"
+      - "Transfer Learning"
+      - "TensorFlow/Keras"
+      - "Render"
+      - "Python"
+    short_desc: "A deep learning-powered web application for automatic brain tumor classification from MRI images. Built with Flask, TensorFlow/Keras, and deployed on Render."
+    full_desc: >
+      This project demonstrates a CNN-based approach for categorizing and detecting brain tumors. 
+      The dataset utilized in this study comprises four categories: glioma, meningioma, pituitary, 
+      and no tumor in a total of 7023 MRI images. In this project, the combination of a pre-trained 
+      model (VGG16) and fine-tuning works very accurately to classify the malignant tumor. 
+      However, there are three fully connected layers 256, 128, and 64 with dropout and batch normalization 
+      respectively, which enhances the overall validation accuracy of 98.67%, and also improves the precision, 
+      sensitivity, and specificity rather than commonly used convolutional neural network models (CNNs).
+    color: "bg-zinc-600"
+    icon: "🧠"
+    website_url: "https://brain-tumor-detection-jeet.onrender.com"
+    github_url: "https://github.com/Jeet-047/brain-tumor-detection"
+    images:
+      - "/static/project_img/P-btd/btd_img1.png"
+      - "/static/project_img/P-btd/btd_img2.png"
+      - "/static/project_img/P-btd/btd_img3.png"
+      - "/static/project_img/P-btd/btd_img4.png"
+    features:
+      - "Achieved Over 98% Prediction Accuracy"
+      - "Adaptive Learning Rate Scheduler"
+      - "Instant Prediction & Easy to Use"
+
+  # Project Section : ------------------------------------------------------------------
+  - id: "heart-disease-predictor"
+    title: "Heart Disease Prediction App"
+    date: "2025-07"
+    role: "End-to-End ML Developer"
+    technologies:
+      - "ML"
+      - "Flask"
+      - "Feature Selection"
+      - "Render"
+      - "Python"
+    short_desc: "This app allows users to input patient attributes such as age, chest pain type, cholesterol, and more. The backend uses a Random Forest model to predict whether the patient is likely to have heart disease."
+    full_desc: >
+      A web application for predicting the presence of heart disease using a trained Random Forest 
+      machine learning model. As a input the model takes 8 attributes to perform prediction. The features 
+      names are: [Age, Chest Pain Type, Resting Blood Pressure, Cholesterol, Max Heart Rate, Oldpeak, Number of Major Vessels, Thalassemia]. 
+      The Random Forest model achieves an accuracy of 99% with 8 selected features. As a feature selection RFE(Recursive Feature Elimination) method. 
+      Built with Flask, this app provides a user-friendly interface for entering patient data and viewing prediction results.
+    color: "bg-orange-600"
+    icon: "❤️‍🩹"
+    website_url: "https://heart-disease-detection-jeet.onrender.com"
+    github_url: "https://github.com/Jeet-047/heart-disease-detection-app"
+    images:
+      - "/static/project_img/P-hdp/hdp_img1.png"
+      - "/static/project_img/P-hdp/hdp_img2.png"
+      - "/static/project_img/P-hdp/hdp_img3.png"
+    features:
+      - "Achieved 99% Prediction Accuracy"
+      - "Modern UI/UX Design"
+      - "Instant Prediction & Detailed Report"
+      - "Easy to Use"
+
+  # Project Section : ------------------------------------------------------------------
+  - id: "person-entry-exit-tracker"
+    title: "Person Entry-Exit Tracking System"
+    date: "2025-06"
+    role: "Computer Vision / ML Engineer"
+    technologies:
+      - "OpenCV"
+      - "ReID"
+      - "YOLO"
+      - "TorchReID"
+      - "ResNet50"
+      - "Python"
+    short_desc: "A computer vision system that tracks people entering and exiting through a designated door area using YOLO object detection and ReID (Re-Identification) techniques."
+    full_desc: >
+      Developed a computer vision system that automatically detects and classifies person entry and 
+      exit events from CCTV video using object detection and appearance-based re-identification. 
+      The pipeline uses a YOLO-based person detector and a FusionReID (ResNet-50) model to extract 
+      robust body embeddings. When a person interacts with a predefined door zone, their appearance 
+      embedding is compared with embeddings from recent frames using cosine similarity to determine 
+      identity continuity and movement direction. This enables single-camera, online person 
+      re-identification for accurate entry/exit analytics while preserving identity privacy.
+    color: "bg-violet-600"
+    icon: "🏃🚪"
+    website_url: "https://github.com/Jeet-047/person-entry-exit-tracker/blob/main/README.md"
+    github_url: "https://github.com/Jeet-047/person-entry-exit-tracker"
+    images:
+      - "/static/project_img/P-peet/peet_img1.png"
+      - "/static/project_img/P-peet/peet_img2.png"
+    features:
+      - "YOLO-based person detection"
+      - "FusionReID (ResNet-50) for appearance embeddings"
+      - "Event Logging & Debug Visualization"
+      - "GUI tool for door area selection"
+
+  # Project Section : ------------------------------------------------------------------
+  - id: "brain-tumor-detection"
+    title: "Research On Brain Tumor Detection"
+    date: "2025-04"
+    role: "Lead Researcher and First Author"
+    technologies:
+      - "DL"
+      - "Fine-Tuning"
+      - "Transfer Learning"
+      - "VGG16"
+    short_desc: "Researchers developed a deep learning model using MRI images to classify brain tumors into four types: Glioma, Meningioma, Pituitary, and No Tumor. The goal is to create an accurate diagnosis tool for medical experts."
+    full_desc: >
+      This study demonstrates a CNN-based approach for categorizing and detecting brain tumors. 
+      The dataset utilized in this study comprises four categories: glioma, meningioma, pituitary, 
+      and no tumor in a total of 7023 MRI images. In this proposed work, the combination of a pre-trained 
+      model (VGG16) and fine-tuning works very accurately to classify the malignant tumor. 
+      However, there are three fully connected layers 256, 128, and 64 with dropout and batch normalization 
+      respectively, which enhances the overall validation accuracy of 98.67%, and also improves the precision, 
+      sensitivity, and specificity rather than commonly used convolutional neural network models (CNNs).
+    color: "bg-cyan-600"
+    icon: "🕵🏻"
+    website_url: "https://github.com/Jeet-047/Research-and-Certificates/blob/main/Research%20Contributions/brain_tumor_research.md"
+    github_url: "https://github.com/Jeet-047/Research-and-Certificates/blob/main/Research%20Contributions/brain_tumor_research.md"
+    images:
+      - "/static/project_img/R-btd/btd_img1.png"
+      - "/static/project_img/R-btd/btd_img2.png"
+      - "/static/project_img/R-btd/btd_img3.png"
+      - "/static/project_img/R-btd/btd_img4.png"
+    features:
+      - "Improved Training Speed and Stability"
+      - "Adaptive Weight Adjustment"
+      - "Dynamic Learning Rate Adjustment"
+      - "Improved Feature Extraction and Generalization"
+
+  # Project Section : ------------------------------------------------------------------
+  - id: "hepatitis-c-prediction"
+    title: "Research On Hepatitis C Prediction"
+    date: "2024"
+    role: "Lead Researcher and First Author"
+    technologies:
+      - "ML"
+      - "Scikit-Learn"
+      - "Feature Selection"
+      - "Model Evaluation"
+    short_desc: "The research paper aimed to develop a machine learning-based approach for early identification of HCV, which could potentially improve treatment outcomes."
+    full_desc: >
+      In this research, we proposed a novel method for predicting Hepatitis C Virus (HCV) infection using machine learning techniques.
+      This study suggests a prediction framework for the Hepatitis C virus that is based on machine learning techniques. In this dataset 564 patients with 12 distinct features are present. 
+      We tested two cases, the first one without feature selection and with feature selection based on Gain Ratio Attribute Evaluation (GRAE) to guarantee the strength and dependability of the suggested framework.
+      We evaluated various machine learning models, including Random Forest, Support Vector Machine, and Gradient Boosting, to determine their effectiveness in predicting HCV infection based on the selected features. 
+      The results demonstrated that our approach significantly improved prediction accuracy compared to traditional methods, highlighting the potential of machine learning in enhancing early diagnosis and treatment of HCV.
+    color: "bg-indigo-600"
+    icon: "🕵🏻"
+    website_url: "https://www.researchgate.net/publication/381029394_Hepatitis_C_Prediction_Using_Feature_Selection_by_Machine_Learning_Technique"
+    github_url: "https://github.com/Jeet-047/Research-and-Certificates/blob/main/Research%20Contributions/hepatitis_c_research.md"
+    images:
+      - "/static/project_img/R-hcp/hcp_img1.jpg"
+      - "/static/project_img/R-hcp/hcp_img2.png"
+      - "/static/project_img/R-hcp/hcp_img3.png"
+    features:
+      - "Optimal feature selection using GRAE"
+      - "Improved prediction accuracy to 100%"
+      - "Validated Clinical Impact"
+  
+

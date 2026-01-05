@@ -1,13 +1,28 @@
 import uvicorn
 import os
+import yaml
 from pathlib import Path
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
+from api.models import ContactForm
+from api.services.db_service import db_service
+from api.services.email_service import email_service
 
 # --- 1. FastAPI Application Setup ---
 app = FastAPI(title="Creative Multi-Page Portfolio API")
+
+# Add CORS middleware to allow frontend requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, replace with specific origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Get the project root directory (parent of api directory)
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,168 +37,26 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 templates_dir = str(BASE_DIR / "templates")
 templates = Jinja2Templates(directory=templates_dir)
 
+# --- 2. Load Portfolio Data from YAML Files ---
+CONFIGS_DIR = BASE_DIR / "configs"
 
-# --- 2. Portfolio Data (Used by all pages) ---
+def load_yaml_file(filename: str) -> dict:
+    """Load and parse a YAML file from the configs directory."""
+    file_path = CONFIGS_DIR / filename
+    with open(file_path, 'r', encoding='utf-8') as f:
+        return yaml.safe_load(f)
+
+# Load data from YAML files
+static_data = load_yaml_file("static.yaml")
+projects_data = load_yaml_file("projects.yaml")
+resume_data = load_yaml_file("resume.yaml")
+
+# Combine all data into PORTFOLIO_DATA
 PORTFOLIO_DATA = {
-    "name": "Jeet Majumder",
-    "title": "Junior Data Scientist & AI Enthusiast",
-    "email": "jeet0912majumder@gmail.com",
-    "linkedin": "jeet0912majumder",
-    "github": "Jeet-047",
-    "kaggle": "jeet047",
-    "youtube": "@Jeet_047",
-    "resume_path": "/static/jeet_majumder_resume.pdf", 
-    "current_year": datetime.now().year, # Used in the footer
-    
-    # Page Route Mapping (Used in buttons)
-    "pages": {
-        "home": "/",
-        "projects": "/projects",
-        "resume": "/resume",
-        "contact": "/contact",
-    },
-
-    # NEW: Navigation Links for the Header (Base Template)
-    # This is required for the {% for page in data.nav_links %} loop in base.html
-    "nav_links": [
-        {"name": "Home", "url": "/"},
-        {"name": "Projects", "url": "/projects"},
-        {"name": "Resume", "url": "/resume"},
-        {"name": "Contact", "url": "/contact"},
-    ],
-    
-    # NEW: Data for Navbar Logo Animation (Base Template)
-    # This is required for the typing animation in the logo
-    "logo_suffixes": [".ai", ".ml", ".ds", ".ops"],
-
-    # Data for Home Page Hero Animation
-    "typing_sentences": [
-        "scalable systems.",
-        "beautiful frontends.",
-        "robust APIs.",
-        "innovative solutions."
-    ],
-    
-    "qualifications": [
-        {
-            "degree": "M.S. Computer Science",
-            "institution": "University of Tech Excellence",
-            "year": "2018 - 2020",
-            "details": "Specialized in Distributed Systems and Machine Learning Algorithms."
-        },
-        {
-            "degree": "B.E. Software Engineering",
-            "institution": "State Technical College",
-            "year": "2014 - 2018",
-            "details": "Focused on Data Structures and Web Application Development."
-        }
-    ],
-    "skills": [
-        {"name": "Python / FastAPI", "level": 95},
-        {"name": "Tailwind CSS / Frontend", "level": 90},
-        {"name": "React / TypeScript", "level": 85},
-        {"name": "Database (SQL/NoSQL)", "level": 80},
-        {"name": "Cloud Deployment (GCP/AWS)", "level": 75},
-    ],
-    "projects": [
-        {
-            "id": "project-1",
-            "title": "Quantum Task Manager",
-            "tech": "React, TypeScript, FastAPI",
-            "desc": "A high-performance task management application featuring real-time collaboration and AI-driven prioritization. Implemented WebSocket communication.",
-            "color": "bg-indigo-600",
-            "icon": "🚀",
-            "url": ""
-        },
-        {
-            "id": "project-2",
-            "title": "Decentralized Voting System",
-            "tech": "Solidity, Web3.js, Python",
-            "desc": "Developed a secure, transparent voting platform on the Ethereum blockchain. Focused on cryptographic security and smart contract auditing.",
-            "color": "bg-emerald-600",
-            "icon": "🔗",
-            "url": ""
-        },
-        {
-            "id": "project-3",
-            "title": "Real-time Data Visualization",
-            "tech": "Vue.js, D3.js, Pandas",
-            "desc": "Built an interactive dashboard for visualizing large streaming datasets. Optimized rendering pipeline for 60fps performance on complex charts.",
-            "color": "bg-rose-600",
-            "icon": "📊",
-            "url": ""
-        }
-    ],
-    # Resume Data Structure - Required for resume.html
-    "resume": {
-        "name": "Jeet Majumder",
-        "title": "Junior Data Scientist & AI Enthusiast",
-        "bio": "Passionate Junior Data Scientist with a focus on building and deploying scalable machine learning models. Adept in data preprocessing, statistical analysis, and developing innovative AI solutions using Python and cloud platforms.",
-        "contact": {
-            "phone": "+91 98765 43210",
-            "email": "jeet.majumder.dev@example.com",
-            "location": "Kolkata, India",
-            "linkedin": "https://linkedin.com/in/jeetmajumder-ds",
-            "github": "https://github.com/jeetmajumder-ai"
-        },
-        "tech_stack": [
-            "Python (Pandas, NumPy, Scikit-learn)",
-            "TensorFlow / PyTorch",
-            "SQL / NoSQL",
-            "BigQuery",
-            "Docker",
-            "GCP / Azure ML",
-            "Data Visualization (Matplotlib, Seaborn)"
-        ],
-        "awards": [
-            {
-                "title": "Data Science Capstone Project Excellence",
-                "issuer": "University of Tech Excellence",
-                "year": "2020"
-            },
-            {
-                "title": "Kaggle Competitor (Top 10%)",
-                "issuer": "Kaggle",
-                "year": "2023"
-            }
-        ],
-        "experience": [
-            {
-                "title": "Data Science Intern",
-                "company": "Aether Analytics",
-                "years": "2023 – Present",
-                "details": [
-                    "Developed and tested predictive models (Random Forest, XGBoost) to forecast customer churn, improving retention by 8%.",
-                    "Performed ETL processes on large datasets (500GB+) using Pandas and SQL for feature engineering.",
-                    "Created and maintained automated weekly reports and visualizations using Python and Tableau for stakeholders."
-                ]
-            },
-            {
-                "title": "Research Assistant, AI Lab",
-                "company": "State Technical College",
-                "years": "2021 – 2022",
-                "details": [
-                    "Contributed to a deep learning project focused on image classification using CNNs and PyTorch.",
-                    "Managed version control for research code using Git and GitHub.",
-                    "Wrote technical documentation and research papers detailing model architectures and performance metrics."
-                ]
-            }
-        ],
-        "education": [
-            {
-                "degree": "M.Sc. in Data Science & Analytics",
-                "institution": "University of Tech Excellence",
-                "year": "2020 – 2022",
-                "details": "Thesis on Time-Series Forecasting using LSTM networks."
-            },
-            {
-                "degree": "B.Tech in Information Technology",
-                "institution": "City Engineering College",
-                "year": "2016 – 2020",
-                "details": "Specialized in database management and software development methodologies."
-            }
-        ]
-    }
+    **static_data,  # Includes: name, title, email, linkedin, github, kaggle, youtube, resume_path, pages, nav_links, logo_suffixes, typing_sentences, qualifications, skills
+    "current_year": datetime.now().year,  # Add current year dynamically
+    **projects_data,  # Includes: projects
+    **resume_data,  # Includes: resume
 }
 
 
@@ -205,6 +78,25 @@ async def projects_page(request: Request):
         {"request": request, "data": PORTFOLIO_DATA, "active_page": "/projects"}
     )
 
+# --- NEW DYNAMIC PROJECT ROUTE ---
+@app.get("/projects/{project_id}")
+async def project_detail_page(request: Request, project_id: str):
+    # Search for the project in our data list by ID
+    project = next((p for p in PORTFOLIO_DATA["projects"] if p["id"] == project_id), None)
+    
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+        
+    return templates.TemplateResponse(
+        "project_detail.html", 
+        {
+            "request": request, 
+            "data": PORTFOLIO_DATA, 
+            "project": project,
+            "active_page": "/projects"
+        }
+    )
+
 @app.get("/resume")
 async def resume_page(request: Request):
     # Renders the 'resume.html' template
@@ -222,14 +114,57 @@ async def contact_page(request: Request):
     )
 
 
+# --- Contact Form API Endpoint ---
+@app.post("/api/contact")
+async def submit_contact_form(form: ContactForm):
+    """
+    Handle contact form submission.
+    Stores message in Supabase and sends auto-reply email.
+    """
+    try:
+        # Prepare data for database
+        data = {
+            "name": form.name,
+            "email": form.email,
+            "subject": form.subject,
+            "message": form.message,
+        }
+        
+        # Store in Supabase
+        db_response = db_service.insert_contact_message(data)
+        
+        # Send auto-reply email
+        email_sent = email_service.send_auto_reply(
+            recipient_email=form.email,
+            name=form.name,
+            subject=form.subject,
+            message=form.message
+        )
+        
+        # Return success response
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content={
+                "success": True,
+                "message": "Your message has been received. Thank you!",
+                "email_sent": email_sent
+            }
+        )
+        
+    except ValueError as e:
+        # Handle missing environment variables
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Configuration error: {str(e)}"
+        )
+    except Exception as e:
+        # Handle other errors
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"An error occurred while processing your request: {str(e)}"
+        )
+
+
 # --- 4. Running the Application ---
 if __name__ == "__main__":
-    # To run locally, use one of these methods:
-    # Method 1: Run directly with Python (from project root):
-    #   python api/index.py
-    # Method 2: Run with uvicorn (from project root):
-    #   uvicorn api.index:app --reload
-    # 
-    # Note: DO NOT use 'uvicorn main:app' - the file is now api/index.py
-    # Ensure you have a 'templates' folder with HTML files and a 'static' folder for assets.
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)

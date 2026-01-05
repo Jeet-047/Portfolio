@@ -158,10 +158,7 @@
                     </h3>
                     <div class="space-y-2 sm:space-y-3">
                         <p class="flex items-center text-xs sm:text-sm break-all">
-                            <i data-lucide="smartphone" class="w-4 h-4 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.resume.contact.phone }}
-                        </p>
-                        <p class="flex items-center text-xs sm:text-sm break-all">
-                            <i data-lucide="at-sign" class="w-4 h-4 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.resume.contact.email }}
+                            <i data-lucide="at-sign" class="w-4 h-4 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> <a href="mailto:{{ data.resume.contact.email }}" target="_blank" class="hover:text-white transition-colors break-all">{{ data.resume.contact.email }}</a>
                         </p>
                         <p class="flex items-center text-xs sm:text-sm">
                             <i data-lucide="map-pin" class="w-4 h-4 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.resume.contact.location }}
@@ -192,7 +189,7 @@
                 <!-- Awards & Recognition -->
                 <div class="space-y-3 sm:space-y-4">
                     <h3 class="text-xl sm:text-2xl font-bold text-primary flex items-center mb-3 sm:mb-4">
-                        <i data-lucide="award" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"></i> Awards
+                        <i data-lucide="award" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"></i> Awards & Research Contributions
                     </h3>
                     <ul class="space-y-2 sm:space-y-3 list-none p-0">
                         {% for award in data.resume.awards %}
@@ -260,8 +257,6 @@
                         {% endfor %}
                     </div>
                 </section>
-
-                <!-- REMOVED: Download Resume Button from inside the container -->
             </div>
         </div>
     </div>
@@ -270,7 +265,7 @@
     <div class="no-print text-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-10">
         <div class="p-5 sm:p-6 rounded-xl bg-gray-900/80 shadow-2xl">
             <h4 class="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Interested in a Professional Copy?</h4>
-            <a href="{{ data.resume_path | default('/static/jeet_majumder_resume.pdf') }}" download 
+            <a href="{{ data.resume_path }}" download 
                class="download-cta inline-flex items-center justify-center space-x-2 text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3 relative z-10" style="pointer-events: auto; touch-action: manipulation; cursor: pointer;">
                 <i data-lucide="download" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                 <span class="hidden sm:inline">Download Professional Resume (PDF)</span>

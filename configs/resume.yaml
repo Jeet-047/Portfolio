@@ -1,0 +1,54 @@
+resume:
+  name: "Jeet Majumder"
+  title: "Data Scientist -- Machine Learning & AI"
+  bio: >
+    Data Scientist with hands-on experience in machine learning, NLP, and LLM-based systems. Built end-to-end ML
+    and RAG pipelines with a focus on scalable, production-ready AI solutions. Passionate about translating ideas into
+    reliable, real-world AI systems.
+  contact:
+    email: "jeet0912majumder@gmail.com"
+    location: "Kolkata, India"
+    linkedin: "https://linkedin.com/in/jeet0912majumder"
+    github: "https://github.com/Jeet-047"
+  tech_stack:
+    - "Python (Pandas, NumPy, Scikit-learn)"
+    - "TensorFlow / PyTorch"
+    - "Ollama, LangChain"
+    - "Embeddings, Transformers"
+    - "OpenCV, YOLO"
+    - "MLflow, DVC, CI/CD"
+    - "AWS, Streamlit, Render, FastAPI"
+    - "Docker, Kubernetes"
+    - "Git & GitHub"
+  awards:
+    - title: "International Conference Paper Presentations"
+      issuer: "Presented three research papers at international conferences on topics including Drone Data Transmission, Hepatitis C Prediction, and Brain Tumor Detection."
+      year: "2023-2024"
+    - title: "Best Final Year Project"
+      issuer: "Developed an IoT-based machine learning system for heart disease classification, integrating real-time sensor data with an ML model to generate diagnostic reports via a web application."
+      year: "2025"
+  experience:
+    - title: "Junior Data Scientist"
+      company: "Databae Technologies LLP"
+      years: "Jul 2025 – Sep 2025"
+      details:
+        - "Built a real-time person tracking system using body and face embeddings with re-identification techniques to handle occlusion and overlapping scenarios in CCTV footage."
+        - "Designed a robust person entry–exit detection system for door-level monitoring, capturing timestamped images and handling edge cases efficiently, reducing reliance on external LLM APIs and associated costs."
+        - "Integrated the tracking and entry–exit detection pipelines with backend services in collaboration with the team."
+    
+    - title: "Data Science Intern"
+      company: "Databae Technologies LLP"
+      years: "Apr 2025 – Jul 2025"
+      details:
+        - "Built and trained a YOLO-based object detection model for spark and person detection in workshop environments to analyze workers’ daily activity patterns."
+        - "Worked on ML and DL model development, fine-tuning, and evaluation during early-stage experimentation."
+  education:
+    - degree: "B.Tech Computer Science & Engineering"
+      institution: "Brainware University"
+      year: "2021 – 2025"
+      details: "Specialization in Data Science"
+    - degree: "Higher Secondary"
+      institution: "Ganrapota High School (H.S.)"
+      year: "2019 – 2021"
+      details: "Pure Science stream"
+

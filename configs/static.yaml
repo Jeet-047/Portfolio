@@ -1,0 +1,73 @@
+name: "Jeet Majumder"
+title: "Machine Learning & AI Practitioner"
+email: "jeet0912majumder@gmail.com"
+linkedin: "jeet0912majumder"
+github: "Jeet-047"
+kaggle: "jeet047"
+youtube: "@Jeet_047"
+resume_path: "/static/Jeet_Majumder_Portfolio_Resume.pdf" 
+
+pages:
+  home: "/"
+  projects: "/projects"
+  resume: "/resume"
+  contact: "/contact"
+
+nav_links:
+  - name: "Home"
+    url: "/"
+  - name: "Projects"
+    url: "/projects"
+  - name: "Resume"
+    url: "/resume"
+  - name: "Contact"
+    url: "/contact"
+
+logo_suffixes:
+  - ".ai"
+  - ".ml"
+  - ".ds"
+  - ".ops"
+
+typing_sentences:
+  - "Welcome! Glad you’re here 👋"
+  - "I build intelligent, production-ready systems 🚀"
+  - "Working with ML, NLP, and modern AI 🤖"
+  - "Let’s explore the portfolio together 🌟"
+
+qualifications:
+  - degree: "B.Tech Computer Science & Engineering"
+    institution: "Brainware University"
+    year: "2021 - 2025"
+    details: "Specialization in Data Science"
+  - degree: "Higher Secondary"
+    institution: "Ganrapota High School (H.S.)"
+    year: "2019 - 2021"
+    details: "Pure Science stream"
+
+skills:
+  - name: "Machine Learning (ML)"
+    level: 90
+  - name: "Deep Learning (DL)"
+    level: 85
+  - name: "Natural Language Processing (NLP)"
+    level: 75
+  - name: "Computer Vision (CV)"
+    level: 70
+  - name: "Large Language Models (LLMs)"
+    level: 70
+  - name: "Retrieval Augmented Generation (RAG)"
+    level: 70
+  - name: "Machine Learning Operations (MLOps)"
+    level: 65
+  - name: "Cloud Deployment (AWS/ Render/ Streamlit)"
+    level: 70
+  - name: "Kubernetes & Docker"
+    level: 60
+  - name: "GitHub Actions for CI/CD"
+    level: 70
+  - name: "DVC & MLflow"
+    level: 60
+  - name: "Python"
+    level: 80
+

@@ -101,7 +101,7 @@
                 <!-- Animated typing headline -->
                 <div class="typing-container" id="typing-data" data-sentences='{{ data.typing_sentences | tojson }}'>
                     <h2 class="text-2xl sm:text-3xl md:text-4xl font-light text-gray-300">
-                        I build <span id="typing-span" class="typing-text typing-cursor"></span>
+                        <span id="typing-span" class="typing-text typing-cursor"></span>
                     </h2>
                 </div>
 
@@ -138,8 +138,8 @@
                         <i data-lucide="user-square" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
                         <h3 class="text-xl sm:text-2xl font-semibold text-white">About Me</h3>
                     </div>
-                    <p class="text-sm sm:text-base">I'm a passionate Full Stack Developer with over 5 years of experience specializing in the Python ecosystem (FastAPI, Django) and modern JavaScript frameworks (React, Vue.js). My journey in technology began with a fascination for complex systems and a drive to create intuitive user experiences.</p>
-                    <p class="text-sm sm:text-base">My expertise lies in translating business requirements into high-quality, scalable code. I thrive in environments that demand continuous learning and problem-solving, particularly in areas like real-time data processing and distributed systems.</p>
+                    <p class="text-sm sm:text-base">I build intelligent, data-driven systems that turn complex ideas into practical, real-world solutions. My experience spans machine learning–powered applications, from experimentation and system design to integration and deployment, with a strong focus on reliability and scalability.</p>
+                    <p class="text-sm sm:text-base">Enjoys solving challenging problems at the intersection of data, algorithms, and software, with a strong focus on continuous learning, clean system design, and applying emerging technologies to build effective, production-ready solutions.</p>
                     <a href="{{ data.resume_path }}" target="_blank" class="mt-4 inline-flex items-center text-sm sm:text-base text-primary hover:text-indigo-400 transition-colors">
                         View Resume 
                         <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
@@ -159,7 +159,7 @@
                         <p class="text-white text-base sm:text-lg font-bold">{{ qual.degree }}</p>
                         <p class="text-xs sm:text-sm font-medium text-gray-400">{{ qual.institution }}</p>
                         <p class="text-xs text-primary mt-1">{{ qual.year }}</p>
-                        <p class="text-xs mt-2 italic text-gray-500">{{ qual.details }}</p>
+                        <p class="text-xs mt-2 italic text-gray-350">{{ qual.details }}</p>
                     </div>
                     {% endfor %}
                 </div>
@@ -256,7 +256,7 @@
                 // Deleting logic
                 typingSpan.textContent = currentWord.substring(0, charIndex - 1);
                 charIndex--;
-                delay = 75;
+                delay = 30;
             } else {
                 // Typing logic
                 typingSpan.textContent = currentWord.substring(0, charIndex + 1);

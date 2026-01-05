@@ -196,7 +196,7 @@
 
     <section id="projects-content" class="py-12 sm:py-16 md:py-20 lg:py-32 relative min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center text-white mb-4 sm:mb-6 animated-element">My Creative Works</h2>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center text-white mb-4 sm:mb-6 animated-element">My Featured Projects & Research</h2>
             <p class="text-base sm:text-lg md:text-xl text-center text-gray-400 mb-8 sm:mb-12 md:mb-16 px-4 animated-element" style="animation-delay: 0.1s;">A selection of projects that demonstrate my technical range and passion for innovation.</p>
 
             <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 lg:gap-12">
@@ -220,12 +220,12 @@
                         </div>
                         
                         <!-- Description Block -->
-                        <p class="text-gray-300 text-sm sm:text-base font-light border-l border-gray-600/50 pl-3 sm:pl-4">{{ project.desc }}</p>
+                        <p class="text-gray-300 text-sm sm:text-base font-light border-l border-gray-600/50 pl-3 sm:pl-4">{{ project.short_desc }}</p>
                         
                         <!-- Technology Badges -->
                         <div class="pt-3 sm:pt-4 flex flex-wrap gap-2 sm:gap-3 border-t border-gray-700/50">
                             <span class="text-xs sm:text-sm text-primary font-bold mr-1 w-full sm:w-auto">Stack:</span>
-                            {% for tech in project.tech.split(', ') %}
+                            {% for tech in project.technologies %}
                             <span class="tech-badge inline-block text-xs font-mono px-2 sm:px-3 py-1 rounded-full 
                                 {% if loop.cycle('', '', '') == 0 %}
                                     bg-indigo-600/20 text-indigo-300 border-indigo-300
@@ -239,7 +239,7 @@
                         </div>
                         
                         <!-- Call to Action Button (Full Gradient) -->
-                        <a href="#" class="gradient-cta block w-full text-center mt-4 sm:mt-6 text-sm sm:text-base relative z-10" style="pointer-events: auto; touch-action: manipulation; cursor: pointer;">
+                        <a href="/projects/{{ project.id }}" class="gradient-cta block w-full text-center mt-4 sm:mt-6 text-sm sm:text-base relative z-10" style="pointer-events: auto; touch-action: manipulation; cursor: pointer;">
                             View Project →
                         </a>
                     </div>

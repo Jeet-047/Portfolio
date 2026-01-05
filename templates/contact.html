@@ -103,6 +103,37 @@
                 padding-left: 1rem;
             }
         }
+
+        /* Sliding popup toast (top-right) */
+        .popup-toast {
+            position: fixed;
+            right: 1.25rem;
+            top: 5rem;
+            transform: translateY(-150%);
+            transition: transform 400ms cubic-bezier(.2,.8,.2,1), opacity 250ms ease-in-out;
+            background: linear-gradient(90deg,#111827,#1f2937);
+            color: #e6edf3;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+            z-index: 60;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            max-width: 320px;
+            opacity: 0.99;
+        }
+        .popup-toast.show {
+            transform: translateY(0);
+        }
+        .popup-toast .close-btn {
+            margin-left: auto;
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            cursor: pointer;
+            font-size: 1rem;
+        }
     </style>
 {% endblock %}
 
@@ -130,13 +161,12 @@
                         
                         <div class="info-block space-y-2 sm:space-y-3 text-gray-300">
                             <p class="flex items-center text-sm sm:text-base break-all">
-                                <i data-lucide="mail" class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.email }}
+                                <a href="mailto:{{ data.email }}" class="flex items-center text-md text-white text-opacity-80 sm:w-full group">
+                                    <i data-lucide="mail" class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i>{{ data.email }}
+                                </a>
                             </p>
                             <p class="flex items-center text-sm sm:text-base">
                                 <i data-lucide="map-pin" class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.resume.contact.location }}
-                            </p>
-                            <p class="flex items-center text-sm sm:text-base">
-                                <i data-lucide="smartphone" class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.resume.contact.phone }}
                             </p>
                         </div>
                     </div>
@@ -160,7 +190,7 @@
 
                 <!-- Right Column: Contact Form -->
                 <div class="lg:col-span-2 order-1 lg:order-2">
-                    <form action="#" method="POST" class="space-y-4 sm:space-y-6">
+                    <form id="contactForm" class="space-y-4 sm:space-y-6">
                         
                         <!-- Name and Email (Side-by-side on desktop) -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
@@ -202,41 +232,146 @@
 {% endblock %}
 
 {% block body_end_script %}
+    <!-- Sliding popup notification -->
+    <div id="contactPopup" class="popup-toast" role="status" aria-live="polite" aria-atomic="true" hidden>
+        <i data-lucide="mail" class="w-5 h-5 text-white"></i>
+        <div>
+            <strong class="text-white">Message Sent Successfully!</strong>
+            <div id="contactPopupMessage" class="text-sm text-gray-200">Thank you for messaging, an acknowledgement has been sent to your email.</div>
+        </div>
+        <button id="contactPopupClose" class="close-btn" aria-label="Close notification">✕</button>
+    </div>
     <script>
         // Initialize Lucide icons after DOM content is loaded
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
+
+            // Bind popup close button (safe after DOM loaded)
+            const popupCloseBtn = document.getElementById('contactPopupClose');
+            if (popupCloseBtn) {
+                popupCloseBtn.addEventListener('click', hidePopup);
+            }
         });
         
-        // Simple form submission handler (prevents default action for static demo)
-        const form = document.querySelector('form');
+        // Popup logic
+        const popup = document.getElementById('contactPopup');
+        let popupTimer = null;
+        function showPopup(message = null, duration = 10000) {
+            if (!popup) return;
+            const messageEl = document.getElementById('contactPopupMessage');
+            // Only override the default HTML text if a message was provided
+            if (message !== null && messageEl) messageEl.textContent = message;
+            // Show visual popup
+            popup.hidden = false;
+            // Small delay to allow transition
+            requestAnimationFrame(() => popup.classList.add('show'));
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            if (popupTimer) clearTimeout(popupTimer);
+            popupTimer = setTimeout(hidePopup, duration);
+        }
+        function hidePopup() {
+            if (!popup) return;
+            popup.classList.remove('show');
+            // Wait for transition to finish before hiding
+            setTimeout(() => { popup.hidden = true; }, 400);
+            if (popupTimer) {
+                clearTimeout(popupTimer);
+                popupTimer = null;
+            }
+        }
+
+        // Form submission handler
+        const form = document.getElementById('contactForm');
         if (form) {
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                // In a real application, you would send data to the server here.
-                // For the demo, we just give visual feedback.
                 const submitButton = document.querySelector('.submit-cta');
-                if (submitButton) {
-                    submitButton.innerHTML = '<i data-lucide="check-circle" class="w-5 h-5"></i><span>Message Sent!</span>';
+                const originalContent = submitButton.innerHTML;
+                
+                // Disable button and show loading state
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Sending...</span>';
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+                
+                // Get form data
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value
+                };
+                
+                try {
+                    // Send POST request to API
+                    const response = await fetch('/api/contact', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok && result.success) {
+                        // Success state
+                        submitButton.innerHTML = '<i data-lucide="check-circle" class="w-5 h-5"></i><span>Message Sent!</span>';
+                        submitButton.classList.remove('submit-cta');
+                        submitButton.classList.add('bg-green-600', 'hover:bg-green-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
+                        
+                        if (typeof lucide !== 'undefined') {
+                            lucide.createIcons();
+                        }
+                        
+                        // Reset form
+                        form.reset();
+
+                        // Show sliding popup notification (uses popup's existing message)
+                        showPopup();
+                        
+                        // Reset button after 3 seconds
+                        setTimeout(() => {
+                            submitButton.innerHTML = originalContent;
+                            submitButton.classList.remove('bg-green-600', 'hover:bg-green-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
+                            submitButton.classList.add('submit-cta');
+                            submitButton.disabled = false;
+                            if (typeof lucide !== 'undefined') {
+                                lucide.createIcons();
+                            }
+                        }, 3000);
+                    } else {
+                        // Error state
+                        throw new Error(result.message || 'Failed to send message');
+                    }
+                } catch (error) {
+                    // Error handling
+                    submitButton.innerHTML = '<i data-lucide="alert-circle" class="w-5 h-5"></i><span>Error - Try Again</span>';
                     submitButton.classList.remove('submit-cta');
-                    submitButton.classList.add('bg-green-600', 'hover:bg-green-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
+                    submitButton.classList.add('bg-red-600', 'hover:bg-red-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
                     
                     if (typeof lucide !== 'undefined') {
                         lucide.createIcons();
                     }
                     
-                    // Reset after 3 seconds
+                    // Reset button after 3 seconds
                     setTimeout(() => {
-                        submitButton.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Send Message</span>';
-                        submitButton.classList.remove('bg-green-600', 'hover:bg-green-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
+                        submitButton.innerHTML = originalContent;
+                        submitButton.classList.remove('bg-red-600', 'hover:bg-red-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
                         submitButton.classList.add('submit-cta');
+                        submitButton.disabled = false;
                         if (typeof lucide !== 'undefined') {
                             lucide.createIcons();
                         }
                     }, 3000);
+                    
+                    console.error('Error:', error);
                 }
             });
         }
