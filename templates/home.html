@@ -9,8 +9,9 @@
     <style>
         /* Specific styles for the typing effect on the home page */
         .typing-text {
-            white-space: nowrap;
             display: inline-block;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
         .typing-container {
             animation: fadeInUp 1s ease-out forwards;
@@ -99,8 +100,8 @@
                 </h1>
                 
                 <!-- Animated typing headline -->
-                <div class="typing-container" id="typing-data" data-sentences='{{ data.typing_sentences | tojson }}'>
-                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-light text-gray-300">
+                <div class="typing-container overflow-hidden" id="typing-data" data-sentences='{{ data.typing_sentences | tojson }}'>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-light text-gray-300 break-words" style="word-wrap: break-word; word-break: break-word;">
                         <span id="typing-span" class="typing-text typing-cursor"></span>
                     </h2>
                 </div>
