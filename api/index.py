@@ -66,16 +66,18 @@ PORTFOLIO_DATA = {
 async def home_page(request: Request):
     # Renders the 'home.html' template
     return templates.TemplateResponse(
+        request,
         "home.html",
-        {"request": request, "data": PORTFOLIO_DATA, "active_page": "/"}
+        {"data": PORTFOLIO_DATA, "active_page": "/"},
     )
 
 @app.get("/projects")
 async def projects_page(request: Request):
     # Renders the 'projects.html' template
     return templates.TemplateResponse(
+        request,
         "projects.html",
-        {"request": request, "data": PORTFOLIO_DATA, "active_page": "/projects"}
+        {"data": PORTFOLIO_DATA, "active_page": "/projects"},
     )
 
 # --- NEW DYNAMIC PROJECT ROUTE ---
@@ -88,29 +90,31 @@ async def project_detail_page(request: Request, project_id: str):
         raise HTTPException(status_code=404, detail="Project not found")
         
     return templates.TemplateResponse(
-        "project_detail.html", 
+        request,
+        "project_detail.html",
         {
-            "request": request, 
-            "data": PORTFOLIO_DATA, 
+            "data": PORTFOLIO_DATA,
             "project": project,
-            "active_page": "/projects"
-        }
+            "active_page": "/projects",
+        },
     )
 
 @app.get("/resume")
 async def resume_page(request: Request):
     # Renders the 'resume.html' template
     return templates.TemplateResponse(
+        request,
         "resume.html",
-        {"request": request, "data": PORTFOLIO_DATA, "active_page": "/resume"}
+        {"data": PORTFOLIO_DATA, "active_page": "/resume"},
     )
 
 @app.get("/contact")
 async def contact_page(request: Request):
     # Renders the 'contact.html' template
     return templates.TemplateResponse(
+        request,
         "contact.html",
-        {"request": request, "data": PORTFOLIO_DATA, "active_page": "/contact"}
+        {"data": PORTFOLIO_DATA, "active_page": "/contact"},
     )
 
 
