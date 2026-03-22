@@ -1,5 +1,44 @@
 projects:
-    # Project Section : ------------------------------------------------------------------
+  # Project Section : ------------------------------------------------------------------
+  - id: "agentic-chat"
+    title: "ChatAgent: An Agentic AI Chat System"
+    date: "2026-03"
+    role: "End-to-End Developer (Agentic System)"
+    technologies:
+      - "LangGraph"
+      - "LangChain"
+      - "Groq LLMs"
+      - "FastAPI"
+      - "Python"
+    short_desc: "A production-grade, goal-driven Agentic AI chat system that enables intelligent conversations by reasoning, planning, and acting through LLMs, tool integration, and memory."
+    full_desc: >
+      ChatAgent is an Agentic AI system designed to understand user intent, plan multi-step solutions, 
+      and execute actions using integrated tools. Unlike traditional chatbots, it follows a structured 
+      reasoning workflow powered by LangGraph, enabling dynamic decision-making and task execution.
+      The system combines LLM intelligence with external tools (e.g., web search, utilities) and 
+      incorporates conversational memory to maintain context across interactions. A built-in safety 
+      layer ensures controlled and secure responses. Overall, ChatAgent demonstrates how modern LLMs 
+      can be orchestrated into goal-driven, tool-using AI agents.
+    color: "bg-amber-600"
+    icon: "🤖💬"
+    website_url: "https://github.com/Jeet-047/Agentic-Chatbot/blob/main/README.md#see-it-in-action"
+    github_url: "https://github.com/Jeet-047/Agentic-Chatbot"
+    images:
+      - "/static/project_img/P-ac/ac_gif1.gif"
+      - "/static/project_img/P-ac/ac_gif2.gif"
+      - "/static/project_img/P-ac/ac_img1.png"
+      - "/static/project_img/P-ac/ac_img2.png"
+      - "/static/project_img/P-ac/ac_img3.png"
+      - "/static/project_img/P-ac/ac_img4.png"
+    features:
+      - "Understand and analyze user intent"
+      - "Plan steps to achieve the user’s goal"
+      - "Execute actions using LLM + tool integration"
+      - "Maintain memory for seamless conversations"
+      - "Apply safety checks to handle potential vulnerabilities"
+      - "No hallucinated answers"
+
+  # Project Section : ------------------------------------------------------------------
   - id: "multi-doc-rag-system"
     title: "Multi-Doc Q&A RAG System"
     date: "2025-11"

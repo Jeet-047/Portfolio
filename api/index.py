@@ -1,5 +1,5 @@
 import uvicorn
-import os
+import multiprocessing
 import yaml
 from pathlib import Path
 from fastapi import FastAPI, Request, HTTPException, status
@@ -167,4 +167,10 @@ async def submit_contact_form(form: ContactForm):
 
 # --- 4. Running the Application ---
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=8000,
+        workers=multiprocessing.cpu_count() * 2,  # Scale with CPU
+        log_level="info"
+    )

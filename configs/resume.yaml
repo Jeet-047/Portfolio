@@ -13,7 +13,8 @@ resume:
   tech_stack:
     - "Python (Pandas, NumPy, Scikit-learn)"
     - "TensorFlow / PyTorch"
-    - "Ollama, LangChain"
+    - "Ollama, Groq"
+    - "LangChain, LangGraph"
     - "Embeddings, Transformers"
     - "OpenCV, YOLO"
     - "MLflow, DVC, CI/CD"
