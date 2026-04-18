@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +12,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Load Lucide icons for footer -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Load GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Load Three.js for 3D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'primary': '#4f46e5', 
-                        'secondary': '#1e293b', 
-                        'background': '#0f172a', 
+                        'primary': '#4f46e5',
+                        'secondary': '#1e293b',
+                        'background': '#0f172a',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -37,26 +43,43 @@
         }
     </script>
     <style>
-        html { scroll-behavior: smooth; }
-        body { min-height: 100vh; display: flex; flex-direction: column; background-color: #0f172a; color: #e2e8f0; font-family: 'Inter', sans-serif; }
-        main { flex-grow: 1; min-height: calc(100vh - 140px); }
-        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        main {
+            flex-grow: 1;
+            min-height: calc(100vh - 140px);
+        }
+
         /* Responsive Image Utilities */
         img {
             max-width: 100%;
             height: auto;
             display: block;
         }
-        
+
         /* Touch-friendly tap targets */
         @media (max-width: 768px) {
-            a:not(.logo-link):not(.social-icon), 
+
+            a:not(.logo-link):not(.social-icon),
             button:not(.hamburger) {
                 min-height: 44px;
                 min-width: 44px;
             }
+
             /* Ensure buttons and links are clickable */
-            a, button {
+            a,
+            button {
                 position: relative;
                 z-index: 1;
                 pointer-events: auto;
@@ -64,32 +87,32 @@
                 -webkit-tap-highlight-color: rgba(79, 70, 229, 0.3);
             }
         }
-        
+
         /* Prevent horizontal scroll */
         * {
             max-width: 100%;
         }
-        
+
         /* Ensure main content is always clickable */
         main {
             position: relative;
             z-index: 1;
         }
-        
+
         /* Ensure all interactive elements are clickable on mobile */
         @media (max-width: 768px) {
             main * {
                 pointer-events: auto;
             }
         }
-        
+
         /* Better text rendering on mobile */
         @media (max-width: 768px) {
             body {
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
             }
-        } 
+        }
 
         /* Custom gradient button */
         .gradient-button {
@@ -98,6 +121,7 @@
             pointer-events: auto;
             cursor: pointer;
         }
+
         .gradient-button:before {
             content: '';
             position: absolute;
@@ -113,15 +137,17 @@
             opacity: 0;
             transition: opacity 0.5s;
         }
+
         .gradient-button:hover:before {
             opacity: 1;
         }
-        
+
         /* Cursor Blink Animation */
         .typing-cursor {
             display: inline-block;
             position: relative;
         }
+
         .typing-cursor::after {
             content: '';
             display: inline-block;
@@ -131,11 +157,15 @@
             vertical-align: baseline;
             animation: blink .75s step-end infinite;
         }
+
         @keyframes blink {
-            0%, 100% { 
+
+            0%,
+            100% {
                 opacity: 0;
             }
-            50% { 
+
+            50% {
                 opacity: 1;
             }
         }
@@ -145,15 +175,20 @@
             position: relative;
             transition: opacity 0.3s ease;
         }
+
         .logo-link:hover {
             opacity: 0.9;
         }
+
         .logo-link:hover .logo-name {
-            color: #818cf8; /* Subtle indigo-400 */
+            color: #818cf8;
+            /* Subtle indigo-400 */
             transition: color 0.3s ease;
         }
+
         .logo-link:hover .logo-suffix {
-            color: #a78bfa; /* Subtle purple-400 */
+            color: #a78bfa;
+            /* Subtle purple-400 */
             transition: color 0.3s ease;
         }
 
@@ -163,6 +198,7 @@
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
             transform: translateY(20px);
         }
+
         .animated-element.visible {
             opacity: 1;
             transform: translateY(0);
@@ -171,7 +207,7 @@
         /* Scroll-to-Top Button */
         #scrollTopBtn {
             z-index: 100;
-            display: none; 
+            display: none;
             transition: opacity 0.3s;
             align-items: center;
             justify-content: center;
@@ -195,20 +231,24 @@
             top: 0;
             right: 0;
             width: 100%;
-            max-width: 300px;
+            max-width: 320px;
             height: 100vh;
-            background: rgba(15, 23, 42, 0.98);
-            backdrop-filter: blur(20px);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
             z-index: 999;
             transform: translateX(100%);
-            transition: transform 0.3s ease-in-out;
-            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
             pointer-events: none;
         }
+
         .mobile-menu.active {
             transform: translateX(0);
             pointer-events: auto;
         }
+
         .mobile-menu-overlay {
             display: none;
             position: fixed;
@@ -221,55 +261,92 @@
             opacity: 0;
             transition: opacity 0.3s ease-in-out;
             pointer-events: none;
+            backdrop-filter: blur(4px);
         }
+
         .mobile-menu-overlay.active {
             opacity: 1;
             pointer-events: auto;
         }
+
         @media (max-width: 768px) {
             .mobile-menu {
                 display: block;
             }
+
             .mobile-menu-overlay {
                 display: block;
             }
+
             .desktop-nav {
                 display: none;
             }
         }
+
         .hamburger {
             display: none;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
-            padding: 8px;
+            width: 44px;
+            height: 44px;
             z-index: 1001;
+            border-radius: 50%;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
         }
+
+        .hamburger:active {
+            transform: scale(0.9);
+        }
+
         .hamburger span {
-            width: 25px;
-            height: 3px;
+            width: 20px;
+            height: 2px;
             background: #e2e8f0;
-            margin: 3px 0;
-            transition: 0.3s;
+            margin: 2px 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 2px;
+            transform-origin: center;
         }
+
+        .hamburger.active {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
         .hamburger.active span:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
+            transform: translateY(6px) rotate(45deg);
         }
+
         .hamburger.active span:nth-child(2) {
             opacity: 0;
+            transform: scaleX(0);
         }
+
         .hamburger.active span:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
+            transform: translateY(-6px) rotate(-45deg);
         }
+
         @media (max-width: 768px) {
             .hamburger {
                 display: flex;
             }
         }
+
+
     </style>
     {% block head_extra %}{% endblock %}
 </head>
-<body class="bg-background text-gray-100 font-sans antialiased">
+
+<body class="bg-background text-gray-100 font-sans antialiased overflow-x-hidden">
+    <!-- WebGL Global 3D Background - Increased Opacity for Sharpness -->
+    <canvas id="webgl-canvas" class="fixed top-0 left-0 w-full h-full -z-50 pointer-events-none opacity-70"></canvas>
+    
+
 
     <!-- READING PROGRESS BAR -->
     <div id="progressBar"></div>
@@ -279,46 +356,66 @@
 
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
-        <div class="p-6 pt-20">
-            <nav class="flex flex-col space-y-4">
+        <div class="p-6 pt-24 h-full flex flex-col">
+            <div class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-6 px-4">Menu</div>
+            <nav class="flex flex-col space-y-2">
                 {% for page in data.nav_links %}
-                    <a href="{{ page.url }}" class="px-4 py-3 rounded-lg text-base font-medium transition duration-300
+                <a href="{{ page.url }}" class="group flex items-center px-4 py-4 rounded-xl text-lg font-semibold transition-all duration-300
                        {% if active_page == page.url %}
-                           bg-primary text-white shadow-md
+                           bg-primary/20 text-white border border-primary/30 shadow-[0_0_15px_rgba(79,70,229,0.2)]
                        {% else %}
-                           text-gray-300 hover:text-primary hover:bg-gray-800
+                           text-gray-400 hover:text-white hover:bg-white/5 border border-transparent
                        {% endif %}
-                    " onclick="closeMobileMenu()">
+                    " onclick="setTimeout(closeMobileMenu, 150)">
+                    <span class="relative">
                         {{ page.name }}
-                    </a>
+                        {% if active_page == page.url %}
+                        <span class="absolute -left-4 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                        {% endif %}
+                    </span>
+                    <i data-lucide="chevron-right" class="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-300"></i>
+                </a>
                 {% endfor %}
             </nav>
+            <div class="mt-auto pb-8">
+                <p class="text-xs text-gray-600 text-center font-medium">© {{ data.current_year }} {{ data.name }}</p>
+                <div class="flex justify-center space-x-4 mt-6">
+                    {% for link in data.socials %}
+                    <a href="{{ link.url }}" target="_blank" class="text-gray-500 hover:text-primary transition-colors">
+                        <i data-lucide="{{ link.icon }}" class="w-5 h-5"></i>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Header & Navigation -->
-    <header class="sticky top-0 z-50 bg-background/95 backdrop-blur-sm shadow-lg border-b border-primary/20">
+    <header class="sticky top-0 z-50 bg-background/95 backdrop-blur-sm shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex justify-between items-center">
-            
+
             <!-- Logo with Typing Animation -->
-            <a href="{{ data.pages.home }}" class="logo-link text-2xl sm:text-3xl font-extrabold transition duration-300 flex items-baseline space-x-0.5">
+            <a href="{{ data.pages.home }}"
+                class="logo-link text-2xl sm:text-3xl font-extrabold transition duration-300 flex items-baseline space-x-0.5">
                 <span class="logo-name text-white transition duration-300">{{ data.name.split(' ')[0] }}</span>
                 <!-- Data for suffixes injected here -->
-                <span id="typed-suffix" class="logo-suffix text-primary font-bold text-2xl sm:text-3xl transition duration-300" data-suffixes='{{ data.logo_suffixes | tojson }}'></span>
+                <span id="typed-suffix"
+                    class="logo-suffix text-primary font-bold text-2xl sm:text-3xl transition duration-300"
+                    data-suffixes='{{ data.logo_suffixes | tojson }}'></span>
             </a>
 
             <!-- Desktop Navigation -->
             <nav class="desktop-nav space-x-2 sm:space-x-4 hidden md:flex">
                 {% for page in data.nav_links %}
-                    <a href="{{ page.url }}" class="px-3 py-1.5 rounded-md text-sm font-medium transition duration-300
+                <a href="{{ page.url }}" class="px-3 py-1.5 rounded-md text-sm font-medium transition duration-300
                        {% if active_page == page.url %}
                            bg-primary text-white shadow-md
                        {% else %}
                            text-gray-300 hover:text-primary hover:bg-gray-800
                        {% endif %}
                     ">
-                        {{ page.name }}
-                    </a>
+                    {{ page.name }}
+                </a>
                 {% endfor %}
             </nav>
 
@@ -335,81 +432,72 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="py-8 sm:py-12 bg-gray-900 border-t border-primary/20 text-gray-400">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 md:gap-16 pb-8 sm:pb-10 border-b border-gray-700/50">
-                <!-- Column 1: Info -->
-                <div class="text-center sm:text-left">
-                    <img src="/static/footer_img.png" 
-                         alt="{{ data.name }}" 
-                         class="w-16 h-16 sm:w-20 sm:h-20 rounded-full mb-4 ring-2 ring-primary/50 mx-auto sm:mx-0">
-                    <h3 class="text-lg sm:text-xl font-bold text-white mb-1">{{ data.name }}</h3>
-                    <p class="text-xs sm:text-sm">Junior Data Scientist</p>
-                    <a href="mailto:{{ data.email }}" class="text-primary hover:text-white transition duration-300 text-xs sm:text-sm mt-2 block break-all">{{ data.email }}</a>
-                </div>
-                <!-- Column 2: Navigation -->
-                <div class="text-center sm:text-left">
-                    <h4 class="text-base sm:text-lg font-semibold text-white mb-4 border-b border-primary/30 inline-block">Navigation</h4>
-                    <nav class="flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-0 sm:space-y-3">
-                        {% for page in data.nav_links %}
-                            <a href="{{ page.url }}" class="flex items-center text-sm hover:text-primary transition duration-300 group sm:w-full">
-                                <i data-lucide="{% if page.name == 'Home' %}home{% elif page.name == 'Projects' %}folder-kanban{% elif page.name == 'Resume' %}file-text{% elif page.name == 'Contact' %}mail{% endif %}" class="w-4 h-4 mr-2 text-gray-500 group-hover:text-primary transition-colors duration-300"></i>
-                                {{ page.name }}
-                            </a>
-                        {% endfor %}
-                    </nav>
-                </div>
-                <!-- Column 3: Social -->
-                <div class="text-center sm:text-left sm:col-span-2 lg:col-span-1">
-                    <h4 class="text-base sm:text-lg font-semibold text-white mb-4 border-b border-primary/30 inline-block">Connect</h4>
-                    <div class="flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-0 sm:space-y-3"> 
-                        <a href="https://linkedin.com/in/{{ data.linkedin }}" target="_blank" class="flex items-center text-sm text-gray-400 hover:text-primary transition duration-300 sm:w-full group">
-                            <i data-lucide="linkedin" class="w-4 h-4 mr-2 text-gray-500 group-hover:text-primary transition-colors duration-300"></i>
-                            LinkedIn
-                        </a>
-                        <a href="https://github.com/{{ data.github }}" target="_blank" class="flex items-center text-sm text-gray-400 hover:text-primary transition duration-300 sm:w-full group">
-                            <i data-lucide="github" class="w-4 h-4 mr-2 text-gray-500 group-hover:text-primary transition-colors duration-300"></i>
-                            GitHub
-                        </a>
-                        <a href="https://kaggle.com/{{ data.kaggle }}" target="_blank" class="flex items-center text-sm text-gray-400 hover:text-primary transition duration-300 sm:w-full group">
-                            <i data-lucide="bar-chart-3" class="w-4 h-4 mr-2 text-gray-500 group-hover:text-primary transition-colors duration-300"></i>
-                            Kaggle
-                        </a>
-                        <a href="https://youtube.com/{{ data.youtube }}" target="_blank" class="flex items-center text-sm text-gray-400 hover:text-primary transition duration-300 sm:w-full group">
-                            <i data-lucide="youtube" class="w-4 h-4 mr-2 text-gray-500 group-hover:text-primary transition-colors duration-300"></i>
-                            YouTube
-                        </a>
-                    </div>
-                </div>
+    <!-- Modern Glassmorphic Footer -->
+    <footer class="relative z-20 w-full mt-20 border-t border-gray-700/50 bg-black/20 backdrop-blur-lg">
+        {% if active_page != data.pages.contact %}
+        <!-- Giant Call-To-Action Block -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 border-b border-gray-700/50 flex flex-col md:flex-row items-center justify-between gap-10">
+            <div class="text-center md:text-left">
+                <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 leading-tight">Ready to build <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-indigo-400 to-purple-500">intelligent systems?</span></h2>
+                <p class="text-gray-400 text-lg md:text-xl max-w-xl">Let's collaborate on transforming your complex data into scalable, production-ready AI solutions.</p>
             </div>
-            <div class="mt-6 sm:mt-8 text-center text-gray-500 text-xs sm:text-sm">
-                <p>&copy; {{ data.current_year }} {{ data.name }}. All rights reserved.</p>
+            <div class="flex-shrink-0">
+                <a href="{{ data.pages.contact }}" class="group relative inline-flex items-center justify-center px-8 py-4 sm:px-10 sm:py-5 text-lg font-bold text-white transition-all duration-300 ease-in-out bg-transparent border-2 border-primary rounded-xl overflow-hidden shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_40px_rgba(79,70,229,0.6)]">
+                    <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-primary"></span>
+                    <span class="absolute inset-0 w-full h-full transition-all duration-300 ease-in-out bg-primary group-hover:bg-indigo-500 opacity-20"></span>
+                    <span class="relative flex items-center">
+                        Start a Conversation
+                        <i data-lucide="arrow-right" class="w-5 h-5 ml-3 transform group-hover:translate-x-2 transition duration-300"></i>
+                    </span>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Minimalist Copyright & Social Link Row -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-gray-800/80 border border-gray-700 flex items-center justify-center shadow-lg">
+                    <span class="text-white font-extrabold text-lg">{{ data.name[0] }}</span>
+                </div>
+                <span class="text-gray-400 text-sm font-medium">© {{ data.current_year }} {{ data.name }}. All rights reserved.</span>
+            </div>
+            
+            <div class="flex items-center space-x-5">
+                {% for link in data.socials %}
+                <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800/80 border border-gray-700 flex items-center justify-center text-gray-400 hover:text-white hover:border-primary hover:bg-primary/20 hover:shadow-[0_0_15px_rgba(79,70,229,0.5)] transition-all duration-300 group" aria-label="{{ link.name }}">
+                    <i data-lucide="{{ link.icon }}" class="w-5 h-5 transform group-hover:scale-110 transition duration-300"></i>
+                </a>
+                {% endfor %}
             </div>
         </div>
     </footer>
 
     <!-- Scroll to Top Button -->
-    <button id="scrollTopBtn" onclick="scrollToTop()" class="gradient-button p-2.5 sm:p-3 rounded-full bg-gray-800 text-white shadow-2xl hover:shadow-primary/50 fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex items-center justify-center">
-        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+    <button id="scrollTopBtn" onclick="scrollToTop()"
+        class="gradient-button p-2.5 sm:p-3 rounded-full bg-gray-800 text-white shadow-2xl hover:shadow-primary/50 fixed bottom-4 right-4 sm:bottom-6 sm:right-6 flex items-center justify-center">
+        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+        </svg>
     </button>
-    
+
     <!-- Page Specific Scripts -->
     {% block body_end_script %}{% endblock %}
 
     <!-- GLOBAL SCRIPTS (Run on all pages) -->
     <script>
         // --- Initialize Lucide Icons ---
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
         });
 
         // --- 1. Navbar Logo Typing Animation ---
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const typedSuffixSpan = document.getElementById("typed-suffix");
-            
+
             // Safe Parsing of Suffixes from Data Attribute
             let suffixes = [".ai", ".ml"]; // Fallback
             if (typedSuffixSpan) {
@@ -431,7 +519,7 @@
 
             function typeSuffix() {
                 if (!typedSuffixSpan) return;
-                
+
                 if (suffixIndex >= suffixes.length) suffixIndex = 0;
                 const currentSuffix = suffixes[suffixIndex];
 
@@ -457,7 +545,7 @@
                 }
             }
 
-            if(typedSuffixSpan && suffixes.length > 0) {
+            if (typedSuffixSpan && suffixes.length > 0) {
                 setTimeout(typeSuffix, 1000);
             }
         });
@@ -489,7 +577,7 @@
         const scrollTopBtn = document.getElementById('scrollTopBtn');
         const progressBar = document.getElementById('progressBar');
 
-        window.onscroll = function() {
+        window.onscroll = function () {
             // Scroll Top Button
             const scrolledHeight = document.body.scrollTop || document.documentElement.scrollTop;
             if (scrolledHeight > 200) {
@@ -499,7 +587,7 @@
                 scrollTopBtn.style.opacity = "0";
                 setTimeout(() => {
                     if (document.body.scrollTop <= 200 && document.documentElement.scrollTop <= 200) {
-                         scrollTopBtn.style.display = "none";
+                        scrollTopBtn.style.display = "none";
                     }
                 }, 300);
             }
@@ -557,16 +645,16 @@
                 if (button.style.pointerEvents === 'none') {
                     button.style.pointerEvents = 'auto';
                 }
-                
+
                 // Ensure touch events work
-                button.addEventListener('touchstart', function(e) {
+                button.addEventListener('touchstart', function (e) {
                     // Allow the event to propagate
                     e.stopPropagation();
                 }, { passive: true });
-                
+
                 // Prevent double-tap zoom on buttons
                 let lastTouchEnd = 0;
-                button.addEventListener('touchend', function(e) {
+                button.addEventListener('touchend', function (e) {
                     const now = Date.now();
                     if (now - lastTouchEnd <= 300) {
                         e.preventDefault();
@@ -575,6 +663,288 @@
                 }, false);
             });
         });
+
+        // --- 5. GSAP Global Setup & Magnetic Cursor ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof gsap !== 'undefined') {
+                gsap.registerPlugin(ScrollTrigger);
+                
+                // Force 3D for smoother animations
+                gsap.defaults({
+                    force3D: true,
+                    ease: "power2.out"
+                });
+
+                // Dynamic Navbar Blur
+                const header = document.querySelector('header');
+                if(header) {
+                    // Start with base transparent values for GSAP to animate from
+                    gsap.set(header, { backgroundColor: "rgba(15, 23, 42, 0.95)" });
+                    
+                    gsap.to(header, {
+                        scrollTrigger: {
+                            trigger: "body",
+                            start: "top -50", // Start slightly after scrolling down
+                            end: "+=200", 
+                            scrub: true
+                        },
+                        backgroundColor: "rgba(15, 23, 42, 1)", 
+                        backdropFilter: "blur(24px)",
+                        borderBottomColor: "rgba(79, 70, 229, 0.8)",
+                        boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.5)",
+                        ease: "none"
+                    });
+                }
+
+
+            }
+        });
+
+        // --- 6. Global Three.js AI Core Background ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof THREE !== 'undefined') {
+                const canvas = document.getElementById('webgl-canvas');
+                if (!canvas) return;
+
+                // Scene setup
+                const scene = new THREE.Scene();
+                
+                // Camera setup
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.z = 5;
+
+                // Renderer setup
+                const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+                // Minimal ambient light 
+                scene.add(new THREE.AmbientLight(0x0a0f1d, 1.5));
+
+                // Create AI Core Geometry with discrete triangles
+                // We convert to NonIndexed so every 3 vertices natively form a separate solid triangle for coloring
+                const baseGeometry = new THREE.IcosahedronGeometry(2, 2);
+                const geometry = baseGeometry.toNonIndexed();
+                
+                // Prepare a color attribute buffer for every vertex
+                const count = geometry.attributes.position.count;
+                const geometryColorArray = new Float32Array(count * 3);
+                geometry.setAttribute('color', new THREE.BufferAttribute(geometryColorArray, 3));
+
+                // Basic material uses vertex colors exclusively, letting us fake the lighting and glowing math perfectly
+                const material = new THREE.MeshBasicMaterial({ 
+                    vertexColors: true,
+                    wireframe: false
+                });
+                
+                const aiCore = new THREE.Mesh(geometry, material);
+
+                // Add an outer glowing wireframe shell 
+                const outerGeometry = new THREE.IcosahedronGeometry(2.3, 1);
+                const outerMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x00f3ff, // High contrast cyan
+                    wireframe: true,
+                    transparent: true,
+                    opacity: 0.25,
+                    blending: THREE.AdditiveBlending
+                });
+                const aiCoreOuter = new THREE.Mesh(outerGeometry, outerMaterial);
+                
+                // Conditionally handle the core rendering
+                if (!document.getElementById('hide-3d-core')) {
+                    scene.add(aiCore);
+                    scene.add(aiCoreOuter);
+                }
+
+                // Create Circular Texture for particles using Canvas
+                const circleCanvas = document.createElement('canvas');
+                circleCanvas.width = 32;
+                circleCanvas.height = 32;
+                const ctx = circleCanvas.getContext('2d');
+                ctx.beginPath();
+                ctx.arc(16, 16, 14, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                const circleTexture = new THREE.CanvasTexture(circleCanvas);
+
+                // Add MULTICOLORED circular particles around the core
+                const particlesGeometry = new THREE.BufferGeometry();
+                const particlesCount = 1200; 
+                const posArray = new Float32Array(particlesCount * 3);
+                const colorArray = new Float32Array(particlesCount * 3);
+                
+                // Palette for particles
+                const colors = [
+                    new THREE.Color(0x00ffff), // Cyan
+                    new THREE.Color(0xff00aa), // Magenta
+                    new THREE.Color(0x4f46e5), // Indigo
+                    new THREE.Color(0x8b5cf6), // Violet
+                    new THREE.Color(0x38bdf8)  // Light blue
+                ];
+
+                for(let i = 0; i < particlesCount; i++) {
+                    // Position
+                    posArray[i*3] = (Math.random() - 0.5) * 20;
+                    posArray[i*3+1] = (Math.random() - 0.5) * 20;
+                    posArray[i*3+2] = (Math.random() - 0.5) * 20;
+                    
+                    // Color
+                    const randColor = colors[Math.floor(Math.random() * colors.length)];
+                    colorArray[i*3] = randColor.r;
+                    colorArray[i*3+1] = randColor.g;
+                    colorArray[i*3+2] = randColor.b;
+                }
+                
+                particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+                particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+                
+                const particlesMaterial = new THREE.PointsMaterial({
+                    size: 0.12,  // Larger size so circles are visible
+                    map: circleTexture,
+                    transparent: true,
+                    opacity: 0.9,
+                    alphaTest: 0.05,
+                    vertexColors: true,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false
+                });
+                
+                const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+                scene.add(particlesMesh);
+
+                // Resize handler
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+
+                // Mouse interaction state
+                let mouseX = 0;
+                let mouseY = 0;
+                let targetX = 0;
+                let targetY = 0;
+
+                const windowHalfX = window.innerWidth / 2;
+                const windowHalfY = window.innerHeight / 2;
+
+                document.addEventListener('mousemove', (event) => {
+                    mouseX = (event.clientX - windowHalfX);
+                    mouseY = (event.clientY - windowHalfY);
+                });
+
+                // Scroll state for interaction
+                let scrollY = window.scrollY;
+                let currentScroll = 0;
+                window.addEventListener('scroll', () => {
+                    scrollY = window.scrollY;
+                });
+
+                // Clock for smooth animations
+                const clock = new THREE.Clock();
+
+                // Animation Loop
+                const tick = () => {
+                    const elapsedTime = clock.getElapsedTime();
+
+                    // Procedurally color individual triangles representing data flows
+                    const colorsAttr = geometry.attributes.color;
+                    const posAttr = geometry.attributes.position;
+                    
+                    // Simple fake light direction for dark base 3D shading
+                    const lx = Math.sin(elapsedTime * 0.5);
+                    const ly = 1.0;
+                    const lz = Math.cos(elapsedTime * 0.5);
+                    const lLen = Math.sqrt(lx*lx + ly*ly + lz*lz);
+                    
+                    for (let i = 0; i < count; i += 3) {
+                        // Calculate center point of the triangle
+                        const cx = (posAttr.getX(i) + posAttr.getX(i+1) + posAttr.getX(i+2)) / 3;
+                        const cy = (posAttr.getY(i) + posAttr.getY(i+1) + posAttr.getY(i+2)) / 3;
+                        const cz = (posAttr.getZ(i) + posAttr.getZ(i+1) + posAttr.getZ(i+2)) / 3;
+                        
+                        const cLen = Math.sqrt(cx*cx + cy*cy + cz*cz);
+                        const nx = cx/cLen, ny = cy/cLen, nz = cz/cLen;
+                        
+                        // Fake lighting dot product for the dark slate background
+                        const dot = Math.max(0.15, (nx*(lx/lLen) + ny*(ly/lLen) + nz*(lz/lLen)));
+                        
+                        // Base color (deep shadowed slate)
+                        let r = 0.05 * dot;
+                        let g = 0.08 * dot;
+                        let b = 0.15 * dot;
+                        
+                        // Increased speed significantly and light colors added
+                        let wave = Math.sin(cx * 0.7 + elapsedTime * 1.0) + 
+                                   Math.cos(cy * 0.8 - elapsedTime * 0.8) + 
+                                   Math.sin(cz * 0.9 + elapsedTime * 1.2);
+                        
+                        // Spatial color gradient generation
+                        let hueShiftR = (Math.sin(cx * 0.4 + elapsedTime * 0.5) + 1) / 2; // 0 to 1
+                        let hueShiftG = (Math.cos(cy * 0.5 + elapsedTime * 0.4) + 1) / 2;
+                        let hueShiftB = (Math.sin(cz * 0.6 - elapsedTime * 0.6) + 1) / 2;
+                        
+                        // When the wave hits a threshold, illuminate the grouped triangles!
+                        if (wave > 1.2) {
+                            // Smooth exponential intensity ramp up
+                            let power = (wave - 1.2) / 1.8; // scale up
+                            let intensity = Math.pow(power, 1.5) * 2.2; // Return to higher intensity cap for brightness
+                            
+                            // Mix crisp colorful gradient colors
+                            // Re-injected lively neon colors alongside the deep ones
+                            r += (0.0 + 1.0 * hueShiftR) * intensity; 
+                            g += (0.0 + 0.8 * hueShiftG) * intensity; 
+                            b += (0.2 + 0.8 * hueShiftB) * intensity; 
+                        }
+                        
+                        // Assign the exactly same flat color to all 3 vertices of the triangle
+                        // This guarantees the triangle has crisp boundaries
+                        for(let j=0; j<3; j++) {
+                            colorsAttr.setXYZ(i+j, Math.min(1, r), Math.min(1, g), Math.min(1, b));
+                        }
+                    }
+                    colorsAttr.needsUpdate = true;
+
+                    // Slowly rotate core components
+                    aiCore.rotation.y += 0.002;
+                    aiCore.rotation.x += 0.001;
+                    aiCoreOuter.rotation.y -= 0.0015;
+                    aiCoreOuter.rotation.z += 0.001;
+                    
+                    // Rotate background particles slowly
+                    particlesMesh.rotation.y = -0.05 * elapsedTime;
+                    particlesMesh.rotation.x = 0.02 * elapsedTime;
+
+                    // Mouse interaction (parallax float)
+                    targetX = mouseX * 0.001;
+                    targetY = mouseY * 0.001;
+                    
+                    aiCore.rotation.y += 0.05 * (targetX - aiCore.rotation.y);
+                    aiCore.rotation.x += 0.05 * (targetY - aiCore.rotation.x);
+                    
+                    aiCoreOuter.rotation.y += 0.03 * (targetX - aiCoreOuter.rotation.y);
+                    aiCoreOuter.rotation.x += 0.03 * (targetY - aiCoreOuter.rotation.x);
+
+                    // Scroll interaction - move camera Y organically
+                    currentScroll += (scrollY - currentScroll) * 0.05;
+                    
+                    // Offset camera based on scroll depth smoothly
+                    camera.position.y = -currentScroll * 0.002;
+                    // Slightly spin core faster on scroll
+                    aiCore.rotation.z = currentScroll * 0.0003;
+                    aiCoreOuter.rotation.x = currentScroll * 0.0002;
+
+                    // Render
+                    renderer.render(scene, camera);
+
+                    // Call next frame
+                    window.requestAnimationFrame(tick);
+                };
+
+                tick();
+            }
+        });
     </script>
 </body>
+
 </html>

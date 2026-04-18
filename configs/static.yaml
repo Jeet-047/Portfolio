@@ -46,28 +46,113 @@ qualifications:
     details: "Pure Science stream"
 
 skills:
-  - name: "Machine Learning (ML)"
-    level: 90
-  - name: "Deep Learning (DL)"
-    level: 85
-  - name: "Natural Language Processing (NLP)"
-    level: 75
-  - name: "Computer Vision (CV)"
-    level: 70
-  - name: "Large Language Models (LLMs)"
-    level: 70
-  - name: "Retrieval Augmented Generation (RAG)"
-    level: 70
-  - name: "Machine Learning Operations (MLOps)"
-    level: 65
-  - name: "Cloud Deployment (AWS/ Render/ Streamlit)"
-    level: 70
-  - name: "Kubernetes & Docker"
-    level: 60
-  - name: "GitHub Actions for CI/CD"
-    level: 70
-  - name: "DVC & MLflow"
-    level: 60
-  - name: "Python"
-    level: 80
+  core_ai:
+    - name: "Machine Learning (ML)"
+      level: 90
+    - name: "Deep Learning (DL)"
+      level: 85
+    - name: "Natural Language Processing (NLP)"
+      level: 75
+    - name: "Computer Vision (CV)"
+      level: 70
+    - name: "Large Language Models (LLMs)"
+      level: 70
+    - name: "Retrieval Augmented Generation (RAG)"
+      level: 70
+    - name: "Agentic AI Systems"
+      level: 70
+  mlops:
+    - name: "Docker & Kubernetes"
+      level: 65
+    - name: "Cloud Deploy (AWS / Render)"
+      level: 70
+    - name: "CI/CD (GitHub Actions)"
+      level: 70
+    - name: "DVC & MLflow"
+      level: 60
+    - name: "Model Registry & Versioning"
+      level: 65
+  data_prgm:
+    - name: "Python"
+      level: 80
+    - name: "SQL & Databases"
+      level: 75
+    - name: "FastAPI / Flask"
+      level: 75
+    - name: "Feature Engineering"
+      level: 80
+    - name: "Data Pipeline Design"
+      level: 70
 
+pipeline_workflows:
+  - id: "mlops"
+    label: "MLOps Pipeline"
+    accent: "indigo"
+    description: "End-to-end machine learning lifecycle from raw data to monitored, versioned cloud deployments."
+    steps:
+      - icon: "database"
+        title: "Data Ingestion"
+        desc: "Collect, validate & version raw datasets from multiple sources."
+        color: "indigo"
+      - icon: "cpu"
+        title: "Feature Engineering"
+        desc: "Transform, normalize & select features for optimal model input."
+        color: "violet"
+      - icon: "brain"
+        title: "Model Training"
+        desc: "Train & tune models with experiment tracking via MLflow / DVC."
+        color: "purple"
+      - icon: "line-chart"
+        title: "Evaluation"
+        desc: "Rigorous validation, A/B testing & performance benchmarking."
+        color: "rose"
+      - icon: "git-merge"
+        title: "CI/CD & Registry"
+        desc: "Automated pipelines, version-controlled model registry on S3."
+        color: "amber"
+      - icon: "rocket"
+        title: "Cloud Deploy"
+        desc: "Containerized deployment on AWS EC2 / Render with monitoring."
+        color: "emerald"
+
+  - id: "llm_rag"
+    label: "LLM / RAG Pipeline"
+    accent: "fuchsia"
+    description: "Full retrieval-augmented generation stack from raw documents to low-latency, grounded AI responses."
+    steps:
+      - icon: "file-text"
+        title: "Document Ingestion"
+        desc: "Parse PDFs, DOCX, URLs & clean content into structured chunks."
+        color: "fuchsia"
+      - icon: "braces"
+        title: "Chunking & Embedding"
+        desc: "Semantic splitting & vector embedding via sentence transformers."
+        color: "pink"
+      - icon: "database-zap"
+        title: "Vector Store"
+        desc: "Store & index embeddings in FAISS / ChromaDB for fast ANN search."
+        color: "rose"
+      - icon: "search"
+        title: "Retrieval & Re-ranking"
+        desc: "Cosine similarity retrieval + cross-encoder re-ranking for precision."
+        color: "orange"
+      - icon: "message-square-text"
+        title: "LLM Generation"
+        desc: "Grounded response synthesis with chain-of-thought prompting."
+        color: "amber"
+      - icon: "zap"
+        title: "API Serving"
+        desc: "Low-latency FastAPI endpoint with streaming & rate limiting."
+        color: "emerald"
+
+flagship_project:
+  title: "ChatAgent: An Agentic AI Chat System"
+  short_desc: "A production-grade, goal-driven Agentic AI chat system that enables intelligent conversations by reasoning, planning, and acting through LLMs, tool integration, and memory."
+  technologies:
+    - "LangGraph"
+    - "LangChain"
+    - "Groq LLMs"
+    - "FastAPI"
+    - "Python"
+  img_path: "/static/project_img/P-ac/ac_gif2.gif"
+  read_architecture_data: "/projects/agentic-chat"

@@ -36,7 +36,16 @@ class DatabaseService:
         response = self.supabase.table("contact_messages").insert(data).execute()
         return response
 
+    def increment_total_visits(self) -> int:
+        """
+        Increment the total website visits counter atomically using an RPC call.
+        
+        Returns:
+            The new visit count
+        """
+        response = self.supabase.rpc("increment_visit_count", {}).execute()
+        return response.data
+
 
 # Create a singleton instance
 db_service = DatabaseService()
-

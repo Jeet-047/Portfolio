@@ -117,6 +117,12 @@ async def contact_page(request: Request):
         {"data": PORTFOLIO_DATA, "active_page": "/contact"},
     )
 
+# --- Silent handler for Chrome devtools request ---
+@app.get("/.well-known/appspecific/com.chrome.devtools.json")
+async def chrome_devtools_json():
+    """Silence browser devtools 404 logs."""
+    return JSONResponse(status_code=status.HTTP_200_OK, content={})
+
 
 # --- Contact Form API Endpoint ---
 @app.post("/api/contact")
@@ -169,6 +175,33 @@ async def submit_contact_form(form: ContactForm):
         )
 
 
+# --- Visits Tracking API Endpoint ---
+@app.post("/api/visits")
+async def increment_visits():
+    """
+    Increment and return the global website visit count.
+    """
+    try:
+        new_count = db_service.increment_total_visits()
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content={
+                "success": True,
+                "count": new_count
+            }
+        )
+    except Exception as e:
+        # Ignore errors so it doesn't break the frontend, just return 0
+        print(f"Error updating visits: {e}")
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content={
+                "success": False,
+                "count": 0
+            }
+        )
+
+
 # --- 4. Running the Application ---
 if __name__ == "__main__":
     uvicorn.run(
@@ -176,5 +209,6 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=8000,
         workers=multiprocessing.cpu_count() * 2,  # Scale with CPU
-        log_level="info"
+        log_level="info",
+        reload=True
     )

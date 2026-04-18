@@ -3,377 +3,430 @@
 {% block title %}Contact – Jeet Majumder{% endblock %}
 
 {% block head_extra %}
-    <!-- Load Lucide icons for social media and form elements -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <style>
-        /* Contact Page Background and Layout */
+<!-- Load Lucide icons for social media and form elements -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+    /* Contact Page Background and Layout */
+    .contact-page {
+        background: transparent;
+        /* Deep Slate Blue -> Transparent for WebGL */
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @media (min-width: 640px) {
         .contact-page {
-            background: #0f172a; /* Deep Slate Blue */
-            padding-top: 3rem;
-            padding-bottom: 3rem;
-            min-height: 90vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding-top: 4rem;
+            padding-bottom: 4rem;
         }
-        @media (min-width: 640px) {
-            .contact-page {
-                padding-top: 4rem;
-                padding-bottom: 4rem;
-            }
-        }
-        @media (min-width: 1024px) {
-            .contact-page {
-                padding-top: 6rem;
-                padding-bottom: 6rem;
-            }
-        }
+    }
 
-        /* Main Contact Card Style (Focus Element) */
-        .contact-card {
-            background: #1e293b; /* Darker card base */
-            border: 1px solid rgba(79, 70, 229, 0.2);
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 80px rgba(0, 0, 0, 0.9), 0 0 30px rgba(79, 70, 229, 0.4);
-            transition: transform 0.3s ease;
+    @media (min-width: 1024px) {
+        .contact-page {
+            padding-top: 6rem;
+            padding-bottom: 6rem;
         }
-        .contact-card:hover {
-            transform: translateY(-5px);
-        }
+    }
 
-        /* Input Field Styling */
+    /* Main Contact Card Style (Focus Element) */
+    .contact-card {
+        background: rgba(30, 41, 59, 0.45);
+        /* Darker semi-transparent card base */
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(79, 70, 229, 0.2);
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 80px rgba(0, 0, 0, 0.5), 0 0 30px rgba(79, 70, 229, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .contact-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Input Field Styling */
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: #334155;
+        /* Slightly lighter background for input */
+        border: 1px solid #4f46e5;
+        border-radius: 0.5rem;
+        color: #f8fafc;
+        /* White text */
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+    }
+
+    @media (min-width: 640px) {
         .form-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: #334155; /* Slightly lighter background for input */
-            border: 1px solid #4f46e5;
-            border-radius: 0.5rem;
-            color: #f8fafc; /* White text */
-            transition: all 0.3s ease;
-            font-size: 0.875rem;
-        }
-        @media (min-width: 640px) {
-            .form-input {
-                font-size: 1rem;
-            }
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #8b5cf6;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.5); /* Inner focus glow */
-        }
-
-        /* Submit Button (Gradient CTA) */
-        .submit-cta {
-            background: linear-gradient(90deg, #4f46e5, #8b5cf6);
-            box-shadow: 0 5px 20px rgba(79, 70, 229, 0.6);
-            color: white;
-            font-weight: 700;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem; 
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-        }
-        
-        .submit-cta:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.8);
-        }
-
-        /* Social Link Styling */
-        .social-icon {
-            color: #4f46e5;
-            transition: color 0.3s ease, transform 0.3s ease;
-        }
-        .social-icon:hover {
-            color: #8b5cf6;
-            transform: translateY(-3px) scale(1.1);
-        }
-
-        /* Info Block */
-        .info-block {
-            border-left: 3px solid #4f46e5;
-            padding-left: 0.75rem;
-        }
-        @media (min-width: 640px) {
-            .info-block {
-                padding-left: 1rem;
-            }
-        }
-
-        /* Sliding popup toast (top-right) */
-        .popup-toast {
-            position: fixed;
-            right: 1.25rem;
-            top: 5rem;
-            transform: translateY(-150%);
-            transition: transform 400ms cubic-bezier(.2,.8,.2,1), opacity 250ms ease-in-out;
-            background: linear-gradient(90deg,#111827,#1f2937);
-            color: #e6edf3;
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 30px rgba(2,6,23,0.6);
-            z-index: 60;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            max-width: 320px;
-            opacity: 0.99;
-        }
-        .popup-toast.show {
-            transform: translateY(0);
-        }
-        .popup-toast .close-btn {
-            margin-left: auto;
-            background: transparent;
-            border: none;
-            color: #cbd5e1;
-            cursor: pointer;
             font-size: 1rem;
         }
-    </style>
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #8b5cf6;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.5);
+        /* Inner focus glow */
+    }
+
+    /* Submit Button (Gradient CTA) */
+    .submit-cta {
+        background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+        box-shadow: 0 5px 20px rgba(79, 70, 229, 0.6);
+        color: white;
+        font-weight: 700;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+    }
+
+    .submit-cta:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 30px rgba(79, 70, 229, 0.8);
+    }
+
+    /* Social Link Styling */
+    .social-icon {
+        color: #cbd5e1;
+        /* Gray-whitish default color */
+        transition: color 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .social-icon:hover {
+        color: #4f46e5;
+        /* The original preset blue/indigo color */
+        transform: translateY(-3px) scale(1.1);
+        filter: drop-shadow(0 0 10px rgba(79, 70, 229, 0.4));
+    }
+
+    /* Info Block */
+    .info-block {
+        border-left: 3px solid #4f46e5;
+        padding-left: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+        .info-block {
+            padding-left: 1rem;
+        }
+    }
+
+    /* Sliding popup toast (top-right) */
+    .popup-toast {
+        position: fixed;
+        right: 1.25rem;
+        top: 5rem;
+        transform: translateY(-150%);
+        transition: transform 400ms cubic-bezier(.2, .8, .2, 1), opacity 250ms ease-in-out;
+        background: linear-gradient(90deg, #111827, #1f2937);
+        color: #e6edf3;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
+        z-index: 60;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        max-width: 320px;
+        opacity: 0.99;
+    }
+
+    .popup-toast.show {
+        transform: translateY(0);
+    }
+
+    .popup-toast .close-btn {
+        margin-left: auto;
+        background: transparent;
+        border: none;
+        color: #cbd5e1;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-    <div class="contact-page">
-        <div class="contact-card max-w-5xl mx-auto w-full p-6 sm:p-8 md:p-12">
-            
-            <!-- Header Text -->
-            <header class="text-center mb-6 sm:mb-8 md:mb-10">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-2 sm:mb-3">Let's Build Something Great.</h2>
-                <p class="text-base sm:text-lg text-gray-400 px-2">
-                    Reach out directly or connect with me on social media. I look forward to your message!
-                </p>
-            </header>
+<div class="contact-page">
+    <div class="contact-card max-w-5xl mx-auto w-full p-6 sm:p-8 md:p-12">
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-10">
-                
-                <!-- Left Column: Contact Information & Links -->
-                <div class="lg:col-span-1 space-y-6 sm:space-y-8 order-2 lg:order-1">
-                    
-                    <div class="space-y-3 sm:space-y-4">
-                        <h3 class="text-lg sm:text-xl font-bold text-primary flex items-center mb-3 sm:mb-4">
-                            <i data-lucide="info" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"></i> Direct Contact Info
-                        </h3>
-                        
-                        <div class="info-block space-y-2 sm:space-y-3 text-gray-300">
-                            <p class="flex items-center text-sm sm:text-base break-all">
-                                <a href="mailto:{{ data.email }}" class="flex items-center text-md text-white text-opacity-80 sm:w-full group">
-                                    <i data-lucide="mail" class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i>{{ data.email }}
-                                </a>
-                            </p>
-                            <p class="flex items-center text-sm sm:text-base">
-                                <i data-lucide="map-pin" class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{ data.resume.contact.location }}
-                            </p>
+        <!-- Header Text -->
+        <header class="text-center mb-6 sm:mb-8 md:mb-10">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-2 sm:mb-3">Let's Build Something Great.</h2>
+            <p class="text-base sm:text-lg text-gray-400 px-2">
+                Reach out directly or connect with me on social media. I look forward to your message!
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-10">
+
+            <!-- Left Column: Contact Information & Links -->
+            <div class="lg:col-span-1 space-y-6 sm:space-y-8 order-2 lg:order-1">
+
+                <div class="space-y-3 sm:space-y-4">
+                    <h3 class="text-lg sm:text-xl font-bold text-primary flex items-center mb-3 sm:mb-4">
+                        <i data-lucide="info" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"></i> Direct Contact Info
+                    </h3>
+
+                    <div class="info-block space-y-2 sm:space-y-3 text-gray-300">
+                        <p class="flex items-center text-sm sm:text-base break-all">
+                            <a href="mailto:{{ data.email }}"
+                                class="flex items-center text-md text-white text-opacity-80 sm:w-full group">
+                                <i data-lucide="mail"
+                                    class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i>{{
+                                data.email }}
+                            </a>
+                        </p>
+                        <p class="flex items-center text-sm sm:text-base">
+                            <i data-lucide="map-pin"
+                                class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 text-indigo-400 flex-shrink-0"></i> {{
+                            data.resume.contact.location }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Social Media Links -->
+                <div class="space-y-3 sm:space-y-4">
+                    <h3 class="text-lg sm:text-xl font-bold text-primary flex items-center mb-4 sm:mb-6">
+                        <i data-lucide="users" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"></i> Find Me Online
+                    </h3>
+                    <div class="flex space-x-5 sm:space-x-7 pt-1">
+                        <a href="https://linkedin.com/in/{{ data.linkedin }}" target="_blank" aria-label="LinkedIn">
+                            <svg class="social-icon w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                        </a>
+                        <a href="https://github.com/{{ data.github }}" target="_blank" aria-label="GitHub">
+                            <svg class="social-icon w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                            </svg>
+                        </a>
+                        <a href="https://kaggle.com/{{ data.kaggle }}" target="_blank" aria-label="Kaggle">
+                            <svg class="social-icon w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M18.825 23.859c-.022.092-.117.141-.281.141h-3.139c-.187 0-.351-.082-.492-.248l-5.178-6.589-1.448 1.374v5.111c0 .235-.117.352-.351.352H5.505c-.234 0-.351-.117-.351-.352V.263c0-.234.117-.351.351-.351h2.431c.234 0 .351.117.351.351v15.344l6.082-6.046c.14-.141.316-.211.527-.211h3.255c.14 0 .234.035.281.106.047.07.035.152-.035.246l-5.694 5.66 6.094 8.201c.07.094.082.193.035.297z" />
+                            </svg>
+                        </a>
+                        <a href="https://youtube.com/{{ data.youtube }}" target="_blank" aria-label="YouTube">
+                            <svg class="social-icon w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Contact Form -->
+            <div class="lg:col-span-2 order-1 lg:order-2">
+                <form id="contactForm" class="space-y-4 sm:space-y-6">
+
+                    <!-- Name and Email (Side-by-side on desktop) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-200 mb-2">Your Name</label>
+                            <input type="text" id="name" name="name" required class="form-input"
+                                placeholder="Jeet Majumder">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-200 mb-2">Email
+                                Address</label>
+                            <input type="email" id="email" name="email" required class="form-input"
+                                placeholder="you@example.com">
                         </div>
                     </div>
 
-                    <!-- Social Media Links -->
-                    <div class="space-y-3 sm:space-y-4">
-                        <h3 class="text-lg sm:text-xl font-bold text-primary flex items-center mb-3 sm:mb-4">
-                            <i data-lucide="users" class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3"></i> Find Me Online
-                        </h3>
-                        <div class="flex space-x-4 sm:space-x-6">
-                            <a href="{{ data.resume.contact.linkedin }}" target="_blank" aria-label="LinkedIn">
-                                <i data-lucide="linkedin" class="social-icon w-7 h-7 sm:w-8 sm:h-8"></i>
-                            </a>
-                            <a href="{{ data.resume.contact.github }}" target="_blank" aria-label="GitHub">
-                                <i data-lucide="github" class="social-icon w-7 h-7 sm:w-8 sm:h-8"></i>
-                            </a>
-                        </div>
+                    <!-- Subject Line -->
+                    <div>
+                        <label for="subject" class="block text-sm font-medium text-gray-200 mb-2">Subject</label>
+                        <input type="text" id="subject" name="subject" required class="form-input"
+                            placeholder="Inquiry about a Data Science role...">
                     </div>
 
-                </div>
+                    <!-- Message Body -->
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-200 mb-2">Message</label>
+                        <textarea id="message" name="message" rows="5" required class="form-input"
+                            placeholder="Hello Jeet, I saw your portfolio and..."></textarea>
+                    </div>
 
-                <!-- Right Column: Contact Form -->
-                <div class="lg:col-span-2 order-1 lg:order-2">
-                    <form id="contactForm" class="space-y-4 sm:space-y-6">
-                        
-                        <!-- Name and Email (Side-by-side on desktop) -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                            <div>
-                                <label for="name" class="block text-sm font-medium text-gray-200 mb-2">Your Name</label>
-                                <input type="text" id="name" name="name" required class="form-input" placeholder="Jeet Majumder">
-                            </div>
-                            <div>
-                                <label for="email" class="block text-sm font-medium text-gray-200 mb-2">Email Address</label>
-                                <input type="email" id="email" name="email" required class="form-input" placeholder="you@example.com">
-                            </div>
-                        </div>
+                    <!-- Submit Button -->
+                    <div class="pt-2 sm:pt-4">
+                        <button type="submit"
+                            class="submit-cta w-full flex items-center justify-center space-x-2 text-sm sm:text-base py-3 sm:py-3.5 relative z-10"
+                            style="pointer-events: auto; touch-action: manipulation; cursor: pointer;">
+                            <i data-lucide="send" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                            <span>Send Message</span>
+                        </button>
+                    </div>
 
-                        <!-- Subject Line -->
-                        <div>
-                            <label for="subject" class="block text-sm font-medium text-gray-200 mb-2">Subject</label>
-                            <input type="text" id="subject" name="subject" required class="form-input" placeholder="Inquiry about a Data Science role...">
-                        </div>
-
-                        <!-- Message Body -->
-                        <div>
-                            <label for="message" class="block text-sm font-medium text-gray-200 mb-2">Message</label>
-                            <textarea id="message" name="message" rows="5" required class="form-input" placeholder="Hello Jeet, I saw your portfolio and..."></textarea>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="pt-2 sm:pt-4">
-                            <button type="submit" class="submit-cta w-full flex items-center justify-center space-x-2 text-sm sm:text-base py-3 sm:py-3.5 relative z-10" style="pointer-events: auto; touch-action: manipulation; cursor: pointer;">
-                                <i data-lucide="send" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                                <span>Send Message</span>
-                            </button>
-                        </div>
-                        
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block body_end_script %}
-    <!-- Sliding popup notification -->
-    <div id="contactPopup" class="popup-toast" role="status" aria-live="polite" aria-atomic="true" hidden>
-        <i data-lucide="mail" class="w-5 h-5 text-white"></i>
-        <div>
-            <strong class="text-white">Message Sent Successfully!</strong>
-            <div id="contactPopupMessage" class="text-sm text-gray-200">Thank you for messaging, an acknowledgement has been sent to your email.</div>
-        </div>
-        <button id="contactPopupClose" class="close-btn" aria-label="Close notification">✕</button>
+<!-- Sliding popup notification -->
+<div id="contactPopup" class="popup-toast" role="status" aria-live="polite" aria-atomic="true" hidden>
+    <i data-lucide="mail" class="w-5 h-5 text-white"></i>
+    <div>
+        <strong class="text-white">Message Sent Successfully!</strong>
+        <div id="contactPopupMessage" class="text-sm text-gray-200">Thank you for messaging, an acknowledgement has been
+            sent to your email.</div>
     </div>
-    <script>
-        // Initialize Lucide icons after DOM content is loaded
-        document.addEventListener('DOMContentLoaded', () => {
+    <button id="contactPopupClose" class="close-btn" aria-label="Close notification">✕</button>
+</div>
+<script>
+    // Initialize Lucide icons after DOM content is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+
+        // Bind popup close button (safe after DOM loaded)
+        const popupCloseBtn = document.getElementById('contactPopupClose');
+        if (popupCloseBtn) {
+            popupCloseBtn.addEventListener('click', hidePopup);
+        }
+    });
+
+    // Popup logic
+    const popup = document.getElementById('contactPopup');
+    let popupTimer = null;
+    function showPopup(message = null, duration = 10000) {
+        if (!popup) return;
+        const messageEl = document.getElementById('contactPopupMessage');
+        // Only override the default HTML text if a message was provided
+        if (message !== null && messageEl) messageEl.textContent = message;
+        // Show visual popup
+        popup.hidden = false;
+        // Small delay to allow transition
+        requestAnimationFrame(() => popup.classList.add('show'));
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+        if (popupTimer) clearTimeout(popupTimer);
+        popupTimer = setTimeout(hidePopup, duration);
+    }
+    function hidePopup() {
+        if (!popup) return;
+        popup.classList.remove('show');
+        // Wait for transition to finish before hiding
+        setTimeout(() => { popup.hidden = true; }, 400);
+        if (popupTimer) {
+            clearTimeout(popupTimer);
+            popupTimer = null;
+        }
+    }
+
+    // Form submission handler
+    const form = document.getElementById('contactForm');
+    if (form) {
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const submitButton = document.querySelector('.submit-cta');
+            const originalContent = submitButton.innerHTML;
+
+            // Disable button and show loading state
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Sending...</span>';
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
 
-            // Bind popup close button (safe after DOM loaded)
-            const popupCloseBtn = document.getElementById('contactPopupClose');
-            if (popupCloseBtn) {
-                popupCloseBtn.addEventListener('click', hidePopup);
-            }
-        });
-        
-        // Popup logic
-        const popup = document.getElementById('contactPopup');
-        let popupTimer = null;
-        function showPopup(message = null, duration = 10000) {
-            if (!popup) return;
-            const messageEl = document.getElementById('contactPopupMessage');
-            // Only override the default HTML text if a message was provided
-            if (message !== null && messageEl) messageEl.textContent = message;
-            // Show visual popup
-            popup.hidden = false;
-            // Small delay to allow transition
-            requestAnimationFrame(() => popup.classList.add('show'));
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-            if (popupTimer) clearTimeout(popupTimer);
-            popupTimer = setTimeout(hidePopup, duration);
-        }
-        function hidePopup() {
-            if (!popup) return;
-            popup.classList.remove('show');
-            // Wait for transition to finish before hiding
-            setTimeout(() => { popup.hidden = true; }, 400);
-            if (popupTimer) {
-                clearTimeout(popupTimer);
-                popupTimer = null;
-            }
-        }
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
 
-        // Form submission handler
-        const form = document.getElementById('contactForm');
-        if (form) {
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const submitButton = document.querySelector('.submit-cta');
-                const originalContent = submitButton.innerHTML;
-                
-                // Disable button and show loading state
-                submitButton.disabled = true;
-                submitButton.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Sending...</span>';
-                if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
-                }
-                
-                // Get form data
-                const formData = {
-                    name: document.getElementById('name').value,
-                    email: document.getElementById('email').value,
-                    subject: document.getElementById('subject').value,
-                    message: document.getElementById('message').value
-                };
-                
-                try {
-                    // Send POST request to API
-                    const response = await fetch('/api/contact', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(formData)
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (response.ok && result.success) {
-                        // Success state
-                        submitButton.innerHTML = '<i data-lucide="check-circle" class="w-5 h-5"></i><span>Message Sent!</span>';
-                        submitButton.classList.remove('submit-cta');
-                        submitButton.classList.add('bg-green-600', 'hover:bg-green-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
-                        
-                        if (typeof lucide !== 'undefined') {
-                            lucide.createIcons();
-                        }
-                        
-                        // Reset form
-                        form.reset();
+            try {
+                // Send POST request to API
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
 
-                        // Show sliding popup notification (uses popup's existing message)
-                        showPopup();
-                        
-                        // Reset button after 3 seconds
-                        setTimeout(() => {
-                            submitButton.innerHTML = originalContent;
-                            submitButton.classList.remove('bg-green-600', 'hover:bg-green-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
-                            submitButton.classList.add('submit-cta');
-                            submitButton.disabled = false;
-                            if (typeof lucide !== 'undefined') {
-                                lucide.createIcons();
-                            }
-                        }, 3000);
-                    } else {
-                        // Error state
-                        throw new Error(result.message || 'Failed to send message');
-                    }
-                } catch (error) {
-                    // Error handling
-                    submitButton.innerHTML = '<i data-lucide="alert-circle" class="w-5 h-5"></i><span>Error - Try Again</span>';
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // Success state
+                    submitButton.innerHTML = '<i data-lucide="check-circle" class="w-5 h-5"></i><span>Message Sent!</span>';
                     submitButton.classList.remove('submit-cta');
-                    submitButton.classList.add('bg-red-600', 'hover:bg-red-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
-                    
+                    submitButton.classList.add('bg-green-600', 'hover:bg-green-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
+
                     if (typeof lucide !== 'undefined') {
                         lucide.createIcons();
                     }
-                    
+
+                    // Reset form
+                    form.reset();
+
+                    // Show sliding popup notification (uses popup's existing message)
+                    showPopup();
+
                     // Reset button after 3 seconds
                     setTimeout(() => {
                         submitButton.innerHTML = originalContent;
-                        submitButton.classList.remove('bg-red-600', 'hover:bg-red-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
+                        submitButton.classList.remove('bg-green-600', 'hover:bg-green-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
                         submitButton.classList.add('submit-cta');
                         submitButton.disabled = false;
                         if (typeof lucide !== 'undefined') {
                             lucide.createIcons();
                         }
                     }, 3000);
-                    
-                    console.error('Error:', error);
+                } else {
+                    // Error state
+                    throw new Error(result.message || 'Failed to send message');
                 }
-            });
-        }
-    </script>
+            } catch (error) {
+                // Error handling
+                submitButton.innerHTML = '<i data-lucide="alert-circle" class="w-5 h-5"></i><span>Error - Try Again</span>';
+                submitButton.classList.remove('submit-cta');
+                submitButton.classList.add('bg-red-600', 'hover:bg-red-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
+
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+
+                // Reset button after 3 seconds
+                setTimeout(() => {
+                    submitButton.innerHTML = originalContent;
+                    submitButton.classList.remove('bg-red-600', 'hover:bg-red-700', 'text-white', 'py-3', 'px-6', 'rounded-lg');
+                    submitButton.classList.add('submit-cta');
+                    submitButton.disabled = false;
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                }, 3000);
+
+                console.error('Error:', error);
+            }
+        });
+    }
+</script>
 {% endblock %}

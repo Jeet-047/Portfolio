@@ -2,6 +2,7 @@ projects:
   # Project Section : ------------------------------------------------------------------
   - id: "agentic-chat"
     title: "ChatAgent: An Agentic AI Chat System"
+    category: "Cognitive AI Systems"
     date: "2026-03"
     role: "End-to-End Developer (Agentic System)"
     technologies:
@@ -41,6 +42,7 @@ projects:
   # Project Section : ------------------------------------------------------------------
   - id: "multi-doc-rag-system"
     title: "Multi-Doc Q&A RAG System"
+    category: "Cognitive AI Systems"
     date: "2025-11"
     role: "End-to-End Developer (RAG System)"
     technologies:
@@ -85,6 +87,7 @@ projects:
   # Project Section : ------------------------------------------------------------------
   - id: "news-topic-classifier"
     title: "News Topic Classification App"
+    category: "NLP Systems"
     date: "2025-10"
     role: "End-to-End NLP Developer"
     technologies:
@@ -121,6 +124,7 @@ projects:
   # Project Section : ------------------------------------------------------------------
   - id: "vehicle-insurance-predictor"
     title: "Vehicle Insurance Prediction App"
+    category: "Applied ML Systems"
     date: "2025-09"
     role: "End-to-End ML Developer"
     technologies:
@@ -153,6 +157,7 @@ projects:
   # Project Section : ------------------------------------------------------------------
   - id: "brain-tumor-detector"
     title: "Brain Tumor Detection App"
+    category: "Applied ML Systems"
     date: "2025-08"
     role: "End-to-End DL Developer"
     technologies:
@@ -187,6 +192,7 @@ projects:
   # Project Section : ------------------------------------------------------------------
   - id: "heart-disease-predictor"
     title: "Heart Disease Prediction App"
+    category: "Applied ML Systems"
     date: "2025-07"
     role: "End-to-End ML Developer"
     technologies:
@@ -219,6 +225,7 @@ projects:
   # Project Section : ------------------------------------------------------------------
   - id: "person-entry-exit-tracker"
     title: "Person Entry-Exit Tracking System"
+    category: "Computer Vision & IoT Systems"
     date: "2025-06"
     role: "Computer Vision / ML Engineer"
     technologies:
@@ -253,6 +260,7 @@ projects:
   # Project Section : ------------------------------------------------------------------
   - id: "brain-tumor-detection"
     title: "Research On Brain Tumor Detection"
+    category: "Research Contributions"
     date: "2025-04"
     role: "Lead Researcher and First Author"
     technologies:
@@ -287,6 +295,7 @@ projects:
   # Project Section : ------------------------------------------------------------------
   - id: "hepatitis-c-prediction"
     title: "Research On Hepatitis C Prediction"
+    category: "Research Contributions"
     date: "2024"
     role: "Lead Researcher and First Author"
     technologies:

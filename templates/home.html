@@ -3,160 +3,270 @@
 {% block title %}Jeet Majumder – Data Science & AI{% endblock %}
 
 {% block head_extra %}
-    <!-- Load Lucide icons for section elements -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <style>
-        /* Specific styles for the typing effect on the home page */
-        .typing-text {
-            display: inline-block;
-            word-break: break-word;
-            overflow-wrap: break-word;
-        }
-        .typing-container {
-            animation: fadeInUp 1s ease-out forwards;
-            animation-delay: 0.1s;
+<!-- Load Lucide icons for section elements -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+    /* Specific styles for the typing effect on the home page */
+    .typing-text {
+        display: inline-block;
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .typing-container {
+        animation: fadeInUp 1s ease-out forwards;
+        animation-delay: 0.1s;
+    }
+
+    /* Floating image animation */
+    .float-image {
+        animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0px);
         }
 
-        /* Floating image animation */
-        .float-image {
-            animation: float 8s ease-in-out infinite;
+        50% {
+            transform: translateY(-20px);
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+    }
+
+    /* Responsive Hero Height for content alignment */
+    .hero-content {
+        display: flex;
+        align-items: center;
+    }
+
+    /* NEW: Custom styles for My Journey & Skills Sections */
+    .skill-bar-gradient {
+        /* Vibrant gradient for the progress bar fill */
+        background: linear-gradient(90deg, #4f46e5 0%, #8b5cf6 50%, #ec4899 100%);
+    }
+
+    .skill-card,
+    .info-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(79, 70, 229, 0.2);
+        /* Subtle primary border */
+    }
+
+    .skill-card:hover,
+    .info-card:hover {
+        transform: translateY(-5px);
+        /* Soft glow effect on hover */
+        box-shadow: 0 15px 30px rgba(79, 70, 229, 0.4);
+    }
+
+    /* Animated border for qualifications timeline */
+    .timeline-item {
+        position: relative;
+    }
+
+    /* Removed ::before line, using SVG path now */
+    .timeline-dot {
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Unique Skill Card Animation Element */
+    .skill-bg-skew {
+        opacity: 0;
+        /* Hidden initially */
+        background: linear-gradient(to right, #4f46e5, #ec4899);
+        transition: opacity 0.5s, transform 0.5s;
+    }
+
+    .skill-item:hover .skill-bg-skew {
+        opacity: 0.1;
+        transform: skewY(-3deg) scale(1.5);
+    }
+
+    /* Synced Pipeline Animation */
+    .node-glow-sync {
+        animation: nodeSyncGlow 8s infinite;
+    }
+
+    .beam-sync {
+        animation: beamSync 8s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes nodeSyncGlow {
+
+        0%,
+        100% {
+            box-shadow: 0 0 0px transparent;
+            border-color: rgba(75, 85, 99, 0.4);
         }
 
-        /* Responsive Hero Height for content alignment */
-        .hero-content {
-            display: flex;
-            align-items: center;
+        5% {
+            box-shadow: 0 0 25px currentColor;
+            border-color: currentColor;
         }
 
-        /* NEW: Custom styles for My Journey & Skills Sections */
-        .skill-bar-gradient {
-            /* Vibrant gradient for the progress bar fill */
-            background: linear-gradient(90deg, #4f46e5 0%, #8b5cf6 50%, #ec4899 100%);
-        }
-        
-        .skill-card, .info-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(79, 70, 229, 0.2); /* Subtle primary border */
-        }
-        
-        .skill-card:hover, .info-card:hover {
-            transform: translateY(-5px);
-            /* Soft glow effect on hover */
-            box-shadow: 0 15px 30px rgba(79, 70, 229, 0.4); 
+        15% {
+            box-shadow: 0 0 35px currentColor;
+            border-color: currentColor;
         }
 
-        /* Animated border for qualifications timeline */
-        .timeline-item {
-            position: relative;
+        25% {
+            box-shadow: 0 0 0px transparent;
+            border-color: rgba(75, 85, 99, 0.4);
         }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(to bottom, #4f46e5, #8b5cf6);
-            border-radius: 2px;
-            transition: all 0.5s ease-out;
+    }
+
+    @keyframes beamSync {
+        0% {
+            left: -20%;
+            opacity: 0;
+            width: 0%;
         }
-        .timeline-item:hover::before {
-            width: 6px;
-            box-shadow: 0 0 10px #4f46e5;
+
+        2% {
+            opacity: 1;
+            width: 50%;
         }
-        
-        /* Unique Skill Card Animation Element */
-        .skill-bg-skew {
-            opacity: 0; /* Hidden initially */
-            background: linear-gradient(to right, #4f46e5, #ec4899);
-            transition: opacity 0.5s, transform 0.5s;
+
+        10% {
+            left: 60%;
+            opacity: 1;
+            width: 50%;
         }
-        .skill-item:hover .skill-bg-skew {
-            opacity: 0.1;
-            transform: skewY(-3deg) scale(1.5);
+
+        14% {
+            left: 100%;
+            opacity: 0;
+            width: 0%;
         }
-    </style>
+
+        100% {
+            left: 100%;
+            opacity: 0;
+            width: 0%;
+        }
+    }
+
+    /* Hide scrollbar for elements with this class */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-    <!-- 1. Hero Section (Two-Column Layout) -->
-    <section id="hero" class="min-h-[85vh] sm:min-h-[90vh] flex hero-content justify-center text-center lg:text-left px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 overflow-hidden bg-background">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center w-full">
-            
-            <!-- Left Column: Text Content and Typing Animation -->
-            <div class="space-y-4 sm:space-y-6 order-2 lg:order-1">
-                <p class="text-lg sm:text-xl text-primary font-semibold animated-element" style="animation-delay: 0.1s;">Hi, I'm</p>
+<!-- 1. Hero Section (Two-Column Layout) -->
+<section id="hero"
+    class="min-h-[85vh] sm:min-h-[90vh] flex hero-content justify-center text-center lg:text-left px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 overflow-hidden bg-transparent">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center w-full">
 
-                <!-- Name Headline -->
-                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight animated-element" style="animation-delay: 0.2s;">
-                    {{ data.name }}
-                </h1>
-                
-                <!-- Animated typing headline -->
-                <div class="typing-container overflow-hidden" id="typing-data" data-sentences='{{ data.typing_sentences | tojson }}'>
-                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-light text-gray-300 break-words" style="word-wrap: break-word; word-break: break-word;">
-                        <span id="typing-span" class="typing-text typing-cursor"></span>
-                    </h2>
-                </div>
+        <!-- Left Column: Text Content and Typing Animation -->
+        <div class="space-y-4 sm:space-y-6 order-2 lg:order-1">
+            <p class="text-lg sm:text-xl text-primary font-semibold">Hi, I'm</p>
 
-                <p class="text-base sm:text-lg text-gray-400 mt-3 sm:mt-4 px-2 sm:px-0 animated-element" style="animation-delay: 0.3s;">
-                    {{ data.title }}. Focused on creating scalable, innovative solutions with elegance and efficiency.
-                </p>
+            <!-- Name Headline -->
+            <h1
+                class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight transform-origin-center will-change-transform">
+                {{ data.name }}
+            </h1>
 
-                <div class="pt-4 sm:pt-6 flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start animated-element" style="animation-delay: 0.4s;">
-                    <a href="{{ data.pages.projects }}" class="gradient-button inline-block px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base text-white font-bold rounded-xl shadow-lg hover:shadow-primary/50 transition duration-300 transform hover:scale-[1.02] text-center relative z-10" style="pointer-events: auto; touch-action: manipulation;">View My Work</a>
-                    <a href="{{ data.pages.contact }}" class="inline-block px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base text-gray-200 border border-gray-600 rounded-xl hover:border-primary hover:text-primary transition duration-300 transform hover:scale-[1.02] text-center relative z-10" style="pointer-events: auto; touch-action: manipulation;">Hire Me</a>
-                </div>
+            <!-- Animated typing headline -->
+            <div class="typing-container overflow-hidden" id="typing-data"
+                data-sentences='{{ data.typing_sentences | tojson }}'>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-light text-gray-300 break-words"
+                    style="word-wrap: break-word; word-break: break-word;">
+                    <span id="typing-span" class="typing-text typing-cursor"></span>
+                </h2>
             </div>
 
-            <!-- Right Column: Image -->
-            <div class="flex justify-center lg:justify-end animated-element lg:mt-0 mt-6 sm:mt-8 order-1 lg:order-2" style="animation-delay: 0.5s;">
-                <img src="/static/home_img.png" 
-                     alt="Professional portrait of {{ data.name }}" 
-                     class="w-full max-w-[280px] sm:max-w-[350px] md:max-w-md h-auto rounded-full ring-4 sm:ring-8 ring-primary/30 shadow-2xl float-image object-cover aspect-square"
-                >
+            <p class="text-base sm:text-lg text-gray-400 mt-3 sm:mt-4 px-2 sm:px-0">
+                {{ data.title }}. Focused on creating scalable, innovative solutions with elegance and efficiency.
+            </p>
+
+            <div class="pt-4 sm:pt-6 flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center lg:justify-start">
+                <a href="{{ data.pages.projects }}"
+                    class="gradient-button inline-block px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base text-white font-bold rounded-xl shadow-lg hover:shadow-primary/50 transition duration-300 transform hover:scale-[1.02] text-center relative z-10"
+                    style="pointer-events: auto; touch-action: manipulation;">View My Work</a>
+                <a href="{{ data.pages.contact }}"
+                    class="inline-block px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base text-gray-200 border border-gray-600 rounded-xl hover:border-primary hover:text-primary transition duration-300 transform hover:scale-[1.02] text-center relative z-10"
+                    style="pointer-events: auto; touch-action: manipulation;">Hire Me</a>
             </div>
-            
         </div>
-    </section>
 
-    <!-- 2. My Journey: About Me & Qualifications Section (Enhanced) -->
-    <section id="about" class="py-12 sm:py-16 md:py-20 lg:py-32 bg-secondary border-t border-primary/20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl sm:text-4xl font-bold text-center text-white mb-8 sm:mb-12 md:mb-16 border-b-2 border-primary/50 inline-block pb-1 animated-element">My Journey</h2>
+        <!-- Right Column: Image -->
+        <div class="flex justify-center lg:justify-end lg:mt-0 mt-6 sm:mt-8 order-1 lg:order-2">
+            <img src="/static/home_img.png" alt="Professional portrait of {{ data.name }}"
+                class="w-full max-w-[280px] sm:max-w-[350px] md:max-w-md h-auto rounded-full ring-4 sm:ring-8 ring-primary/30 shadow-2xl float-image object-cover aspect-square">
+        </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
-                <!-- About Card (Enhanced) -->
-                <div class="lg:col-span-2 space-y-4 sm:space-y-6 text-gray-300 p-6 sm:p-8 bg-gray-800/70 rounded-xl shadow-2xl info-card animated-element">
-                    <div class="flex items-center space-x-3 mb-3 sm:mb-4">
-                        <i data-lucide="user-square" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
-                        <h3 class="text-xl sm:text-2xl font-semibold text-white">About Me</h3>
-                    </div>
-                    <p class="text-sm sm:text-base">I am a Data Scientist and AI Practitioner, passionate about building intelligent, data-driven systems that turn complex ideas into practical, real-world solutions. My experience spans machine learning–powered applications, from experimentation and system design to integration and deployment, with a strong focus on reliability and scalability.</p>
-                    <p class="text-sm sm:text-base">Enjoys solving challenging problems at the intersection of data, algorithms, and software, with a strong focus on continuous learning, clean system design, and applying emerging technologies to build effective, production-ready solutions.</p>
-                    <a href="{{ data.resume_path }}" target="_blank" class="mt-4 inline-flex items-center text-sm sm:text-base text-primary hover:text-indigo-400 transition-colors">
-                        View Resume 
-                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                    </a>
+    </div>
+</section>
+
+<!-- 2. My Journey: About Me & Qualifications Section (Enhanced) -->
+<section id="about"
+    class="py-12 sm:py-16 md:py-20 lg:py-32 bg-secondary/30 backdrop-blur-md border-t border-primary/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2
+            class="text-3xl sm:text-4xl font-bold text-center text-white mb-8 sm:mb-12 md:mb-16 border-b-2 border-primary/50 inline-block pb-1 animated-element">
+            My Journey</h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
+            <!-- About Card (Enhanced) -->
+            <div
+                class="lg:col-span-2 space-y-4 sm:space-y-6 text-gray-300 p-6 sm:p-8 bg-gray-800/70 rounded-xl shadow-2xl info-card animated-element">
+                <div class="flex items-center space-x-3 mb-3 sm:mb-4">
+                    <i data-lucide="user-square" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
+                    <h3 class="text-xl sm:text-2xl font-semibold text-white">About Me</h3>
                 </div>
+                <p class="text-sm sm:text-base">I am a Data Scientist and AI Practitioner, passionate about building
+                    intelligent, data-driven systems that turn complex ideas into practical, real-world solutions. My
+                    experience spans machine learning–powered applications, from experimentation and system design to
+                    integration and deployment, with a strong focus on reliability and scalability.</p>
+                <p class="text-sm sm:text-base">Enjoys solving challenging problems at the intersection of data,
+                    algorithms, and software, with a strong focus on continuous learning, clean system design, and
+                    applying emerging technologies to build effective, production-ready solutions.</p>
+                <a href="{{ data.resume_path }}" target="_blank"
+                    class="mt-4 inline-flex items-center text-sm sm:text-base text-primary hover:text-indigo-400 transition-colors">
+                    View Resume
+                    <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                </a>
+            </div>
 
-                <!-- Qualifications Timeline (Enhanced) -->
-                <div class="space-y-4 sm:space-y-6 text-gray-300 p-6 sm:p-8 bg-gray-800/70 rounded-xl shadow-2xl info-card animated-element" style="animation-delay: 0.2s;">
-                    <div class="flex items-center space-x-3 mb-4 sm:mb-6">
-                        <i data-lucide="graduation-cap" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
-                        <h3 class="text-xl sm:text-2xl font-semibold text-white">Education & Milestones</h3>
-                    </div>
+            <!-- Qualifications Timeline (Enhanced) -->
+            <div class="space-y-4 sm:space-y-6 text-gray-300 p-6 sm:p-8 bg-gray-800/70 rounded-xl shadow-2xl info-card animated-element max-h-min relative"
+                id="qualifications-card" style="animation-delay: 0.2s;">
+                <div class="flex items-center space-x-3 mb-4 sm:mb-6">
+                    <i data-lucide="graduation-cap" class="w-5 h-5 sm:w-6 sm:h-6 text-primary z-10 relative"></i>
+                    <h3 class="text-xl sm:text-2xl font-semibold text-white z-10 relative">Education & Milestones</h3>
+                </div>
+                <div class="relative timeline-wrapper pl-2 sm:pl-3 pt-2">
+                    <svg class="absolute top-0 bottom-0 left-0 w-[4px] h-full z-0 overflow-visible"
+                        preserveAspectRatio="none">
+                        <line class="timeline-path" x1="2" y1="0" x2="2" y2="100%" stroke="url(#grad)" stroke-width="4"
+                            stroke-linecap="round" />
+                        <defs>
+                            <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#4f46e5" />
+                                <stop offset="100%" stop-color="#ec4899" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
                     {% for qual in data.qualifications %}
                     <!-- Timeline Item with enhanced CSS -->
-                    <div class="timeline-item pl-5 sm:pl-6 mb-6 sm:mb-8 relative">
-                        <span class="absolute -left-2 top-0 block w-3 h-3 sm:w-4 sm:h-4 bg-primary rounded-full ring-2 sm:ring-4 ring-gray-900 z-10"></span>
+                    <div class="timeline-item pl-6 mb-6 sm:mb-8 relative z-10">
+                        <span
+                            class="timeline-dot absolute left-[-6px] top-1 block w-4 h-4 bg-gray-900 border-[3px] border-primary rounded-full z-10"></span>
                         <p class="text-white text-base sm:text-lg font-bold">{{ qual.degree }}</p>
                         <p class="text-xs sm:text-sm font-medium text-gray-400">{{ qual.institution }}</p>
                         <p class="text-xs text-primary mt-1">{{ qual.year }}</p>
@@ -166,157 +276,712 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- 3. Technical Skills Section (Unique Grid Design) -->
-    <section id="skills" class="py-12 sm:py-16 md:py-20 lg:py-32 bg-gray-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl sm:text-4xl font-bold text-center text-white mb-8 sm:mb-12 border-b-2 border-primary/50 inline-block pb-1 animated-element">Technical Skills</h2>
+<!-- 3. Technical Skills Section (Categorized & Tabbed) -->
+<section id="skills" class="py-12 sm:py-16 md:py-20 lg:py-32 bg-transparent relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2
+            class="text-3xl sm:text-4xl font-bold text-center text-white mb-8 sm:mb-12 border-b-2 border-primary/50 inline-block pb-1 animated-element">
+            Technical Skills</h2>
 
-            <!-- Unique Grid Layout (4 columns on large screens) -->
-            <div id="skills-container" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
-                {% for skill in data.skills %}
-                <!-- Skill Card - Designed to be unique and impactful -->
-                <div class="skill-item p-4 sm:p-5 bg-gray-800/70 rounded-xl sm:rounded-2xl shadow-xl skill-card text-center relative overflow-hidden group animated-element" style="animation-delay: {{ loop.index * 0.15 }}s;">
-                    
-                    <!-- Unique Animated Skewed Background Element (flair) -->
-                    <div class="absolute inset-0 z-0 skill-bg-skew w-full h-full transform -skew-y-3 scale-150"></div>
+        <!-- Interactive Tab Navigation -->
+        <div class="flex flex-wrap justify-center gap-4 mb-10 w-full relative z-20">
+            <!-- Using Jinja to generate tabs from keys -->
+            <button
+                class="skills-tab-btn active px-6 py-2 rounded-full border border-primary text-white bg-primary/20 backdrop-blur-md transition-all duration-300 hover:bg-primary/40 font-semibold"
+                data-target="core_ai">Core AI & ML</button>
+            <button
+                class="skills-tab-btn px-6 py-2 rounded-full border border-gray-600 text-gray-400 backdrop-blur-md transition-all duration-300 hover:text-white hover:border-gray-400 font-semibold"
+                data-target="mlops">MLOps</button>
+            <button
+                class="skills-tab-btn px-6 py-2 rounded-full border border-gray-600 text-gray-400 backdrop-blur-md transition-all duration-300 hover:text-white hover:border-gray-400 font-semibold"
+                data-target="data_prgm">Data & Programming</button>
+        </div>
 
-                    <div class="relative z-10 space-y-2 sm:space-y-3 flex flex-col items-center">
-                        
-                        <!-- Skill Icon -->
-                        <i data-lucide="zap" class="w-6 h-6 sm:w-8 sm:h-8 text-primary group-hover:text-white transition-colors duration-300"></i>
-                        
-                        <!-- Highlighting Percentage -->
-                        <div class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white transition-all duration-500 group-hover:text-primary">
-                            {{ skill.level }}<span class="text-lg sm:text-xl md:text-2xl">%</span>
-                        </div>
-                        
-                        <!-- Skill Name -->
-                        <span class="text-sm sm:text-base md:text-lg font-semibold text-gray-300 group-hover:text-white transition-colors duration-300 leading-tight px-1">{{ skill.name }}</span>
+        <!-- Tab Content Areas -->
+        <div id="skills-container" class="relative min-h-[300px]">
+            {% for category, skill_list in data.skills.items() %}
+            <div id="tab-{{ category }}"
+                class="skills-tab-content grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 w-full transition-opacity duration-300 {{ 'opacity-100 relative z-10' if loop.index0 == 0 else 'opacity-0 pointer-events-none absolute top-0 left-0' }}">
+                {% for skill in skill_list %}
+                <!-- Skill Card - Futuristic Design -->
+                <div class="skill-item p-4 sm:p-5 bg-gray-900/60 backdrop-blur-md border border-indigo-500/20 rounded-xl shadow-xl skill-card text-center relative overflow-hidden group"
+                    style="will-change: transform;">
+
+                    <!-- Glowing Pulse Effect -->
+                    <div
+                        class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl">
                     </div>
 
-                    <!-- Functional Bar (Hidden - to be used by the scroll animation) -->
-                    <div class="w-full bg-gray-700 rounded-full h-1 mt-4 hidden">
-                        <div class="skill-bar h-1 rounded-full skill-bar-gradient transition-all duration-1000 ease-out"
-                             data-level="{{ skill.level }}" style="width: 0%;"></div>
+                    <div class="relative z-10 space-y-2 sm:space-y-3 flex flex-col items-center">
+
+                        <!-- Skill Icon (Dynamic based on category) -->
+                        {% if category == 'core_ai' %}
+                        <i data-lucide="brain"
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-cyan-400 group-hover:text-cyan-300 transition-colors duration-300"></i>
+                        {% elif category == 'mlops' %}
+                        <i data-lucide="server"
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-purple-400 group-hover:text-purple-300 transition-colors duration-300"></i>
+                        {% else %}
+                        <i data-lucide="layers"
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-emerald-400 group-hover:text-emerald-300 transition-colors duration-300"></i>
+                        {% endif %}
+
+                        <!-- Highlighting Percentage -->
+                        <div
+                            class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white transition-all duration-500 group-hover:text-primary">
+                            {{ skill.level }}<span class="text-lg sm:text-xl md:text-2xl">%</span>
+                        </div>
+
+                        <!-- Skill Name -->
+                        <span
+                            class="text-sm sm:text-base md:text-lg font-semibold text-gray-300 group-hover:text-white transition-colors duration-300 leading-tight px-1">{{
+                            skill.name }}</span>
                     </div>
                 </div>
                 {% endfor %}
             </div>
+            {% endfor %}
         </div>
-    </section>
+    </div>
+</section>
+
+<!-- 1. Impact & Metrics HUD -->
+<section id="metrics"
+    class="relative z-10 w-full py-16 md:py-24 mt-8 md:mt-12 bg-gray-900/30 backdrop-blur-md border-y border-gray-700/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="text-center mb-12 sm:mb-16">
+            <h2
+                class="text-3xl sm:text-4xl font-bold text-white border-b-2 border-primary/50 inline-block pb-1 animated-element">
+                Impact & Telemetry
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10 w-full">
+
+            <!-- Card 1: Website Visits -->
+            <div
+                class="metric-card bg-gray-900/50 backdrop-blur-xl border border-gray-700/50 hover:border-primary/50 relative overflow-hidden rounded-3xl p-8 flex flex-col justify-between items-center md:items-start text-center md:text-left min-h-[240px] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(79,70,229,0.2)] group">
+                <!-- Glowing Orb Background -->
+                <div
+                    class="absolute -right-12 -top-12 w-40 h-40 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/30 transition-all duration-700 pointer-events-none">
+                </div>
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                </div>
+
+                <i data-lucide="globe"
+                    class="w-10 h-10 text-primary mb-6 group-hover:scale-110 transition-transform duration-500 relative z-10"></i>
+                <div class="relative z-10">
+                    <h3 class="text-5xl lg:text-6xl font-black text-white mb-1 tracking-tighter drop-shadow-md"><span
+                            id="visits-counter" class="counter" data-target="0">0</span>+</h3>
+                    <p class="text-primary text-xs uppercase tracking-[0.15em] font-bold mb-1">Global Reach</p>
+                    <p class="text-gray-400 text-sm font-medium">Website Visits</p>
+                </div>
+            </div>
+
+            <!-- Card 2: Total Projects -->
+            <div
+                class="metric-card bg-gray-900/50 backdrop-blur-xl border border-gray-700/50 hover:border-emerald-500/50 relative overflow-hidden rounded-3xl p-8 flex flex-col justify-between items-center md:items-start text-center md:text-left min-h-[240px] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(16,185,129,0.2)] group">
+                <div
+                    class="absolute -right-12 -top-12 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl group-hover:bg-emerald-500/30 transition-all duration-700 pointer-events-none">
+                </div>
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                </div>
+
+                <i data-lucide="folder-git-2"
+                    class="w-10 h-10 text-emerald-400 mb-6 group-hover:scale-110 transition-transform duration-500 relative z-10"></i>
+                <div class="relative z-10">
+                    <h3 class="text-5xl lg:text-6xl font-black text-white mb-1 tracking-tighter drop-shadow-md"><span
+                            class="counter" data-target="24">0</span></h3>
+                    <p class="text-emerald-400 text-xs uppercase tracking-[0.15em] font-bold mb-1">Portfolio</p>
+                    <p class="text-gray-400 text-sm font-medium">Total Projects</p>
+                </div>
+            </div>
+
+            <!-- Card 3: Deployments -->
+            <div
+                class="metric-card bg-gray-900/50 backdrop-blur-xl border border-gray-700/50 hover:border-purple-500/50 relative overflow-hidden rounded-3xl p-8 flex flex-col justify-between items-center md:items-start text-center md:text-left min-h-[240px] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(168,85,247,0.2)] group">
+                <div
+                    class="absolute -right-12 -top-12 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl group-hover:bg-purple-500/30 transition-all duration-700 pointer-events-none">
+                </div>
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                </div>
+
+                <i data-lucide="rocket"
+                    class="w-10 h-10 text-purple-400 mb-6 group-hover:scale-110 transition-transform duration-500 relative z-10"></i>
+                <div class="relative z-10">
+                    <h3 class="text-5xl lg:text-6xl font-black text-white mb-1 tracking-tighter drop-shadow-md"><span
+                            class="counter" data-target="10">0</span>+</h3>
+                    <p class="text-purple-400 text-xs uppercase tracking-[0.15em] font-bold mb-1">Production</p>
+                    <p class="text-gray-400 text-sm font-medium">Deployments</p>
+                </div>
+            </div>
+
+            <!-- Card 4: Models Trained / Data -->
+            <div
+                class="metric-card bg-gray-900/50 backdrop-blur-xl border border-gray-700/50 hover:border-rose-500/50 relative overflow-hidden rounded-3xl p-8 flex flex-col justify-between items-center md:items-start text-center md:text-left min-h-[240px] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_rgba(244,63,94,0.2)] group">
+                <div
+                    class="absolute -right-12 -top-12 w-40 h-40 bg-rose-500/20 rounded-full blur-3xl group-hover:bg-rose-500/30 transition-all duration-700 pointer-events-none">
+                </div>
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-rose-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                </div>
+
+                <i data-lucide="brain-circuit"
+                    class="w-10 h-10 text-rose-400 mb-6 group-hover:scale-110 transition-transform duration-500 relative z-10"></i>
+                <div class="relative z-10">
+                    <h3 class="text-5xl lg:text-6xl font-black text-white mb-1 tracking-tighter drop-shadow-md"><span
+                            class="counter" data-target="25">0</span>+</h3>
+                    <p class="text-rose-400 text-xs uppercase tracking-[0.15em] font-bold mb-1">Intelligence</p>
+                    <p class="text-gray-400 text-sm font-medium">Models Trained</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- 2. AI Engineering Pipeline (Tabbed & Animated) -->
+<section id="pipeline" class="relative z-10 w-full py-20 md:py-28 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 md:mb-16">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-6">My Engineering Workflow</h2>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">From messy unstructured data to lightning-fast
+                deployments.</p>
+            <div class="w-16 h-1 bg-primary rounded mx-auto mt-8 mb-10"></div>
+
+            <!-- Pipeline Tabs -->
+            <div class="flex flex-wrap justify-center gap-3 sm:gap-4 relative z-20">
+                {% for workflow in data.pipeline_workflows %}
+                <button
+                    class="pipeline-tab-btn px-5 sm:px-6 py-2 rounded-full border transition-all duration-300 font-medium text-sm sm:text-base {{ 'active text-white border-' ~ workflow.accent ~ '-500 bg-' ~ workflow.accent ~ '-500/20' if loop.index0 == 0 else 'text-gray-400 border-gray-700 hover:text-white hover:border-gray-500' }}"
+                    data-target="{{ workflow.id }}" data-accent="{{ workflow.accent }}">
+                    {{ workflow.label }}
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div id="pipeline-container" class="relative max-w-6xl mx-auto min-h-[300px] md:min-h-[280px]">
+            {% for workflow in data.pipeline_workflows %}
+            <div id="pipeline-{{ workflow.id }}"
+                class="pipeline-content absolute inset-0 w-full transition-opacity duration-500 {{ 'active z-10 opacity-100' if loop.index0 == 0 else 'opacity-0 pointer-events-none z-0' }}">
+
+                <div class="w-full overflow-x-auto no-scrollbar snap-x snap-mandatory pt-4 pb-8">
+                    <div
+                        class="flex flex-row items-start justify-start md:justify-between relative h-full min-w-max md:min-w-full px-4 md:px-0">
+
+                        {% for step in workflow.steps %}
+                        <!-- Step {{ loop.index }} -->
+                        <div
+                            class="pipeline-step-item flex flex-col items-center flex-shrink-0 snap-center w-[200px] sm:w-[240px] md:flex-1 relative z-10 opacity-0 translate-y-8 group px-2">
+
+                            <!-- Step Icon Box -->
+                            <div class="text-{{ step.color }}-400 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gray-900 border border-gray-700 flex items-center justify-center shadow-lg group-hover:-translate-y-2 transition-all duration-300 relative bg-opacity-90 backdrop-blur-sm group-hover:border-{{ step.color }}-400 group-hover:shadow-[0_0_25px_currentColor] mb-4 node-glow-sync"
+                                style="animation-delay: {{ loop.index0 * 1.5 }}s;">
+                                <!-- Icon and Number -->
+                                <i data-lucide="{{ step.icon }}"
+                                    class="w-7 h-7 sm:w-8 sm:h-8 text-{{ step.color }}-400 group-hover:scale-110 transition-transform"></i>
+                                <span
+                                    class="absolute -top-3 -right-3 w-7 h-7 sm:w-8 sm:h-8 bg-{{ step.color }}-600 hover:bg-{{ step.color }}-500 text-white rounded-full flex items-center justify-center font-bold text-xs sm:text-sm shadow border-2 border-gray-900 transition-colors">{{
+                                    loop.index }}</span>
+                            </div>
+
+                            <!-- Step Text -->
+                            <h3 class="text-base sm:text-lg font-bold text-white mb-1.5 text-center">{{ step.title }}
+                            </h3>
+                            <p class="text-xs sm:text-sm text-gray-400 text-center max-w-[180px] leading-snug">{{
+                                step.desc }}</p>
+                        </div>
+
+                        <!-- Connector between steps -->
+                        {% if not loop.last %}
+                        <div
+                            class="pipeline-step-item flex flex-col justify-start flex-shrink-0 w-[40px] sm:w-[60px] md:flex-1 md:min-w-[40px] md:w-auto h-2 mt-[32px] sm:mt-[40px] relative z-0 opacity-0 translate-y-8 mx-[-10px] md:mx-[-10px] lg:mx-0">
+                            <!-- Dashed static track -->
+                            <div
+                                class="w-full h-[2px] border-t-2 border-dashed border-gray-600 opacity-50 absolute top-[0px]">
+                            </div>
+                            <!-- Laser glowing beam moving across -->
+                            <div
+                                class="h-[20px] w-full absolute top-[-9px] pointer-events-none z-10 overflow-visible text-{{ workflow.accent }}-400">
+                                <div class="beam-sync absolute top-[9px] h-[3px] rounded-full"
+                                    style="animation-delay: {{ (loop.index0 * 1.5) + 0.5 }}s; background: linear-gradient(90deg, transparent, currentColor); box-shadow: 0 0 10px currentColor;">
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 3. Flagship Case Study (Teaser) -->
+<section id="featured-case" class="relative z-10 w-full py-16 pb-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+            class="bg-gray-900/60 backdrop-blur-xl border border-gray-700/50 rounded-[2rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row transform transition-all duration-500 hover:border-primary/50 group">
+
+            <!-- Content Half -->
+            <div class="p-8 md:p-12 lg:w-1/2 flex flex-col justify-center order-2 lg:order-1 pointer-events-auto">
+                <div
+                    class="inline-flex items-center space-x-2 text-primary font-bold text-sm uppercase tracking-wider mb-6">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    <span>Flagship Project</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">{{
+                    data.flagship_project.title }}</h2>
+                <p class="text-gray-300 text-lg mb-8 leading-relaxed">
+                    {{ data.flagship_project.short_desc }}
+                </p>
+
+                <div class="flex flex-wrap gap-3 mb-10">
+                    {% for tech in data.flagship_project.technologies %}
+                    <span
+                        class="px-4 py-1.5 rounded-full bg-blue-900/30 text-blue-300 border border-blue-700/50 text-sm font-mono">{{
+                        tech }}</span>
+                    {% endfor %}
+                </div>
+
+                <div>
+                    <a href="{{ data.flagship_project.read_architecture_data }}"
+                        class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-gradient-to-r from-primary to-indigo-600 rounded-xl hover:from-indigo-500 hover:to-purple-500 transition-all duration-300 shadow-lg hover:shadow-indigo-500/50 transform hover:-translate-y-1">
+                        Explore Architecture
+                        <i data-lucide="arrow-right" class="w-5 h-5 ml-3"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Visual Half -->
+            <div
+                class="lg:w-1/2 bg-gradient-to-br from-gray-800/80 to-gray-900/80 relative min-h-[350px] lg:min-h-full flex items-center justify-center p-8 overflow-hidden order-1 lg:order-2 border-b lg:border-b-0 lg:border-l border-gray-700/50">
+                <!-- Abstract glowing tech rings -->
+                <div
+                    class="absolute inset-0 opacity-40 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/30 via-gray-900/5 to-transparent mix-blend-screen transition duration-700 group-hover:opacity-60 group-hover:scale-110">
+                </div>
+
+                {% if data.flagship_project.img_path %}
+                <div
+                    class="relative z-10 w-full max-w-lg aspect-[16/10] bg-gray-950 rounded-2xl border border-gray-600 shadow-[0_0_50px_rgba(79,70,229,0.2)] overflow-hidden transform transition-all duration-500 group">
+                    <img src="{{ data.flagship_project.img_path }}"
+                        class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-[1.04]">
+
+                    <!-- Hover Zoom Overlay -->
+                    <div
+                        class="absolute inset-0 bg-gray-900/60 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center z-20 cursor-pointer pointer-events-none">
+                        <div
+                            class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center border border-primary/50 mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <i data-lucide="zoom-in" class="w-8 h-8 text-white drop-shadow-md"></i>
+                        </div>
+                        <span
+                            class="text-white font-semibold tracking-wider uppercase text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">Preview</span>
+                    </div>
+                </div>
+                {% else %}
+                <div
+                    class="relative z-10 w-full max-w-md aspect-square lg:aspect-auto lg:h-[80%] bg-gray-900/90 backdrop-blur-2xl rounded-2xl border border-gray-600 shadow-[0_0_50px_rgba(79,70,229,0.2)] flex flex-col items-center justify-center overflow-hidden transform group-hover:rotate-1 group-hover:scale-[1.02] transition-all duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-indigo-600/10 to-purple-600/10"></div>
+                    <div
+                        class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-purple-500 to-rose-500">
+                    </div>
+
+                    <!-- Mini terminal UI -->
+                    <div class="w-full absolute top-0 left-0 p-3 border-b border-gray-700/50 flex space-x-2">
+                        <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                    </div>
+
+                    <i data-lucide="search-code"
+                        class="w-24 h-24 text-primary opacity-80 mb-6 drop-shadow-[0_0_15px_rgba(79,70,229,0.5)] mt-12"></i>
+                    <p class="font-mono text-emerald-400 text-sm">>> Querying Vector Store...</p>
+                    <p class="font-mono text-gray-400 text-xs mt-2 opacity-50">latency: 42ms</p>
+
+                    <div
+                        class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-gray-900 to-transparent pointer-events-none">
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
 {% endblock %}
 
 {% block body_end_script %}
-    <script>
-        // Initialize Lucide icons after DOM content is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            // Replaces all 'data-lucide' attributes with SVG icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
+<script>
+    // Initialize Lucide icons after DOM content is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        // Replaces all 'data-lucide' attributes with SVG icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    });
+
+    // --- Hero Typing Animation ---
+    const typingSpan = document.getElementById('typing-span');
+
+    // Ensure cursor class is maintained
+    if (typingSpan) {
+        typingSpan.classList.add('typing-cursor');
+    }
+
+    // 1. Get the sentences from the typing container, simulating data passed from main.py
+    const typingDataElement = document.getElementById('typing-data');
+    const sentencesJSON = typingDataElement ? typingDataElement.getAttribute('data-sentences') : null;
+
+    // Robust data parsing
+    let words = ["things that work."];
+    try {
+        if (sentencesJSON) {
+            const parsedWords = JSON.parse(sentencesJSON);
+            if (Array.isArray(parsedWords) && parsedWords.length > 0) {
+                words = parsedWords;
             }
+        }
+    } catch (e) {
+        console.error("Error parsing typing sentences data:", e);
+    }
+
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let delay = 150;
+
+    function type() {
+        if (!typingSpan) return;
+
+        const currentWord = words[wordIndex];
+
+        if (isDeleting) {
+            // Deleting logic
+            typingSpan.textContent = currentWord.substring(0, charIndex - 1);
+            charIndex--;
+            delay = 30;
+        } else {
+            // Typing logic
+            typingSpan.textContent = currentWord.substring(0, charIndex + 1);
+            charIndex++;
+            delay = 150;
+        }
+
+        // Ensure cursor class is always present
+        typingSpan.classList.add('typing-cursor');
+
+        if (!isDeleting && charIndex === currentWord.length) {
+            // Word fully typed, pause and start deleting
+            delay = 1500;
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            // Word fully deleted, move to the next word
+            isDeleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+            delay = 500;
+        }
+
+        setTimeout(type, delay);
+    }
+
+    // Start the typing animation after a small delay
+    if (typingSpan) {
+        setTimeout(type, 1000);
+    }
+
+
+    // --- Progress Bar Animation on Scroll (Still functional for hidden bars/visual feedback) ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const skillContainer = document.getElementById('skills-container');
+        const skillBars = document.querySelectorAll('.skill-bar');
+
+        const skillObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    skillBars.forEach(bar => {
+                        const level = bar.getAttribute('data-level');
+                        // Use setTimeout to ensure animation is visible
+                        setTimeout(() => {
+                            bar.style.width = `${level}%`;
+                        }, 100);
+                    });
+                    // Since this element also uses animated-element, we don't necessarily need to unobserve here,
+                    // but we will keep it for the progress bar logic itself.
+                    // observer.unobserve(entry.target); 
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: "0px",
+            threshold: 0.3 // Trigger when 30% of the skills container is visible
         });
 
-        // --- Hero Typing Animation ---
-        const typingSpan = document.getElementById('typing-span');
-        
-        // Ensure cursor class is maintained
-        if (typingSpan) {
-            typingSpan.classList.add('typing-cursor');
+        if (skillContainer) {
+            skillObserver.observe(skillContainer);
         }
-        
-        // 1. Get the sentences from the typing container, simulating data passed from main.py
-        const typingDataElement = document.getElementById('typing-data');
-        const sentencesJSON = typingDataElement ? typingDataElement.getAttribute('data-sentences') : null;
-        
-        // Robust data parsing
-        let words = ["things that work."];
-        try {
-            if (sentencesJSON) {
-                const parsedWords = JSON.parse(sentencesJSON);
-                if (Array.isArray(parsedWords) && parsedWords.length > 0) {
-                     words = parsedWords;
-                }
-            }
-        } catch (e) {
-            console.error("Error parsing typing sentences data:", e);
-        }
-        
-        let wordIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let delay = 150;
+    });
 
-        function type() {
-            if (!typingSpan) return;
-            
-            const currentWord = words[wordIndex];
+    // --- Interactive Skills Tabs ---
+    const tabBtns = document.querySelectorAll('.skills-tab-btn');
+    const tabContents = document.querySelectorAll('.skills-tab-content');
 
-            if (isDeleting) {
-                // Deleting logic
-                typingSpan.textContent = currentWord.substring(0, charIndex - 1);
-                charIndex--;
-                delay = 30;
-            } else {
-                // Typing logic
-                typingSpan.textContent = currentWord.substring(0, charIndex + 1);
-                charIndex++;
-                delay = 150;
-            }
-
-            // Ensure cursor class is always present
-            typingSpan.classList.add('typing-cursor');
-
-            if (!isDeleting && charIndex === currentWord.length) {
-                // Word fully typed, pause and start deleting
-                delay = 1500;
-                isDeleting = true;
-            } else if (isDeleting && charIndex === 0) {
-                // Word fully deleted, move to the next word
-                isDeleting = false;
-                wordIndex = (wordIndex + 1) % words.length;
-                delay = 500;
-            }
-
-            setTimeout(type, delay);
-        }
-
-        // Start the typing animation after a small delay
-        if (typingSpan) {
-            setTimeout(type, 1000);
-        }
-
-
-        // --- Progress Bar Animation on Scroll (Still functional for hidden bars/visual feedback) ---
-        document.addEventListener('DOMContentLoaded', () => {
-            const skillContainer = document.getElementById('skills-container');
-            const skillBars = document.querySelectorAll('.skill-bar');
-
-            const skillObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        skillBars.forEach(bar => {
-                            const level = bar.getAttribute('data-level');
-                            // Use setTimeout to ensure animation is visible
-                            setTimeout(() => {
-                                bar.style.width = `${level}%`;
-                            }, 100);
-                        });
-                        // Since this element also uses animated-element, we don't necessarily need to unobserve here,
-                        // but we will keep it for the progress bar logic itself.
-                        // observer.unobserve(entry.target); 
-                    }
-                });
-            }, {
-                root: null,
-                rootMargin: "0px",
-                threshold: 0.3 // Trigger when 30% of the skills container is visible
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active styling from all buttons
+            tabBtns.forEach(b => {
+                b.classList.remove('border-primary', 'text-white', 'bg-primary/20', 'active');
+                b.classList.add('border-gray-600', 'text-gray-400');
             });
 
-            if (skillContainer) {
-                skillObserver.observe(skillContainer);
-            }
+            // Add active styling to clicked button
+            btn.classList.remove('border-gray-600', 'text-gray-400');
+            btn.classList.add('border-primary', 'text-white', 'bg-primary/20', 'active');
+
+            const targetId = 'tab-' + btn.getAttribute('data-target');
+
+            // Hide all contents and show target smoothly
+            tabContents.forEach(content => {
+                if (content.id === targetId) {
+                    content.classList.remove('opacity-0', 'pointer-events-none', 'absolute', 'top-0', 'left-0');
+                    content.classList.add('opacity-100', 'relative', 'z-10');
+
+                    // Retrigger GSAP staggered animation for the newly visible cards
+                    if (typeof gsap !== 'undefined') {
+                        gsap.fromTo(content.querySelectorAll('.skill-card'),
+                            { y: 40, opacity: 0, scale: 0.8 },
+                            { y: 0, opacity: 1, scale: 1, duration: 0.25, stagger: 0.02, ease: "back.out(1.5)", overwrite: true }
+                        );
+                    }
+                } else {
+                    content.classList.remove('opacity-100', 'relative', 'z-10');
+                    content.classList.add('opacity-0', 'pointer-events-none', 'absolute', 'top-0', 'left-0');
+                }
+            });
         });
-    </script>
+    });
+
+    // --- GSAP Animations for Home Page ---
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof gsap !== 'undefined') {
+
+            // 1. Hero Zoom Parallax Effect
+            const heroTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#hero",
+                    start: "top top",
+                    end: "+=" + window.innerHeight * 0.8,
+                    scrub: 1,
+                    pin: true,
+                    pinSpacing: true
+                }
+            });
+
+            heroTl.to(".hero-title", {
+                scale: 15, // Decreased scale for slower, smoother zooming
+                opacity: 0,
+                ease: "power2.inOut"
+            }, 0)
+                .to("#hero p, #hero .typing-container, #hero .gradient-button, #hero img, #hero a", {
+                    y: -50,
+                    opacity: 0,
+                    ease: "power2.inOut"
+                }, 0);
+
+            // 2. Timeline Scroll-Driven Path
+            const path = document.querySelector('.timeline-path');
+            if (path) {
+                // Assume an arbitrarily large dash array since path dynamic length doesn't report immediately for relative % values in SVG cross-browser
+                const length = 1500;
+                gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+
+                gsap.to(path, {
+                    strokeDashoffset: 0,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: "#qualifications-card",
+                        start: "top 70%",
+                        end: "bottom 80%",
+                        scrub: true
+                    }
+                });
+
+                // Timeline dots popper
+                gsap.set('.timeline-dot', { scale: 0, opacity: 0 });
+                ScrollTrigger.batch('.timeline-dot', {
+                    start: "top 80%",
+                    onEnter: batch => gsap.to(batch, { opacity: 1, scale: 1, backgroundColor: "#ec4899", borderColor: "#fff", duration: 0.4, stagger: 0.15, ease: "back.out(2)", overwrite: true }),
+                    onLeaveBack: batch => gsap.to(batch, { scale: 0, opacity: 0, overwrite: true })
+                });
+            }
+
+            // 3. Staggered Skills Batch Animation (Pop/Float)
+            gsap.set(".skill-card", { y: 60, scale: 0.7, opacity: 0 });
+
+            ScrollTrigger.batch(".skill-card", {
+                start: "top 95%", // Trigger sooner so they don't feel delayed
+                onEnter: batch => gsap.to(batch, {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 0.2, // Even faster appearance
+                    stagger: 0.015, // Extremely fast stagger
+                    ease: "back.out(1.2)",
+                    overwrite: true
+                }),
+                onLeaveBack: batch => gsap.to(batch, {
+                    opacity: 0,
+                    y: 60,
+                    scale: 0.7,
+                    duration: 0.2, // Faster disappear
+                    overwrite: true
+                })
+            });
+
+            // 4. Counter logic for Impact Metrics HUD
+            let metricsAnimated = false;
+
+            const triggerMetricsAnimation = () => {
+                if (metricsAnimated) return;
+                metricsAnimated = true;
+                const counters = document.querySelectorAll('.counter');
+                counters.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    if (target > 0) animateCounterNode(counter, target);
+                });
+            };
+
+            const animateCounterNode = (counter, target) => {
+                const duration = 2000; // ms
+                const startValue = parseInt(counter.innerText) || 0;
+                const startTime = performance.now();
+
+                const updateCounter = (currentTime) => {
+                    const elapsedTime = currentTime - startTime;
+                    const progress = Math.min(elapsedTime / duration, 1);
+
+                    // easeOutQuart curve for natural visual slowdown
+                    const easeProgress = 1 - Math.pow(1 - progress, 4);
+
+                    const current = startValue + (target - startValue) * easeProgress;
+
+                    if (progress < 1) {
+                        counter.innerText = Math.floor(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                requestAnimationFrame(updateCounter);
+            };
+
+            ScrollTrigger.create({
+                trigger: "#metrics",
+                start: "top 85%",
+                once: true,
+                onEnter: triggerMetricsAnimation
+            });
+
+            // Fetch dynamic visits asynchronously
+            fetch('/api/visits', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const visitsCounter = document.getElementById('visits-counter');
+                        if (visitsCounter) {
+                            visitsCounter.setAttribute('data-target', data.count);
+                            // If metrics section was already animated by scroll, trigger this specific counter now
+                            if (metricsAnimated) {
+                                animateCounterNode(visitsCounter, data.count);
+                            }
+                        }
+                    }
+                })
+                .catch(error => console.error("Error fetching dynamic visits:", error));
+
+            // 5. Pipeline Step Tab & Stagger Animation
+            const pipelineTabs = document.querySelectorAll('.pipeline-tab-btn');
+            const pipelineContents = document.querySelectorAll('.pipeline-content');
+            let currentPipelineAnim = null;
+
+            function animatePipeline(contentEl) {
+                if (currentPipelineAnim) {
+                    currentPipelineAnim.kill();
+                }
+
+                const steps = contentEl.querySelectorAll('.pipeline-step-item');
+
+                currentPipelineAnim = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: contentEl,
+                        start: "top 80%"
+                        // removed scrub for a snappy, clean entrance
+                    }
+                });
+
+                // Animate steps appearing vertically
+                currentPipelineAnim.to(steps, {
+                    y: 0,
+                    opacity: 1,
+                    stagger: 0.1,
+                    duration: 0.5,
+                    ease: "back.out(1.2)"
+                });
+            }
+
+            // Init first pipeline tab animation
+            const activePipeline = document.querySelector('.pipeline-content.active');
+            if (activePipeline) {
+                // Ensure initial setup logic fires once DOM is ready
+                setTimeout(() => animatePipeline(activePipeline), 300);
+            }
+
+            // Pipeline Tabs Logic
+            pipelineTabs.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-target');
+                    const accent = btn.getAttribute('data-accent');
+
+                    // Reset all tabs
+                    pipelineTabs.forEach(b => {
+                        const bAccent = b.getAttribute('data-accent');
+                        b.className = `pipeline-tab-btn px-5 sm:px-6 py-2 rounded-full border transition-all duration-300 font-medium text-sm sm:text-base text-gray-400 border-gray-700 hover:text-white hover:border-gray-500`;
+                    });
+
+                    // Set active tab
+                    btn.className = `pipeline-tab-btn active px-5 sm:px-6 py-2 rounded-full border transition-all duration-300 font-medium text-sm sm:text-base text-white border-${accent}-500 bg-${accent}-500/20`;
+
+                    // Switch content
+                    pipelineContents.forEach(content => {
+                        if (content.id === `pipeline-${targetId}`) {
+                            content.className = 'pipeline-content absolute inset-0 w-full transition-opacity duration-500 active z-10 opacity-100';
+
+                            // Immediately reset opacity and y of steps so they can animate in
+                            gsap.set(content.querySelectorAll('.pipeline-step-item'), { y: 30, opacity: 0 });
+
+                            // Wait a short tick then animate
+                            setTimeout(() => {
+                                ScrollTrigger.refresh();
+                                animatePipeline(content);
+                            }, 50);
+
+                        } else {
+                            content.className = 'pipeline-content absolute inset-0 w-full transition-opacity duration-500 opacity-0 pointer-events-none z-0';
+                        }
+                    });
+                });
+            });
+        }
+    });
+</script>
 {% endblock %}

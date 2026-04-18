@@ -1,414 +1,408 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ project.title }} | Project Details</title>
-    <link rel="icon" href="/static/favicon.png" type="image/png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }} | System Architecture{% endblock %}
+
+{% block head_extra %}
+<style>
+    .glass-monitor {
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.4));
+        border: 1px solid rgba(148, 163, 184, 0.15);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+    }
+    
+    .glass-cube {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(148, 163, 184, 0.15);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+    }
+
+    .slider-container {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        background: #000;
+        border-radius: 1.5rem;
+        overflow: hidden;
+    }
+
+    .slider-wrapper {
+        display: flex;
+        height: 100%;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform;
+    }
+
+    .slider-wrapper.no-transition {
+        transition: none;
+    }
+
+    .slide-item {
+        flex: 0 0 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .slide-item img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        object-position: center;
+        display: block;
+    }
+
+    .slider-dots {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 10;
+        background: rgba(0,0,0,0.5);
+        padding: 8px 16px;
+        border-radius: 20px;
+        backdrop-filter: blur(8px);
+    }
+
+    .slider-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .slider-dot.active {
+        background: #22d3ee;
+        width: 24px;
+        border-radius: 5px;
+    }
+
+    .slider-dot:hover {
+        background: rgba(34, 211, 238, 0.8);
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="relative z-10 w-full pt-32 pb-32 min-h-screen flex flex-col items-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full block-hero">
         
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #0f172a;
-            color: #e2e8f0;
-            overflow-x: hidden;
-        }
-
-        .glass-card {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .slider-container {
-            position: relative;
-            width: 100%;
-            height: 500px;
-            background: #000;
-            border-radius: 1.5rem;
-            overflow: hidden;
-        }
-
-        .slider-wrapper {
-            display: flex;
-            height: 100%;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: transform;
-        }
-
-        .slider-wrapper.no-transition {
-            transition: none;
-        }
-
-        .slide-item {
-            flex: 0 0 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .slide-item img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            object-position: center;
-            display: block;
-        }
-
-        .slider-dots {
-            position: absolute;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 10;
-        }
-
-        .slider-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgb(100, 100, 100);
-            border: 2px solid rgb(187, 169, 169);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .slider-dot.active {
-            background: #22d3ee;
-            border-color: #22d3ee;
-            width: 30px;
-            border-radius: 5px;
-        }
-
-        .slider-dot:hover {
-            background: rgba(34, 211, 238, 0.6);
-        }
-
-        .feature-card {
-            background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.8));
-            border-left: 3px solid #22d3ee;
-            transition: transform 0.2s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateX(5px);
-            background: linear-gradient(145deg, rgba(34, 211, 238, 0.1), rgba(15, 23, 42, 0.8));
-        }
-
-        .overview-accent {
-            position: relative;
-            padding-left: 2rem;
-            padding-right: 1rem;
-            text-align: justify;
-        }
-
-        .overview-accent::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(to bottom, #22d3ee, transparent);
-            border-radius: 2px;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.75rem;
-            border-radius: 0.75rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-    </style>
-</head>
-<body class="antialiased">
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20">
-        
-        <!-- Back Navigation -->
-        <div class="mb-8">
-            <a href="/projects" class="inline-flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors group">
-                <i class="fas fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
-                <span class="font-medium">Return to Projects</span>
-            </a>
-        </div>
-
-        <!-- Header Info -->
-        <div class="mb-10">
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-3 tracking-tight">{{ project.title }}</h1>
-            <p class="text-xl text-slate-400 max-w-3xl leading-relaxed text-justify">{{ project.short_desc }}</p>
+        <!-- Glowing Breadcrumb Header -->
+        <div class="mb-10 block-stagger glass-cube p-6 sm:p-10 rounded-[2rem] shadow-xl relative z-10 w-full overflow-hidden border border-gray-700/50">
+            <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-50 pointer-events-none"></div>
+            <div class="inline-flex items-center space-x-2 text-primary font-bold text-xs sm:text-sm uppercase tracking-widest mb-4 bg-gray-900/80 rounded-full px-4 py-1.5 border border-gray-700/50 backdrop-blur-md relative z-10 shadow-md">
+                <a href="/projects" class="hover:text-white transition-colors flex items-center">
+                    <i data-lucide="layout-grid" class="w-4 h-4 mr-2"></i> Projects
+                </a>
+                <i data-lucide="chevron-right" class="w-3 h-3 text-gray-500"></i>
+                <span class="text-gray-300">Project Details</span>
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-4 tracking-tight drop-shadow-md relative z-10">{{ project.title }}</h1>
+            <p class="text-lg md:text-xl text-gray-400 max-w-4xl leading-relaxed text-left sm:text-justify font-light relative z-10">{{ project.short_desc }}</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            <!-- Media Section -->
-            <div class="lg:col-span-8">
-                <div class="slider-container shadow-2xl border border-slate-800" id="slider-container">
-                    <div class="slider-wrapper" id="slider-wrapper">
-                        {% if project.images and project.images|length > 1 %}
-                            <!-- Clone of last image for infinite loop -->
-                            <div class="slide-item" data-clone="last">
-                                <img src="{{ project.images[-1] }}" alt="Project View">
-                            </div>
-                            <!-- Original images -->
-                            {% for img in project.images %}
-                            <div class="slide-item" data-index="{{ loop.index0 }}">
-                                <img src="{{ img }}" alt="Project View {{ loop.index }}">
-                            </div>
-                            {% endfor %}
-                            <!-- Clone of first image for infinite loop -->
-                            <div class="slide-item" data-clone="first">
-                                <img src="{{ project.images[0] }}" alt="Project View">
-                            </div>
-                        {% elif project.images %}
-                            <div class="slide-item">
-                                <img src="{{ project.images[0] }}" alt="Project View">
-                            </div>
-                        {% else %}
-                            <div class="slide-item">
-                                <img src="{{ project.image_url }}" alt="Project View">
-                            </div>
-                        {% endif %}
+            <!-- Left Panel: Media Monitor -->
+            <div class="lg:col-span-8 block-stagger relative">
+                <!-- Decorative Engine Glow -->
+                <div class="absolute -top-10 -left-10 w-64 h-64 bg-primary/10 blur-[80px] rounded-full pointer-events-none z-0"></div>
+                
+                <!-- Monitor Glass Container -->
+                <div class="glass-monitor rounded-[2rem] p-3 sm:p-4 relative z-10">
+                    <div class="flex items-center space-x-2 mb-3 px-2">
+                        <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                        <span class="ml-4 text-[10px] text-gray-500 font-mono tracking-widest">DISPLAY // {{ project.id }}</span>
                     </div>
-                    
-                    {% if project.images and project.images|length > 1 %}
-                    <button onclick="changeSlide(-1); pauseAutoSlide();" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white hover:bg-cyan-500 hover:text-black transition-all z-20 flex items-center justify-center">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button onclick="changeSlide(1); pauseAutoSlide();" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white hover:bg-cyan-500 hover:text-black transition-all z-20 flex items-center justify-center">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
 
-                    <!-- Slider Dots Indicator -->
-                    <div class="slider-dots">
+                    <div class="slider-container border border-gray-700/50" id="slider-container">
+                        <div class="slider-wrapper" id="slider-wrapper">
+                            {% if project.images and project.images|length > 1 %}
+                                <!-- Clone of last image for infinite loop -->
+                                <div class="slide-item" data-clone="last">
+                                    <img src="{{ project.images[-1] }}" alt="Project View">
+                                </div>
+                                <!-- Original images -->
+                                {% for img in project.images %}
+                                <div class="slide-item" data-index="{{ loop.index0 }}">
+                                    <img src="{{ img }}" alt="Project View {{ loop.index }}">
+                                </div>
+                                {% endfor %}
+                                <!-- Clone of first image for infinite loop -->
+                                <div class="slide-item" data-clone="first">
+                                    <img src="{{ project.images[0] }}" alt="Project View">
+                                </div>
+                            {% elif project.images %}
+                                <div class="slide-item">
+                                    <img src="{{ project.images[0] }}" alt="Project View">
+                                </div>
+                            {% else %}
+                                <div class="slide-item">
+                                    <img src="{{ project.image_url }}" alt="Project View">
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        {% if project.images and project.images|length > 1 %}
+                        <button onclick="changeSlide(-1); pauseAutoSlide();" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white hover:bg-primary hover:text-white hover:scale-110 transition-all z-20 flex items-center justify-center group shadow-lg">
+                            <i data-lucide="chevron-left" class="w-6 h-6 group-hover:-translate-x-0.5 transition-transform"></i>
+                        </button>
+                        <button onclick="changeSlide(1); pauseAutoSlide();" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white hover:bg-primary hover:text-white hover:scale-110 transition-all z-20 flex items-center justify-center group shadow-lg">
+                            <i data-lucide="chevron-right" class="w-6 h-6 group-hover:translate-x-0.5 transition-transform"></i>
+                        </button>
+
+                        <!-- Slider Dots Indicator -->
+                        <div class="slider-dots">
+                            {% for img in project.images %}
+                            <div class="slider-dot {% if loop.index0 == 0 %}active{% endif %}" 
+                                 onclick="setSlide({{ loop.index0 }}); pauseAutoSlide();" 
+                                 data-index="{{ loop.index0 }}"></div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="absolute bottom-4 right-4 bg-black/80 px-3 py-1 rounded-lg text-[10px] font-mono text-primary border border-primary/30 z-20 shadow-[0_0_10px_rgba(79,70,229,0.2)]">
+                            HUD <span id="slide-index" class="text-white">1</span>/{{ project.images|length if project.images else 1 }}
+                        </div>
+                    </div>
+
+                    {% if project.images and project.images|length > 1 %}
+                    <div class="flex gap-3 overflow-x-auto no-scrollbar mt-4 px-2 pb-2">
                         {% for img in project.images %}
-                        <div class="slider-dot {% if loop.index0 == 0 %}active{% endif %}" 
-                             onclick="setSlide({{ loop.index0 }}); pauseAutoSlide();" 
-                             data-index="{{ loop.index0 }}"></div>
+                        <button onclick="setSlide({{ loop.index0 }}); pauseAutoSlide();" 
+                                class="flex-shrink-0 w-24 h-16 rounded-xl overflow-hidden border-2 border-transparent hover:border-primary transition-all bg-gray-900 thumbnail-btn cursor-pointer opacity-70 hover:opacity-100 hover:-translate-y-1 {% if loop.index0 == 0 %}border-primary opacity-100{% endif %}" 
+                                data-index="{{ loop.index0 }}">
+                            <img src="{{ img }}" class="w-full h-full object-cover">
+                        </button>
                         {% endfor %}
                     </div>
                     {% endif %}
-
-                    <div class="absolute bottom-4 right-4 bg-black/60 px-4 py-1.5 rounded-full text-xs font-mono text-cyan-400 border border-white/10 z-20">
-                        <span id="slide-index">1</span> / {{ project.images|length if project.images else 1 }}
-                    </div>
                 </div>
-
-                {% if project.images and project.images|length > 1 %}
-                <div class="flex gap-3 overflow-x-auto no-scrollbar mt-4">
-                    {% for img in project.images %}
-                    <button onclick="setSlide({{ loop.index0 }}); pauseAutoSlide();" 
-                            class="flex-shrink-0 w-24 h-16 rounded-xl overflow-hidden border-2 border-transparent hover:border-cyan-400 transition-all bg-black thumbnail-btn {% if loop.index0 == 0 %}border-cyan-400{% endif %}" 
-                            data-index="{{ loop.index0 }}">
-                        <img src="{{ img }}" class="w-full h-full object-contain opacity-60 hover:opacity-100">
-                    </button>
-                    {% endfor %}
-                </div>
-                {% endif %}
             </div>
 
-            <!-- Sidebar -->
-            <div class="lg:col-span-4 space-y-6">
-                <!-- Project Assets Card -->
-                <div class="glass-card p-6 rounded-2xl border border-slate-700/50 shadow-xl">
-                    <h3 class="text-sm font-bold text-cyan-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <i class="fas fa-rocket"></i> Deployment & Code
+            <!-- Right Panel: Data Cubes -->
+            <div class="lg:col-span-4 space-y-6 block-stagger relative relative-z-20 mt-8 lg:mt-0">
+                <!-- Meta Cube 1: External Links -->
+                <div class="glass-cube p-6 rounded-[2rem] shadow-xl relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-5 flex items-center">
+                        <i data-lucide="link" class="w-4 h-4 mr-2 text-primary"></i> Deployment & Code
                     </h3>
                     <div class="space-y-3">
-                        <a href="{{ project.website_url }}" target="_blank" class="flex items-center justify-between p-4 bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 hover:border-indigo-500/50 rounded-xl transition-all group">
-                            <span class="flex items-center gap-3 text-sm font-semibold text-indigo-300">
-                                <i class="fas fa-external-link-alt"></i> Live Application
+                        {% if project.website_url %}
+                        <a href="{{ project.website_url }}" target="_blank" class="flex items-center justify-between p-4 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/50 rounded-2xl transition-all duration-300 relative group/btn overflow-hidden">
+                            <span class="flex items-center gap-3 text-sm font-bold text-white relative z-10">
+                                <i data-lucide="external-link" class="w-5 h-5 text-primary"></i> Live Application
                             </span>
-                            <i class="fas fa-arrow-right text-xs opacity-50 group-hover:translate-x-1 transition-all"></i>
+                            <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center relative z-10 group-hover/btn:bg-primary group-hover/btn:shadow-[0_0_15px_rgba(79,70,229,0.8)] transition-all">
+                                <i data-lucide="arrow-right" class="w-4 h-4 text-primary group-hover/btn:text-white transition-colors"></i>
+                            </div>
                         </a>
-                        <a href="{{ project.github_url }}" target="_blank" class="flex items-center justify-between p-4 bg-slate-800/40 hover:bg-slate-700 border border-slate-700 rounded-xl transition-all group">
-                            <span class="flex items-center gap-3 text-sm font-semibold text-slate-300">
-                                <i class="fab fa-github text-xl"></i> Repository
+                        {% endif %}
+                        
+                        {% if project.github_url %}
+                        <a href="{{ project.github_url }}" target="_blank" class="flex items-center justify-between p-4 bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 hover:border-gray-500 rounded-2xl transition-all duration-300 relative group/btn">
+                            <span class="flex items-center gap-3 text-sm font-bold text-white">
+                                <svg class="w-5 h-5 text-gray-400 group-hover/btn:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M12 2C6.48 2 2 6.58 2 12.23c0 4.52 2.87 8.35 6.84 9.71.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.93.86.09-.67.35-1.12.64-1.38-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.85c.85 0 1.71.12 2.51.36 1.9-1.32 2.74-1.05 2.74-1.05.56 1.42.21 2.47.11 2.73.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.8-4.57 5.05.36.32.68.95.68 1.92 0 1.39-.01 2.5-.01 2.84 0 .27.18.6.69.49A10.25 10.25 0 0 0 22 12.23C22 6.58 17.52 2 12 2z"/>
+                                </svg>
+                                Repository
                             </span>
-                            <i class="fas fa-arrow-right text-xs opacity-50 group-hover:translate-x-1 transition-all"></i>
+                            <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center group-hover/btn:bg-gray-600 transition-colors">
+                                <i data-lucide="arrow-right" class="w-4 h-4 text-gray-400 group-hover/btn:text-white"></i>
+                            </div>
                         </a>
+                        {% endif %}
                     </div>
                 </div>
 
-                <!-- Project Metadata Card - MORE UNDERSTANDABLE -->
-                <div class="glass-card p-6 rounded-2xl border border-slate-700/50 shadow-xl">
-                    <h3 class="text-sm font-bold text-cyan-400 uppercase tracking-widest mb-5 flex items-center gap-2">
-                        <i class="fas fa-fingerprint"></i> Project Snapshot
+                <!-- Meta Cube 2: Telemetry -->
+                <div class="glass-cube p-6 rounded-[2rem] shadow-xl relative overflow-hidden">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center">
+                        <i data-lucide="fingerprint" class="w-4 h-4 mr-2 text-emerald-400"></i> Project Snapshot
                     </h3>
-                    <div class="space-y-3">
-                        <div class="meta-item">
-                            <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400">
-                                <i class="far fa-calendar-alt"></i>
+                    
+                    <div class="flex flex-col space-y-3 mb-6 w-full relative z-10">
+                        <!-- Date -->
+                        <div class="bg-gray-900/60 hover:bg-gray-900/90 hover:border-gray-600 transition-colors border border-gray-800 rounded-2xl p-4 flex items-center justify-between text-left shadow-md">
+                            <div class="flex items-center space-x-3 flex-shrink-0">
+                                <i data-lucide="calendar" class="w-5 h-5 text-emerald-400"></i>
+                                <span class="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500 font-bold">Deployment</span>
                             </div>
-                            <div>
-                                <p class="text-[10px] uppercase tracking-tighter text-slate-500 font-bold">Released</p>
-                                <p class="text-sm text-slate-200 font-semibold">{{ project.date }}</p>
-                            </div>
+                            <span class="text-sm text-gray-100 font-extrabold text-right">{{ project.date }}</span>
                         </div>
-
-                        <div class="meta-item">
-                            <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400">
-                                <i class="fas fa-user-tag text-xs"></i>
+                        <!-- Role -->
+                        <div class="bg-gray-900/60 hover:bg-gray-900/90 hover:border-gray-600 transition-colors border border-gray-800 rounded-2xl p-4 flex items-center justify-between text-left shadow-md">
+                            <div class="flex items-center space-x-3 flex-shrink-0 mr-4">
+                                <i data-lucide="user-circle" class="w-5 h-5 text-amber-400"></i>
+                                <span class="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500 font-bold">Role</span>
                             </div>
-                            <div>
-                                <p class="text-[10px] uppercase tracking-tighter text-slate-500 font-bold">Contribution</p>
-                                <p class="text-sm text-slate-200 font-semibold">{{ project.role }}</p>
-                            </div>
+                            <span class="text-xs sm:text-sm text-emerald-400 font-extrabold text-right break-words">{{ project.role }}</span>
                         </div>
+                    </div>
 
-                        <div class="p-4 rounded-xl bg-slate-900/50 border border-slate-800">
-                            <p class="text-[10px] uppercase tracking-tighter text-slate-500 font-bold mb-3 flex items-center gap-2">
-                                <i class="fas fa-layer-group"></i> Core Stack
-                            </p>
-                            <div class="flex flex-wrap gap-1.5">
-                                {% for tech in project.technologies %}
-                                <span class="px-2.5 py-1 bg-slate-800 text-slate-300 rounded text-[11px] font-medium border border-slate-700">
-                                    {{ tech }}
-                                </span>
-                                {% endfor %}
-                            </div>
+                    <!-- Tech Stack -->
+                    <div class="p-5 rounded-2xl bg-gray-900/80 border border-gray-800">
+                        <p class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-4 flex items-center">
+                            <i data-lucide="cpu" class="w-3 h-3 mr-2"></i> Core Compute Stack
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            {% for tech in project.technologies %}
+                            <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-lg text-xs font-bold border border-gray-700 hover:border-gray-500 hover:text-white transition-colors cursor-default">
+                                {{ tech }}
+                            </span>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Content Grid -->
-            <div class="lg:col-span-12 mt-12 border-t border-slate-800 pt-12">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
-                    <!-- Overview - MORE STYLISH -->
-                    <div class="lg:col-span-2">
+            <!-- Bottom Content Blocks -->
+            <div class="lg:col-span-12 mt-16 md:mt-24 pt-16 border-t border-gray-800 relative z-20">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                    
+                    <!-- Extensive Overview Text -->
+                    <div class="lg:col-span-8 block-scroll-fade glass-cube p-6 sm:p-10 rounded-[2.5rem] shadow-xl border border-gray-700/50 h-fit">
                         <div class="flex items-center gap-4 mb-8">
-                            <h2 class="text-3xl font-bold text-white">Overview</h2>
-                            <div class="h-[1px] flex-grow bg-gradient-to-r from-cyan-500/50 to-transparent"></div>
+                            <div class="w-2 h-8 bg-cyan-500 rounded-full"></div>
+                            <h2 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">System Overview</h2>
+                            <div class="h-[1px] flex-grow bg-gradient-to-r from-gray-700 to-transparent ml-4"></div>
                         </div>
                         
-                        <div class="overview-accent">
-                            <div class="text-slate-300 text-lg leading-relaxed space-y-6">
-                                {% if project.full_desc %}
-                                    <div class="prose prose-invert max-w-none">
-                                        {{ project.full_desc | safe }}
-                                    </div>
-                                {% elif project.full_description %}
-                                    <p>{{ project.full_description }}</p>
-                                {% else %}
-                                    <p>{{ project.description }}</p>
-                                {% endif %}
-                            </div>
+                        <div class="text-gray-300 text-base md:text-lg leading-loose space-y-6 font-light text-justify px-2 md:px-6">
+                            {% if project.full_desc %}
+                                <div class="prose prose-invert max-w-none prose-p:mb-6 prose-strong:text-white prose-strong:font-bold prose-a:text-primary">
+                                    {{ project.full_desc | replace('\n', '<br>') | safe }}
+                                </div>
+                            {% elif project.full_description %}
+                                <p>{{ project.full_description }}</p>
+                            {% else %}
+                                <p>{{ project.description }}</p>
+                            {% endif %}
                         </div>
                     </div>
                     
-                    <!-- Key Features -->
-                    <div>
+                    <!-- Analytical Feature Nodes -->
+                    <div class="lg:col-span-4 block-scroll-fade glass-cube p-6 sm:p-10 rounded-[2.5rem] shadow-xl border border-gray-700/50 h-fit">
                         <div class="flex items-center gap-4 mb-8">
-                            <h2 class="text-3xl font-bold text-white">Features</h2>
+                            <div class="w-2 h-8 bg-purple-500 rounded-full"></div>
+                            <h2 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">Parameters</h2>
                         </div>
+                        
                         <div class="space-y-4">
                             {% for feature in project.features %}
-                            <div class="feature-card p-4 rounded-xl flex items-start gap-4 shadow-lg group">
-                                <div class="w-8 h-8 rounded-lg bg-cyan-400/10 flex items-center justify-center text-cyan-400 flex-shrink-0 group-hover:bg-cyan-400 group-hover:text-black transition-colors">
-                                    <i class="fas fa-check text-xs"></i>
+                            <div class="bg-gray-800/40 border border-gray-700/50 p-5 rounded-[1.5rem] flex items-start gap-4 shadow-lg hover:border-purple-500/50 hover:bg-gray-800/80 transition-all duration-300 group hover:-translate-x-2">
+                                <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 flex-shrink-0 group-hover:bg-purple-500 group-hover:text-white transition-colors shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                                    <i data-lucide="check-circle" class="w-5 h-5"></i>
                                 </div>
-                                <span class="text-sm font-medium text-slate-200 leading-tight pt-1">
+                                <span class="text-sm font-bold text-gray-300 leading-snug pt-2.5 group-hover:text-white transition-colors">
                                     {{ feature }}
                                 </span>
                             </div>
                             {% endfor %}
                         </div>
                     </div>
+
                 </div>
             </div>
+            
         </div>
-    </main>
+    </div>
+</section>
 
-    <script>
+<!-- Flag to disable the global 3D geometric core solely on the details page -->
+<div id="hide-3d-core" class="hidden"></div>
+{% endblock %}
+
+{% block body_end_script %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Init generic icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+
+        // ==========================================
+        // SLIDER LOGIC
+        // ==========================================
         const images = {{ (project.images if project.images else [project.image_url]) | tojson }};
         let currentIndex = 0;
         let autoSlideInterval = null;
-        const SLIDE_INTERVAL = 4000; // 4 seconds between slides
+        const SLIDE_INTERVAL = 4000;
         const sliderWrapper = document.getElementById('slider-wrapper');
         const indexDisplay = document.getElementById('slide-index');
         const sliderContainer = document.getElementById('slider-container');
         let isTransitioning = false;
 
-        const hasMultipleImages = images.length > 1;
+        const hasMultipleImages = images && images.length > 1;
 
-        function updateSlider(skipTransition = false) {
+        // Hoist functions to window scope for inline onclick handlers from Jinja
+        window.updateSlider = function(skipTransition = false) {
             let slideIndex = currentIndex;
             let displayIndex = currentIndex;
             
-            // For infinite loop: adjust index to account for clone at the beginning
             if (hasMultipleImages) {
                 if (currentIndex === -1) {
-                    // At clone of last image (position 0)
                     slideIndex = 0;
                     displayIndex = images.length - 1;
                 } else if (currentIndex === images.length) {
-                    // At clone of first image (position images.length + 1)
                     slideIndex = images.length + 1;
                     displayIndex = 0;
                 } else {
-                    // At a real image (position currentIndex + 1, because first is clone)
                     slideIndex = currentIndex + 1;
                     displayIndex = currentIndex;
                 }
             }
             
-            // Calculate the translateX value
             const translateX = -slideIndex * 100;
             
-            // Apply transition control
             if (skipTransition) {
                 sliderWrapper.classList.add('no-transition');
             } else {
                 sliderWrapper.classList.remove('no-transition');
             }
             
-            // Apply transform
             sliderWrapper.style.transform = `translateX(${translateX}%)`;
             
-            // Update display index (normalize to valid range)
             const normalizedIndex = displayIndex >= 0 && displayIndex < images.length 
                 ? displayIndex 
                 : (displayIndex + images.length) % images.length;
             
-            indexDisplay.innerText = normalizedIndex + 1;
+            if(indexDisplay) indexDisplay.innerText = normalizedIndex + 1;
             
-            // Update indicators
             updateDots(normalizedIndex);
             updateThumbnails(normalizedIndex);
 
-            // Handle infinite loop: jump to real image after reaching clone
             if (hasMultipleImages && !skipTransition) {
                 setTimeout(() => {
                     if (currentIndex === -1) {
-                        // Jump from last clone to real last image
                         currentIndex = images.length - 1;
-                        updateSlider(true);
+                        window.updateSlider(true);
                     } else if (currentIndex === images.length) {
-                        // Jump from first clone to real first image
                         currentIndex = 0;
-                        updateSlider(true);
+                        window.updateSlider(true);
                     }
                 }, 600);
             }
         }
 
-        function updateDots(activeIndex) {
+        window.updateDots = function(activeIndex) {
             const dots = document.querySelectorAll('.slider-dot');
             dots.forEach((dot, index) => {
                 if (index === activeIndex) {
@@ -419,24 +413,23 @@
             });
         }
 
-        function updateThumbnails(activeIndex) {
+        window.updateThumbnails = function(activeIndex) {
             const thumbnails = document.querySelectorAll('.thumbnail-btn');
             thumbnails.forEach((thumb, index) => {
                 if (index === activeIndex) {
-                    thumb.classList.add('border-cyan-400');
+                    thumb.classList.add('border-primary');
+                    thumb.classList.remove('opacity-70');
                 } else {
-                    thumb.classList.remove('border-cyan-400');
+                    thumb.classList.remove('border-primary');
+                    thumb.classList.add('opacity-70');
                 }
             });
         }
 
-        function changeSlide(direction) {
+        window.changeSlide = function(direction) {
             if (isTransitioning && hasMultipleImages) {
-                // Allow if it's been stuck for too long (safety mechanism)
                 const timeSinceLastUpdate = Date.now() - (window.lastSliderUpdate || 0);
-                if (timeSinceLastUpdate < 500) {
-                    return;
-                }
+                if (timeSinceLastUpdate < 500) return;
             }
             
             isTransitioning = true;
@@ -444,105 +437,127 @@
             
             if (hasMultipleImages) {
                 currentIndex += direction;
-                
-                // Handle boundaries for infinite loop
                 if (currentIndex < 0) {
-                    currentIndex = -1; // Go to last clone
+                    currentIndex = -1;
                 } else if (currentIndex >= images.length) {
-                    currentIndex = images.length; // Go to first clone
+                    currentIndex = images.length;
                 }
             } else {
                 currentIndex = 0;
             }
             
-            updateSlider();
+            window.updateSlider();
             
-            // Reset transitioning flag
             setTimeout(() => {
                 isTransitioning = false;
             }, 650);
         }
 
-        function setSlide(index) {
+        window.setSlide = function(index) {
             if (isTransitioning) return;
             if (index < 0 || index >= images.length) return;
             
             isTransitioning = true;
             currentIndex = index;
-            updateSlider();
+            window.updateSlider();
             
-            // Reset transitioning flag
             setTimeout(() => {
                 isTransitioning = false;
             }, 600);
         }
 
-        function startAutoSlide() {
+        window.startAutoSlide = function() {
             if (!hasMultipleImages) return;
-            
-            pauseAutoSlide();
+            window.pauseAutoSlide();
             autoSlideInterval = setInterval(() => {
                 if (!isTransitioning) {
-                    changeSlide(1);
+                    window.changeSlide(1);
                 }
             }, SLIDE_INTERVAL);
         }
 
-        function pauseAutoSlide() {
+        window.pauseAutoSlide = function() {
             if (autoSlideInterval) {
                 clearInterval(autoSlideInterval);
                 autoSlideInterval = null;
             }
         }
 
-        function resumeAutoSlide() {
+        window.resumeAutoSlide = function() {
             if (!autoSlideInterval && hasMultipleImages) {
-                startAutoSlide();
+                window.startAutoSlide();
             }
         }
 
-        // Initialize slider when DOM is ready
         function initSlider() {
-            if (!sliderWrapper) {
-                console.error('Slider wrapper not found');
-                return;
-            }
+            if (!sliderWrapper) return;
 
             if (hasMultipleImages) {
                 currentIndex = 0;
-                // Set initial position at first real image (position 1, after clone)
                 sliderWrapper.classList.add('no-transition');
                 sliderWrapper.style.transform = 'translateX(-100%)';
                 
-                // Remove no-transition class after a brief delay
                 setTimeout(() => {
                     sliderWrapper.classList.remove('no-transition');
                 }, 100);
                 
-                updateDots(0);
-                updateThumbnails(0);
+                window.updateDots(0);
+                window.updateThumbnails(0);
+                window.startAutoSlide();
                 
-                // Start auto-slide
-                startAutoSlide();
-                
-                // Pause on hover, resume on mouse leave
                 if (sliderContainer) {
-                    sliderContainer.addEventListener('mouseenter', pauseAutoSlide);
-                    sliderContainer.addEventListener('mouseleave', resumeAutoSlide);
+                    sliderContainer.addEventListener('mouseenter', window.pauseAutoSlide);
+                    sliderContainer.addEventListener('mouseleave', window.resumeAutoSlide);
                 }
             } else {
-                // Single image - no sliding needed
                 currentIndex = 0;
-                updateSlider();
+                window.updateSlider();
             }
         }
 
-        // Initialize when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initSlider);
-        } else {
-            initSlider();
+        initSlider();
+
+        // ==========================================
+        // GSAP ARCHITECTURE ANIMATIONS
+        // ==========================================
+        if (typeof gsap !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Stagger hero layer components down
+            gsap.from(".block-stagger", {
+                y: 40,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: "power3.out",
+                delay: 0.1
+            });
+
+            // Make data-cubes float gently forever
+            gsap.to(".glass-cube", {
+                y: "-5px",
+                duration: 2,
+                yoyo: true,
+                repeat: -1,
+                ease: "sine.inOut",
+                stagger: { amount: 0.5 }
+            });
+
+            // Scroll trigger for bottom text and features to fade up naturally
+            const scrollBlocks = document.querySelectorAll('.block-scroll-fade');
+            scrollBlocks.forEach(block => {
+                gsap.from(block, {
+                    scrollTrigger: {
+                        trigger: block,
+                        start: "top 85%", // Triggers when the top of the block hits 85% of viewport
+                    },
+                    y: 30,
+                    opacity: 0,
+                    duration: 0.8,
+                    ease: "power2.out"
+                });
+            });
         }
-    </script>
-</body>
-</html>
+    });
+</script>
+{% endblock %}

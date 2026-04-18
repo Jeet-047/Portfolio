@@ -3,292 +3,431 @@
 {% block title %}Projects – Jeet Majumder | Data Science & AI{% endblock %}
 
 {% block head_extra %}
-    <style>
-        /* Projects Page Specific Styles for 3D Illusion */
-        .project-bg-container {
-            /* --- MODIFICATION: Fixed position to cover the entire page --- */
-            position: fixed; 
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-            perspective: 1000px; /* Essential for 3D effect */
-            z-index: -1; /* IMPORTANT: Keeps background behind all content */
-        }
-        .cube {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            /* Using a darker, more subtle background for the cubes */
-            background: rgba(45, 45, 60, 0.15); 
-            border: 1px solid rgba(79, 70, 229, 0.2);
-            border-radius: 6px;
-            
-            /* --- ENHANCEMENT: Increased subtle glow to the cubes --- */
-            box-shadow: 0 0 8px rgba(79, 70, 229, 0.8), inset 0 0 5px rgba(139, 92, 246, 0.6); /* Primary color glow */
-            
-            animation: float 20s infinite ease-in-out, spin var(--duration) linear infinite;
+<style>
+    /* Projects Page Premium Timeline Formatting */
+    .project-glass-card {
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.4));
+        border: 1px solid rgba(148, 163, 184, 0.15);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+    }
+
+    /* Custom scrollbar for horizontal dock */
+    .dock-scroll::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .dock-scroll::-webkit-scrollbar-track {
+        background: rgba(30, 41, 59, 0.5);
+        border-radius: 10px;
+    }
+
+    .dock-scroll::-webkit-scrollbar-thumb {
+        background: rgba(79, 70, 229, 0.5);
+        border-radius: 10px;
+    }
+
+    .dock-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(79, 70, 229, 0.8);
+    }
+
+    .project-node.active-node {
+        border-color: rgba(99, 102, 241, 1);
+        box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+        background: rgba(30, 41, 59, 0.9);
+        transform: scale(1.05);
+    }
+
+    /* Stop selection highlighting to make it feel like an app */
+    .no-select {
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    /* Animated gradient flowing through heading text */
+    .hero-gradient-text {
+        background: linear-gradient(120deg,
+                #60a5fa 0%,
+                #22d3ee 18%,
+                #34d399 36%,
+                #f59e0b 54%,
+                #f472b6 72%,
+                #a78bfa 88%,
+                #60a5fa 100%);
+        background-size: 320% 320%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        animation: heroTextGradientFlow 7s ease-in-out infinite;
+        text-shadow: 0 0 24px rgba(167, 139, 250, 0.28);
+        display: inline-block;
+        line-height: 1.12;
+        padding-bottom: 0.1em;
+    }
+
+    @keyframes heroTextGradientFlow {
+        0% {
+            background-position: 0% 50%;
         }
 
-        /* Custom spin animation - ENHANCEMENT: Added rotateZ for a more dynamic "twist" */
-        @keyframes spin {
-            0% { transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg); }
-            50% { transform: rotateY(180deg) rotateX(180deg) rotateZ(90deg); }
-            100% { transform: rotateY(360deg) rotateX(360deg) rotateZ(180deg); }
+        50% {
+            background-position: 100% 50%;
         }
 
-        /* --- MODIFIED STYLES FOR PROJECT CARD (Premium Modular Accent Card) --- */
-        .project-card {
-            /* Glassy / gradient background for a premium look */
-            background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.20), rgba(15, 23, 42, 0.96));
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            
-            /* Initial Shadow */
-            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.85);
-            
-            /* Transitions for smooth effects */
-            transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
-            
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+        100% {
+            background-position: 0% 50%;
         }
-
-        /* Subtle inner glow & border ring */
-        .project-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 1rem;
-            border: 1px solid rgba(129, 140, 248, 0.18);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.35s ease;
-        }
-
-        .project-card::after {
-            content: "";
-            position: absolute;
-            inset: -40%;
-            background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.35), transparent 60%);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            transform: translate3d(-10px, -10px, 0);
-        }
-
-        /* Custom Radial Gradient for Card Depth (kept subtle under new glass background) */
-        .project-card-bg {
-            background: radial-gradient(circle at 10% 10%, rgba(79, 70, 229, 0.05) 0%, rgba(30, 41, 59, 0.95) 60%);
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 0;
-        }
-
-        /* Hover Effect: Lift and Glow */
-        .project-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            /* Soft glow based on primary color */
-            box-shadow: 0 22px 60px rgba(15, 23, 42, 0.95), 0 0 40px rgba(79, 70, 229, 0.75);
-            border-color: rgba(191, 219, 254, 0.55);
-        }
-
-        .project-card:hover::before {
-            opacity: 1;
-        }
-
-        .project-card:hover::after {
-            opacity: 1;
-            transform: translate3d(0, 0, 0);
-        }
-
-        /* Vertical accent line on the left side of the card */
-        .project-accent-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px; /* Slimmer for mobile */
-            height: 100%;
-            transition: width 0.3s ease, box-shadow 0.3s ease;
-            /* Added shadow for depth on the bar itself */
-            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.5); 
-        }
-        
-        @media (min-width: 640px) {
-            .project-accent-bar {
-                width: 6px; /* Slightly slimmer by default */
-            }
-        }
-        
-        .project-card:hover .project-accent-bar {
-            width: 8px; /* Expands on hover for mobile */
-            box-shadow: 6px 0 22px rgba(15, 23, 42, 0.9);
-        }
-        
-        @media (min-width: 640px) {
-            .project-card:hover .project-accent-bar {
-                width: 11px; /* Expands on hover for desktop */
-            }
-        }
-
-        /* Technology badges for better contrast */
-        .tech-badge {
-            font-weight: 600;
-            border: 1px solid currentColor;
-            transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-            box-shadow: 0 0 0 rgba(15, 23, 42, 0);
-        }
-
-        .tech-badge:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.85);
-            background-color: rgba(15, 23, 42, 0.9);
-        }
-        
-        /* Gradient Button Style for CTA (minimal, clean, animated gradient) */
-        .gradient-cta {
-            /* Subtle animated gradient background */
-            background-image: linear-gradient(120deg, #1f2937, #4f46e5, #8b5cf6, #1f2937);
-            background-size: 220% 220%;
-            color: #e5e7eb;
-            font-weight: 600;
-            text-align: center;
-            padding: 9px 18px;
-            border-radius: 9999px; 
-            transition: all 0.3s ease;
-            letter-spacing: 0.03em;
-            border: 1px solid rgba(148, 163, 184, 0.6);
-            box-shadow: none;
-            animation: buttonGradient 8s ease infinite;
-        }
-        
-        .gradient-cta:hover {
-            transform: translateY(-1px);
-            border-color: rgba(191, 219, 254, 0.9);
-            animation-duration: 6s;
-        }
-
-        @keyframes buttonGradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-    </style>
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-    <!-- 3D Background Container is now FIXED and covers the entire page -->
-    <div class="project-bg-container">
-        <!-- Cubes are injected by JavaScript -->
-    </div>
+<section id="projects-content" class="relative z-10 w-full pt-32 pb-32 min-h-[90vh] flex flex-col justify-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
 
-    <section id="projects-content" class="py-12 sm:py-16 md:py-20 lg:py-32 relative min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center text-white mb-4 sm:mb-6 animated-element">My Featured Projects & Research</h2>
-            <p class="text-base sm:text-lg md:text-xl text-center text-gray-400 mb-8 sm:mb-12 md:mb-16 px-4 animated-element" style="animation-delay: 0.1s;">A selection of projects that demonstrate my technical range and passion for innovation.</p>
+        <!-- Title Area -->
+        <div class="text-center mb-12 relative pointer-events-none">
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/10 blur-[100px] rounded-full z-0">
+            </div>
+            <h2
+                class="hero-gradient-text text-4xl sm:text-5xl md:text-6xl font-extrabold mb-4 tracking-tight relative z-10">
+                Intelligent Systems & AI Projects</h2>
+            <p class="text-lg md:text-xl text-gray-400 max-w-4xl mx-auto font-light relative z-10">A selection of projects that demonstrate my technical range and passion for innovation.</p>
+        </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10 lg:gap-12">
-                {% for project in data.projects %}
-                <!-- PREMIUM MODULAR ACCENT CARD DESIGN -->
-                <div class="project-card rounded-xl sm:rounded-2xl transition duration-500 animated-element" style="animation-delay: {{ loop.index * 0.2 }}s;">
-                    
-                    <!-- Radial Gradient Layer (Z-index 0) -->
-                    <div class="project-card-bg rounded-xl sm:rounded-2xl"></div>
+        <!-- Dashboard Layout Engine -->
+        <div class="flex flex-col w-full space-y-8 relative z-20">
 
-                    <!-- Vertical Accent Bar -->
-                    <div class="project-accent-bar {{ project.color }}"></div>
+            <!-- Main Viewport (Master Display) -->
+            <div
+                class="project-glass-card w-full rounded-[2rem] p-8 md:p-12 relative overflow-hidden min-h-[450px] flex flex-col md:flex-row items-center border border-gray-700/50">
 
-                    <div class="p-6 sm:p-8 space-y-4 sm:space-y-5 relative z-10">
-                        
-                        <!-- Header Block: Icon and Title -->
-                        <div class="flex items-center space-x-3 sm:space-x-4 mb-3 sm:mb-4">
-                            <!-- Large, distinctive icon with color accent -->
-                            <div class="text-3xl sm:text-4xl md:text-5xl font-bold {{ project.color | replace('bg-', 'text-') }}">{{ project.icon }}</div>
-                            <h3 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white leading-tight">{{ project.title }}</h3>
+                <!-- Viewport Background Art -->
+                <div
+                    class="absolute -top-32 -right-32 w-96 h-96 bg-primary/10 blur-[80px] rounded-full viewport-glow pointer-events-none">
+                </div>
+
+                <!-- Left: Content Container -->
+                <div class="w-full md:w-[65%] flex flex-col justify-center pr-0 md:pr-12 relative z-10"
+                    id="viewport-content">
+                    <!-- Content dynamically injected here via JS -->
+                </div>
+
+                <!-- Right: Abstract Graphic -->
+                <div class="w-full md:w-[35%] hidden md:flex items-center justify-center relative z-10 mt-8 md:mt-0 pointer-events-none"
+                    id="viewport-graphic">
+                    <div
+                        class="w-full aspect-square max-h-[350px] bg-gradient-to-br from-gray-900/50 to-gray-800/20 rounded-[3rem] border border-gray-700/30 flex items-center justify-center backdrop-blur-sm relative shadow-2xl">
+                        <div id="viewport-icon"
+                            class="text-7xl sm:text-9xl drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-transform duration-700 transform hover:scale-110">
                         </div>
-                        
-                        <!-- Description Block -->
-                        <p class="text-gray-300 text-sm sm:text-base font-light border-l border-gray-600/50 pl-3 sm:pl-4">{{ project.short_desc }}</p>
-                        
-                        <!-- Technology Badges -->
-                        <div class="pt-3 sm:pt-4 flex flex-wrap gap-2 sm:gap-3 border-t border-gray-700/50">
-                            <span class="text-xs sm:text-sm text-primary font-bold mr-1 w-full sm:w-auto">Stack:</span>
-                            {% for tech in project.technologies %}
-                            <span class="tech-badge inline-block text-xs font-mono px-2 sm:px-3 py-1 rounded-full 
-                                {% if loop.cycle('', '', '') == 0 %}
-                                    bg-indigo-600/20 text-indigo-300 border-indigo-300
-                                {% elif loop.cycle('', '', '') == 1 %}
-                                    bg-emerald-600/20 text-emerald-300 border-emerald-300
-                                {% else %}
-                                    bg-rose-600/20 text-rose-300 border-rose-300
-                                {% endif %}
-                            ">{{ tech }}</span>
-                            {% endfor %}
-                        </div>
-                        
-                        <!-- Call to Action Button (Full Gradient) -->
-                        <a href="/projects/{{ project.id }}" class="gradient-cta block w-full text-center mt-4 sm:mt-6 text-sm sm:text-base relative z-10" style="pointer-events: auto; touch-action: manipulation; cursor: pointer;">
-                            View Project →
-                        </a>
                     </div>
                 </div>
-                {% endfor %}
             </div>
+
+            <!-- The Dock Header & Category Tabs -->
+            <div class="w-full">
+
+                <!-- Jinja Category Extraction -->
+                {% set categories = [] %}
+                {% for project in data.projects %}
+                {% if project.category not in categories %}
+                {% set _ = categories.append(project.category) %}
+                {% endif %}
+                {% endfor %}
+
+                <!-- Animated Sector Tabs -->
+                <div class="w-full mb-6 mt-12">
+                    <div class="flex space-x-3 overflow-x-auto pb-4 pt-2 scroll-smooth w-full px-2 snap-x">
+                        <button
+                            class="category-tab active-category-tab flex-none px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 border-2 border-primary bg-primary text-white shadow-[0_0_15px_rgba(79,70,229,0.5)]"
+                            data-target="All">
+                            <i data-lucide="layers" class="inline w-4 h-4 mr-2 -mt-1"></i>All
+                        </button>
+                        {% for cat in categories %}
+                        <button
+                            class="category-tab flex-none px-6 py-2.5 rounded-full text-sm font-bold text-gray-400 bg-gray-800/80 border-2 border-transparent hover:border-gray-500 hover:text-white hover:-translate-y-1 transition-all duration-300 shadow-md"
+                            data-target="{{ cat }}">
+                            {{ cat }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between mb-4 pl-4 pr-4">
+                    <p class="text-xs text-gray-400 uppercase tracking-widest font-bold flex items-center"><span
+                            class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-2"></span> Active Projects
+                        (<span id="node-count">{{ data.projects|length }}</span>)</p>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest hidden sm:flex items-center">Mouse
+                        Wheel / Scroll <i data-lucide="chevrons-right" class="w-3 h-3 ml-1"></i></p>
+                </div>
+
+                <div id="thumbnail-track"
+                    class="flex overflow-x-auto pb-8 pt-4 px-4 dock-scroll space-x-6 w-full no-select scroll-smooth">
+                    <!-- Jinja map of projects -->
+                    {% for project in data.projects %}
+                    <div class="project-node flex-none w-[170px] h-[170px] sm:w-[260px] sm:h-[260px] aspect-square bg-gray-800/90 rounded-2xl sm:rounded-[2rem] border-2 border-gray-700 hover:border-gray-400 cursor-pointer transition-all duration-500 hover:-translate-y-3 flex flex-col items-center justify-center p-4 sm:p-6 relative group shadow-[0_10px_30px_-15px_rgba(0,0,0,0.5)] overflow-hidden"
+                        data-index="{{ loop.index0 }}" data-category="{{ project.category }}">
+
+                        <!-- Dynamic Hover Aura derived from project color -->
+                        <div
+                            class="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-700 {{ project.color }}">
+                        </div>
+
+                        <div
+                            class="text-5xl sm:text-7xl mb-3 sm:mb-5 group-hover:scale-125 group-hover:-translate-y-2 transition-transform duration-500 relative z-10 filter drop-shadow-md">
+                            {{ project.icon }}</div>
+                        <span
+                            class="text-xs sm:text-lg text-white font-extrabold tracking-wide text-center whitespace-normal break-words w-full px-1 sm:px-4 leading-tight relative z-10" style="text-wrap: balance;">{{
+                            project.title }}</span>
+
+                        <!-- Bottom Neon Laser Line -->
+                        <div
+                            class="absolute bottom-0 left-1/2 -translate-x-1/2 h-1.5 w-0 group-hover:w-full transition-all duration-500 {{ project.color }} rounded-t-full shadow-[0_0_10px_currentColor]">
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
         </div>
-    </section>
+    </div>
+</section>
+
+<!-- Hidden JSON data object for JS consumption -->
+<script id="projects-data" type="application/json">
+        {{ data.projects | tojson }}
+    </script>
 {% endblock %}
 
 {% block body_end_script %}
-    <script>
-        // --- 3D Background Element Generation ---
-        function createCube() {
-            const cube = document.createElement('div');
-            cube.classList.add('cube');
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
 
-            // Random position and size - Responsive size range
-            const isMobile = window.innerWidth < 640;
-            const size = isMobile ? Math.random() * 40 + 20 : Math.random() * 80 + 30; // 20-60px mobile, 30-110px desktop
-            cube.style.width = `${size}px`;
-            cube.style.height = `${size}px`;
-            cube.style.left = `${Math.random() * 100}vw`;
-            cube.style.top = `${Math.random() * 100}vh`;
-
-            // Random animation speed and duration
-            const duration = Math.random() * 30 + 10; // 10s to 40s
-            cube.style.setProperty('--duration', `${duration}s`);
-            cube.style.animationDuration = `${duration}s, ${Math.random() * 15 + 5}s`;
-            
-            // Random depth (Z-translation)
-            const zDepth = Math.random() * 400 - 200; // -200px (near) to +200px (far)
-            
-            // Set initial transform
-            cube.style.transform = `translateZ(${zDepth}px) rotateX(${Math.random() * 360}deg) rotateY(${Math.random() * 360}deg)`;
-            
-            // Opacity based on depth: deeper = more transparent (subtle effect)
-            // --- MODIFICATION: Opacity range increased from (0.1-0.3) to (0.2-0.5) for better visibility ---
-            const normalizedDepth = (zDepth + 200) / 400; // Normalize Z to 0-1
-            cube.style.opacity = `${0.2 + (0.3 * (1 - normalizedDepth))}`; 
-
-            document.querySelector('.project-bg-container').appendChild(cube);
+        // Reinitialize generic icons manually incase auto-init misses newly mounted DOM
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
         }
 
-        // Create cubes - fewer on mobile for performance
-        const isMobile = window.innerWidth < 640;
-        const cubeCount = isMobile ? 25 : 50;
-        for (let i = 0; i < cubeCount; i++) {
-            createCube();
+        // Load project data
+        const dataEl = document.getElementById('projects-data');
+        if (!dataEl) return;
+        const projects = JSON.parse(dataEl.textContent);
+
+        const nodes = document.querySelectorAll('.project-node');
+        const viewportContent = document.getElementById('viewport-content');
+        const viewportIcon = document.getElementById('viewport-icon');
+
+        // Core rendering function for the Master Viewport
+        function renderProject(index) {
+            const project = projects[index];
+
+            // Construct specific Category Breadcrumb
+            const categoryHTML = project.category ? `<span class="px-2 py-0.5 rounded bg-gray-800 border border-gray-600 text-gray-300 ml-3 hidden sm:inline-block">${project.category}</span>` : '';
+
+            // Update active state visuals in dock
+            nodes.forEach(n => n.classList.remove('active-node', 'ring-4', 'ring-indigo-500/50'));
+            nodes[index].classList.add('active-node', 'ring-4', 'ring-indigo-500/50');
+
+            // Build Technologies HTML dynamically
+            const techHtml = project.technologies.map(tech =>
+                `<span class="px-4 py-1.5 rounded-full bg-gray-900 text-gray-300 border border-gray-600/50 text-xs sm:text-sm font-mono shadow-sm">${tech}</span>`
+            ).join('');
+
+            // Build content HTML cleanly
+            const contentHtml = `
+                    <div class="inline-flex items-center space-x-2 text-primary font-bold text-xs sm:text-sm uppercase tracking-widest mb-6">
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        <span>Project ${index + 1} Activated</span>
+                        ${categoryHTML}
+                    </div>
+                    <h3 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-6 tracking-tight drop-shadow-md">${project.title}</h3>
+                    <p class="text-gray-300 text-base md:text-lg mb-8 leading-relaxed font-light block line-clamp-3 md:line-clamp-none">${project.short_desc}</p>
+                    
+                    <div class="flex flex-wrap gap-2 mb-10">
+                        ${techHtml}
+                    </div>
+                    
+                    <div class="mt-auto">
+                        <a href="/projects/${project.id}" class="inline-flex items-center text-sm md:text-base text-primary font-bold hover:text-white transition-all duration-300 bg-primary/10 border border-primary/20 px-6 py-3 rounded-xl hover:bg-primary/90 hover:shadow-[0_0_20px_rgba(79,70,229,0.5)] group w-max">
+                            Explore Project Details
+                            <div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center ml-3 group-hover:bg-white transition-colors duration-300">
+                                <i data-lucide="arrow-right" class="w-3 h-3 text-primary group-hover:text-primary transform group-hover:translate-x-0.5 transition duration-300"></i>
+                            </div>
+                        </a>
+                    </div>
+                `;
+
+            // Execute GSAP Hardware-Accelerated Transition
+            if (typeof gsap !== 'undefined') {
+                // GSAP timeline for tearing down old UI and bringing in new seamlessly
+                const tl = gsap.timeline();
+
+                tl.to([viewportContent, viewportIcon], {
+                    opacity: 0,
+                    y: 10,
+                    duration: 0.2,
+                    ease: "power2.in",
+                    onComplete: () => {
+                        // DOM Update while invisible
+                        viewportContent.innerHTML = contentHtml;
+                        viewportIcon.textContent = project.icon;
+
+                        // Rehydrate new raw icons
+                        if (typeof lucide !== 'undefined') {
+                            lucide.createIcons();
+                        }
+
+                        // Transform scale effect on icon change
+                        viewportIcon.style.transform = `scale(0.5) rotate(-10deg)`;
+                        setTimeout(() => {
+                            viewportIcon.style.transform = `scale(1) rotate(0deg)`;
+                        }, 50);
+                    }
+                })
+                    .to([viewportContent, viewportIcon], {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.4,
+                        stagger: 0.1,
+                        ease: "power3.out"
+                    });
+            } else {
+                // Fallback without GSAP
+                viewportContent.innerHTML = contentHtml;
+                viewportIcon.textContent = project.icon;
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
         }
-    </script>
+
+        // Add click listeners to all dock nodes & handle Auto-Scroll
+        nodes.forEach(node => {
+            node.addEventListener('click', () => {
+
+                // Smooth scroll up to the master viewport monitor precisely
+                const monitor = document.getElementById('viewport-content');
+                if (monitor) {
+                    window.scrollTo({
+                        top: monitor.getBoundingClientRect().top + window.scrollY - 150,
+                        behavior: 'smooth'
+                    });
+                }
+
+                // Do not animate if user clicks the currently active node
+                if (node.classList.contains('active-node')) return;
+
+                const idx = parseInt(node.getAttribute('data-index'));
+                renderProject(idx);
+            });
+        });
+
+        // --- Node Filtering Engine ---
+        const categoryTabs = document.querySelectorAll('.category-tab');
+        let currentCategory = "All";
+
+        categoryTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('data-target');
+                if (target === currentCategory) return;
+                currentCategory = target;
+
+                // Update Tab CSS Styliing
+                categoryTabs.forEach(t => {
+                    t.className = "category-tab flex-none px-6 py-2.5 rounded-full text-sm font-bold text-gray-400 bg-gray-800/80 border-2 border-transparent hover:border-gray-500 hover:text-white hover:-translate-y-1 transition-all duration-300 shadow-md";
+                });
+
+                // Specific active styling
+                const iconHTML = target === 'All' ? `<i data-lucide="layers" class="inline w-4 h-4 mr-2 -mt-1"></i>` : '';
+                tab.innerHTML = iconHTML + target;
+                tab.className = "category-tab active-category-tab flex-none px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 border-2 border-primary bg-primary text-white shadow-[0_0_15px_rgba(79,70,229,0.5)]";
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+
+                // Master GSAP Filtering Animation
+                let count = 0;
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(nodes, {
+                        scale: 0.8,
+                        opacity: 0,
+                        duration: 0.2,
+                        ease: "power2.in",
+                        onComplete: () => {
+                            // Toggle display
+                            nodes.forEach(n => {
+                                if (target === "All" || n.getAttribute('data-category') === target) {
+                                    n.style.display = "flex";
+                                    count++;
+                                } else {
+                                    n.style.display = "none";
+                                }
+                            });
+
+                            document.getElementById('node-count').textContent = count;
+
+                            // Animate matched items back in
+                            const visibleNodes = Array.from(nodes).filter(n => n.style.display !== "none");
+                            gsap.fromTo(visibleNodes,
+                                { scale: 0.8, opacity: 0, y: 20 },
+                                { scale: 1, opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: "back.out(1.5)" }
+                            );
+
+                            // Auto-trigger the first project in the newly selected category
+                            if (visibleNodes.length > 0) {
+                                const firstIdx = parseInt(visibleNodes[0].getAttribute('data-index'));
+                                renderProject(firstIdx);
+
+                                // Reset horizontal scroll to perfectly align left
+                                const track = document.getElementById('thumbnail-track');
+                                if (track) {
+                                    gsap.to(track, { scrollLeft: 0, duration: 0.5 });
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    // Fallback
+                    nodes.forEach(n => {
+                        if (target === "All" || n.getAttribute('data-category') === target) {
+                            n.style.display = "flex";
+                            count++;
+                        } else {
+                            n.style.display = "none";
+                        }
+                    });
+                    document.getElementById('node-count').textContent = count;
+                }
+            });
+        });
+
+        // Initial render of first project
+        if (projects.length > 0) {
+            renderProject(0);
+
+            // Initial entrance animation on hard reload
+            if (typeof gsap !== 'undefined') {
+                gsap.from(".project-glass-card", { y: 20, duration: 0.8, ease: "power3.out" });
+            }
+        } // end of Initial render
+
+        // Horizontal scrolling via mouse wheel on the thumbnail track
+        const track = document.getElementById('thumbnail-track');
+        if (track) {
+            track.addEventListener("wheel", (evt) => {
+                // Only intercept if scrolling up/down with the wheel
+                if (evt.deltaY !== 0) {
+                    evt.preventDefault();
+
+                    // Use native scrollBy with smooth behavior
+                    // We multiply deltaY for a slightly faster scroll feel
+                    track.scrollBy({
+                        left: evt.deltaY * 2.5,
+                        behavior: 'smooth'
+                    });
+                }
+            }, { passive: false });
+        }
+    });
+</script>
 {% endblock %}
