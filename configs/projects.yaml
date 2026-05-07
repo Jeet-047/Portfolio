@@ -1,5 +1,48 @@
 projects:
   # Project Section : ------------------------------------------------------------------
+  - id: "banking-rag"
+    title: "Banking RAG Intelligence System"
+    category: "Cognitive AI Systems"
+    date: "2026-04"
+    role: "End-to-End Developer (RAG System)"
+    technologies:
+      - "LangChain"
+      - "Groq LLMs"
+      - "FastAPI"
+      - "RAG"
+      - "FAISS"
+      - "Python"
+    short_desc: "An enterprise-focused, secure, and explainable Retrieval-Augmented Generation (RAG) system for banking knowledge workflows."
+    full_desc: >
+      Developed an enterprise-grade, secure, and explainable RAG system for banking workflows using FastAPI. 
+      Built a multi-stage pipeline covering document ingestion, semantic chunking, embedding generation, 
+      FAISS-based retrieval, reranking, and response generation. Integrated advanced retrieval strategies 
+      such as MMR diversification and cross-encoder reranking, along with hallucination detection and a 
+      secure knowledge-base fallback system using token-based authentication. Designed the system with 
+      configurable settings, structured logging, and production-style APIs for scalable and reliable 
+      AI-powered knowledge retrieval.
+    color: "bg-teal-600"
+    icon: "🏦🔎"
+    website_url: "https://github.com/Jeet-047/Enterprise-Grade-RAG-System-for-Banking-Knowledge-Intelligence/blob/main/README.md#see-it-in-action"
+    github_url: "https://github.com/Jeet-047/Enterprise-Grade-RAG-System-for-Banking-Knowledge-Intelligence"
+    images:
+      - "/static/project_img/P-bri/bri_gif1.gif"
+      - "/static/project_img/P-bri/bri_img1.png"
+      - "/static/project_img/P-bri/bri_img2.png"
+      - "/static/project_img/P-bri/bri_img3.png"
+      - "/static/project_img/P-bri/bri_img4.png"
+      - "/static/project_img/P-bri/bri_img5.png"
+      - "/static/project_img/P-bri/bri_img6.png"
+    features:
+      - "Intelligent query processing"
+      - "Multi-stage RAG pipeline"
+      - "Advanced retrieval strategy"
+      - "Structure-aware + semantic chunking"
+      - "Hallucination detection"
+      - "Secure KB access"
+      - "Advanced debugging"
+
+  # Project Section : ------------------------------------------------------------------
   - id: "agentic-chat"
     title: "ChatAgent: An Agentic AI Chat System"
     category: "Cognitive AI Systems"
@@ -10,6 +53,7 @@ projects:
       - "LangChain"
       - "Groq LLMs"
       - "FastAPI"
+      - "RAG"
       - "Python"
     short_desc: "A production-grade, goal-driven Agentic AI chat system that enables intelligent conversations by reasoning, planning, and acting through LLMs, tool integration, and memory."
     full_desc: >
